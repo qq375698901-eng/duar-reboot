@@ -1,0 +1,241 @@
+[gd_scene load_steps=49 format=3]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_idle_strip.png" id="1_idle"]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_move_strip.png" id="2_move"]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_guard_strip.png" id="3_guard"]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_attack_strip.png" id="4_attack"]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_hit_strip.png" id="5_hit"]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_launch_strip.png" id="6_launch"]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_down_strip.png" id="7_down"]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_get_up_strip.png" id="8_get_up"]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_grabbed_strip.png" id="9_grabbed"]
+
+[ext_resource type="Texture2D" path="res://art/enemies/dungeon_shieldguard/dungeon_shieldguard_death_strip.png" id="10_death"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0"]
+atlas = ExtResource("1_idle")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1"]
+atlas = ExtResource("1_idle")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2"]
+atlas = ExtResource("1_idle")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3"]
+atlas = ExtResource("1_idle")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4"]
+atlas = ExtResource("2_move")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5"]
+atlas = ExtResource("2_move")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6"]
+atlas = ExtResource("2_move")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7"]
+atlas = ExtResource("2_move")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8"]
+atlas = ExtResource("2_move")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_9"]
+atlas = ExtResource("2_move")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_10"]
+atlas = ExtResource("3_guard")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_11"]
+atlas = ExtResource("3_guard")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12"]
+atlas = ExtResource("4_attack")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_13"]
+atlas = ExtResource("4_attack")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14"]
+atlas = ExtResource("4_attack")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_15"]
+atlas = ExtResource("4_attack")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_16"]
+atlas = ExtResource("4_attack")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_17"]
+atlas = ExtResource("4_attack")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_18"]
+atlas = ExtResource("4_attack")
+region = Rect2(288, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_19"]
+atlas = ExtResource("5_hit")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_20"]
+atlas = ExtResource("5_hit")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_21"]
+atlas = ExtResource("5_hit")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_22"]
+atlas = ExtResource("6_launch")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_23"]
+atlas = ExtResource("6_launch")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_24"]
+atlas = ExtResource("7_down")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_25"]
+atlas = ExtResource("7_down")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_26"]
+atlas = ExtResource("8_get_up")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27"]
+atlas = ExtResource("8_get_up")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_28"]
+atlas = ExtResource("8_get_up")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_29"]
+atlas = ExtResource("8_get_up")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_30"]
+atlas = ExtResource("8_get_up")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_31"]
+atlas = ExtResource("9_grabbed")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32"]
+atlas = ExtResource("9_grabbed")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_33"]
+atlas = ExtResource("10_death")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_34"]
+atlas = ExtResource("10_death")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_35"]
+atlas = ExtResource("10_death")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_36"]
+atlas = ExtResource("10_death")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dungeon_shieldguard"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_0")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_1")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_2")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_3")}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_4")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_5")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_6")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_7")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_8")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_9")}],
+"loop": true,
+"name": &"move",
+"speed": 7.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_10")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_11")}],
+"loop": true,
+"name": &"guard",
+"speed": 6.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_12")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_13")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_14")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_15")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_16")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_17")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_18")}],
+"loop": false,
+"name": &"attack",
+"speed": 10.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_19")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_20")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_21")}],
+"loop": false,
+"name": &"hit",
+"speed": 8.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_22")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_23")}],
+"loop": false,
+"name": &"launch",
+"speed": 8.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_24")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_25")}],
+"loop": true,
+"name": &"down",
+"speed": 6.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_26")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_27")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_28")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_29")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_30")}],
+"loop": false,
+"name": &"get_up",
+"speed": 8.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_31")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_32")}],
+"loop": true,
+"name": &"grabbed",
+"speed": 6.0
+},
+{
+"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_33")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_34")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_35")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_36")}],
+"loop": false,
+"name": &"death",
+"speed": 8.0
+}]
+
+[node name="DungeonShieldguardSprite" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, 0)
+sprite_frames = SubResource("SpriteFrames_dungeon_shieldguard")
+animation = &"idle"
+frame = 0
+centered = true

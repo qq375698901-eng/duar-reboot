@@ -1,0 +1,251 @@
+<svg width="1800" height="1200" viewBox="0 0 1800 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1B2130"/>
+      <stop offset="0.5" stop-color="#121724"/>
+      <stop offset="1" stop-color="#0A0E15"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#252D3D"/>
+      <stop offset="1" stop-color="#171D28"/>
+    </linearGradient>
+    <linearGradient id="stoneA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8E99AB"/>
+      <stop offset="0.45" stop-color="#677286"/>
+      <stop offset="1" stop-color="#3A4454"/>
+    </linearGradient>
+    <linearGradient id="stoneB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#AAB4C5"/>
+      <stop offset="0.5" stop-color="#768195"/>
+      <stop offset="1" stop-color="#434C5D"/>
+    </linearGradient>
+    <linearGradient id="shadow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.35"/>
+    </linearGradient>
+    <radialGradient id="warm" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0" stop-color="#FFD99A"/>
+      <stop offset="0.45" stop-color="#F2A03D"/>
+      <stop offset="1" stop-color="#F2A03D" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cold" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0" stop-color="#B7FFF5"/>
+      <stop offset="0.45" stop-color="#57D0B7"/>
+      <stop offset="1" stop-color="#57D0B7" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="1800" height="1200" fill="url(#bg)"/>
+  <rect x="36" y="36" width="1728" height="1128" rx="24" fill="#0E131C" stroke="#2D3750" stroke-width="2"/>
+
+  <text x="80" y="102" fill="#F3E6C8" font-family="Georgia, serif" font-size="34">Map Module Sheet V2</text>
+  <text x="80" y="154" fill="#D7F0EA" font-family="Georgia, serif" font-size="62">HD Pixel Ruins</text>
+  <text x="80" y="196" fill="#96A8B5" font-family="Georgia, serif" font-size="24">Cleaner silhouettes, richer material rendering, softer light, less blocky than classic pixel tiles</text>
+
+  <rect x="68" y="234" width="530" height="422" rx="18" fill="url(#panel)" stroke="#313C53"/>
+  <rect x="636" y="234" width="530" height="422" rx="18" fill="url(#panel)" stroke="#313C53"/>
+  <rect x="1204" y="234" width="530" height="422" rx="18" fill="url(#panel)" stroke="#313C53"/>
+  <rect x="68" y="694" width="530" height="422" rx="18" fill="url(#panel)" stroke="#313C53"/>
+  <rect x="636" y="694" width="530" height="422" rx="18" fill="url(#panel)" stroke="#313C53"/>
+  <rect x="1204" y="694" width="530" height="422" rx="18" fill="url(#panel)" stroke="#313C53"/>
+
+  <text x="96" y="282" fill="#E9DAB8" font-family="Georgia, serif" font-size="29">Platforms</text>
+  <text x="664" y="282" fill="#E9DAB8" font-family="Georgia, serif" font-size="29">Walls &amp; Columns</text>
+  <text x="1232" y="282" fill="#E9DAB8" font-family="Georgia, serif" font-size="29">Arches &amp; Frames</text>
+  <text x="96" y="742" fill="#E9DAB8" font-family="Georgia, serif" font-size="29">Props</text>
+  <text x="664" y="742" fill="#E9DAB8" font-family="Georgia, serif" font-size="29">Rune Objects</text>
+  <text x="1232" y="742" fill="#E9DAB8" font-family="Georgia, serif" font-size="29">Scene Preview</text>
+
+  <g>
+    <g transform="translate(108 326)">
+      <rect x="0" y="0" width="224" height="44" rx="6" fill="url(#stoneA)"/>
+      <rect x="0" y="34" width="224" height="18" rx="4" fill="#394354"/>
+      <rect x="12" y="-10" width="198" height="18" rx="5" fill="#B5C0D1"/>
+      <path d="M8 10H216" stroke="#D3DEEE" stroke-width="4" opacity="0.45"/>
+      <path d="M0 38H224" stroke="#1E2530" stroke-width="4" opacity="0.45"/>
+      <rect x="28" y="52" width="18" height="70" rx="3" fill="#27303D"/>
+      <rect x="178" y="52" width="18" height="70" rx="3" fill="#27303D"/>
+      <rect x="31" y="56" width="4" height="62" fill="#4C586C"/>
+      <rect x="181" y="56" width="4" height="62" fill="#4C586C"/>
+    </g>
+
+    <g transform="translate(374 330)">
+      <rect x="0" y="0" width="158" height="32" rx="6" fill="url(#stoneB)"/>
+      <rect x="10" y="-10" width="138" height="14" rx="4" fill="#B8C4D7"/>
+      <rect x="12" y="32" width="134" height="12" rx="4" fill="#313949"/>
+      <path d="M10 6H146" stroke="#D7E0EC" stroke-width="3" opacity="0.45"/>
+    </g>
+
+    <g transform="translate(108 466)">
+      <rect x="0" y="0" width="176" height="28" rx="5" fill="url(#stoneA)"/>
+      <rect x="18" y="-10" width="140" height="12" rx="4" fill="#AEBACD"/>
+      <rect x="0" y="28" width="176" height="12" rx="4" fill="#313949"/>
+    </g>
+
+    <g transform="translate(326 456)">
+      <rect x="0" y="0" width="220" height="52" rx="8" fill="url(#stoneB)"/>
+      <rect x="16" y="-14" width="188" height="16" rx="4" fill="#AAB6C8"/>
+      <rect x="0" y="42" width="220" height="18" rx="5" fill="#303846"/>
+      <rect x="30" y="60" width="18" height="60" rx="3" fill="#222A36"/>
+      <rect x="172" y="60" width="18" height="60" rx="3" fill="#222A36"/>
+    </g>
+
+    <text x="108" y="624" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Main ground</text>
+    <text x="374" y="624" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Light ledge</text>
+    <text x="108" y="648" fill="#91A3AF" font-family="Georgia, serif" font-size="18">One-way platform</text>
+    <text x="326" y="648" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Heavy platform</text>
+  </g>
+
+  <g>
+    <g transform="translate(702 310)">
+      <rect x="0" y="0" width="94" height="260" rx="8" fill="url(#stoneA)"/>
+      <rect x="-8" y="-14" width="110" height="16" rx="4" fill="#B7C2D4"/>
+      <rect x="16" y="0" width="12" height="260" fill="#506078" opacity="0.7"/>
+      <rect x="62" y="0" width="12" height="260" fill="#506078" opacity="0.7"/>
+      <path d="M0 32H94M0 96H94M0 164H94" stroke="#2E3745" stroke-width="3" opacity="0.25"/>
+    </g>
+
+    <g transform="translate(844 294)">
+      <rect x="0" y="0" width="148" height="276" rx="10" fill="url(#stoneB)"/>
+      <rect x="-10" y="-16" width="168" height="18" rx="5" fill="#BDC8D9"/>
+      <rect x="20" y="0" width="14" height="276" fill="#56657C" opacity="0.6"/>
+      <rect x="67" y="0" width="14" height="276" fill="#56657C" opacity="0.6"/>
+      <rect x="112" y="0" width="14" height="276" fill="#56657C" opacity="0.6"/>
+      <path d="M0 40H148M0 106H148M0 178H148" stroke="#313A48" stroke-width="3" opacity="0.22"/>
+    </g>
+
+    <g transform="translate(1032 334)">
+      <rect x="0" y="0" width="90" height="236" rx="8" fill="url(#stoneA)"/>
+      <rect x="-10" y="-14" width="110" height="16" rx="4" fill="#ADB9CC"/>
+      <path d="M40 0L18 84L46 146L24 236" stroke="#2F3744" stroke-width="5" opacity="0.38"/>
+      <path d="M82 0L58 70L80 132L54 236" stroke="#2F3744" stroke-width="5" opacity="0.32"/>
+    </g>
+
+    <text x="704" y="624" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Slim column</text>
+    <text x="844" y="624" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Wall block</text>
+    <text x="1032" y="624" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Broken pillar</text>
+  </g>
+
+  <g>
+    <g transform="translate(1260 266)">
+      <rect x="50" y="240" width="156" height="20" rx="5" fill="url(#stoneA)"/>
+      <rect x="224" y="240" width="156" height="20" rx="5" fill="url(#stoneA)"/>
+      <rect x="72" y="62" width="24" height="178" rx="5" fill="#415064"/>
+      <rect x="340" y="62" width="24" height="178" rx="5" fill="#415064"/>
+      <rect x="62" y="62" width="24" height="178" rx="5" fill="url(#stoneB)"/>
+      <rect x="330" y="62" width="24" height="178" rx="5" fill="url(#stoneB)"/>
+      <path d="M96 64C124 0 292 0 330 64" fill="none" stroke="#C3CFDF" stroke-width="26" stroke-linecap="round"/>
+      <path d="M102 74C132 20 286 20 324 74" fill="none" stroke="#8996A9" stroke-width="16" stroke-linecap="round"/>
+      <rect x="164" y="116" width="100" height="24" rx="5" fill="#D3E0EE"/>
+    </g>
+
+    <g transform="translate(1264 360)">
+      <rect x="0" y="0" width="124" height="204" rx="8" fill="url(#stoneA)"/>
+      <rect x="140" y="0" width="124" height="204" rx="8" fill="url(#stoneA)"/>
+      <rect x="16" y="-14" width="92" height="16" rx="4" fill="#B4C0D1"/>
+      <rect x="156" y="-14" width="92" height="16" rx="4" fill="#B4C0D1"/>
+      <rect x="54" y="18" width="156" height="188" rx="8" fill="#111721"/>
+      <rect x="106" y="64" width="52" height="142" rx="4" fill="#1E2530"/>
+    </g>
+
+    <text x="1264" y="624" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Sacred arch</text>
+    <text x="1410" y="624" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Gate frame</text>
+  </g>
+
+  <g>
+    <g transform="translate(118 802)">
+      <rect x="0" y="42" width="84" height="150" rx="8" fill="url(#stoneA)"/>
+      <rect x="14" y="24" width="56" height="24" rx="6" fill="#A7B3C5"/>
+      <rect x="26" y="0" width="32" height="28" rx="6" fill="#DDEAF6"/>
+      <path d="M42 0V-42" stroke="#EAF8FF" stroke-width="10" stroke-linecap="round"/>
+      <path d="M42 -42L30 -20H54L42 -42Z" fill="#D8EEF7"/>
+    </g>
+
+    <g transform="translate(258 860)">
+      <rect x="0" y="28" width="76" height="108" rx="8" fill="#3B2E2A"/>
+      <rect x="10" y="8" width="56" height="24" rx="6" fill="#5B453A"/>
+      <path d="M38 0C58 8 66 34 52 52C42 64 34 64 24 52C10 34 18 8 38 0Z" fill="#F7A742"/>
+      <ellipse cx="38" cy="42" rx="42" ry="34" fill="url(#warm)" opacity="0.65"/>
+    </g>
+
+    <g transform="translate(386 870)">
+      <rect x="0" y="44" width="136" height="86" rx="10" fill="url(#stoneA)"/>
+      <rect x="18" y="28" width="100" height="18" rx="5" fill="#AAB6C8"/>
+      <rect x="36" y="0" width="64" height="30" rx="8" fill="#D9E9F5"/>
+      <rect x="60" y="-12" width="16" height="12" rx="3" fill="#64DBC5"/>
+      <ellipse cx="68" cy="-10" rx="52" ry="40" fill="url(#cold)" opacity="0.3"/>
+    </g>
+
+    <text x="118" y="1040" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Statue pedestal</text>
+    <text x="258" y="1040" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Brazier</text>
+    <text x="386" y="1040" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Small altar</text>
+  </g>
+
+  <g>
+    <g transform="translate(708 842)">
+      <rect x="0" y="52" width="142" height="94" rx="10" fill="url(#stoneA)"/>
+      <rect x="18" y="34" width="106" height="20" rx="5" fill="#A7B3C5"/>
+      <rect x="42" y="0" width="58" height="36" rx="8" fill="#D8E8F3"/>
+      <path d="M71 0V-48" stroke="#7CE5D2" stroke-width="12" stroke-linecap="round"/>
+      <ellipse cx="71" cy="-48" rx="64" ry="52" fill="url(#cold)" opacity="0.32"/>
+    </g>
+
+    <g transform="translate(900 778)">
+      <rect x="0" y="80" width="100" height="210" rx="10" fill="url(#stoneB)"/>
+      <rect x="20" y="54" width="60" height="28" rx="6" fill="#C9D8E7"/>
+      <rect x="34" y="0" width="32" height="54" rx="8" fill="#E0F0FA"/>
+      <path d="M50 0V-42" stroke="#75E0CE" stroke-width="14" stroke-linecap="round"/>
+      <ellipse cx="50" cy="-46" rx="62" ry="46" fill="url(#cold)" opacity="0.36"/>
+      <path d="M14 138H86M14 202H86" stroke="#374150" stroke-width="4" opacity="0.25"/>
+    </g>
+
+    <g transform="translate(1044 846)">
+      <rect x="0" y="54" width="112" height="126" rx="10" fill="url(#stoneA)"/>
+      <rect x="18" y="34" width="76" height="20" rx="5" fill="#B0BCCE"/>
+      <rect x="34" y="0" width="44" height="36" rx="8" fill="#DCECF7"/>
+      <ellipse cx="56" cy="18" rx="54" ry="40" fill="url(#cold)" opacity="0.22"/>
+      <path d="M20 106C44 86 68 86 92 106" fill="none" stroke="#53C8AD" stroke-width="6" opacity="0.7"/>
+    </g>
+
+    <text x="708" y="1040" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Rune altar</text>
+    <text x="900" y="1040" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Obelisk</text>
+    <text x="1044" y="1040" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Sacred stone</text>
+  </g>
+
+  <g>
+    <g transform="translate(1262 780)">
+      <rect x="0" y="242" width="390" height="18" rx="5" fill="#28303C"/>
+      <rect x="0" y="260" width="390" height="10" rx="4" fill="#151A22"/>
+
+      <rect x="34" y="196" width="182" height="30" rx="6" fill="url(#stoneA)"/>
+      <rect x="48" y="182" width="154" height="16" rx="4" fill="#B4C0D1"/>
+      <rect x="62" y="226" width="18" height="54" rx="3" fill="#222A35"/>
+      <rect x="170" y="226" width="18" height="54" rx="3" fill="#222A35"/>
+
+      <rect x="124" y="64" width="162" height="22" rx="5" fill="#BCC8D9"/>
+      <rect x="142" y="44" width="126" height="20" rx="5" fill="#D9E6F2"/>
+      <path d="M142 64C162 24 248 24 268 64" fill="none" stroke="#8A97A9" stroke-width="20" stroke-linecap="round"/>
+      <rect x="122" y="86" width="22" height="140" rx="4" fill="#415064"/>
+      <rect x="266" y="86" width="22" height="140" rx="4" fill="#415064"/>
+
+      <rect x="36" y="118" width="96" height="162" rx="8" fill="#202834"/>
+      <rect x="278" y="118" width="88" height="162" rx="8" fill="#202834"/>
+      <rect x="172" y="108" width="66" height="172" rx="5" fill="#121721"/>
+
+      <rect x="286" y="206" width="14" height="34" rx="3" fill="#4D392D"/>
+      <path d="M293 202C311 210 316 234 304 248C296 258 290 258 282 248C270 234 275 210 293 202Z" fill="#F8A541"/>
+      <ellipse cx="293" cy="238" rx="46" ry="34" fill="url(#warm)" opacity="0.28"/>
+
+      <rect x="188" y="204" width="16" height="38" rx="3" fill="#20252E"/>
+      <circle cx="196" cy="194" r="7" fill="#E9DABE"/>
+      <rect x="204" y="212" width="18" height="6" rx="3" fill="#89A1B0"/>
+    </g>
+
+    <text x="1262" y="1040" fill="#91A3AF" font-family="Georgia, serif" font-size="18">Preview: clearer forms, richer lighting, less rigid pixel chunking</text>
+  </g>
+
+  <text x="78" y="1140" fill="#80919F" font-family="Georgia, serif" font-size="20">This version shifts toward HD-2D concept art: still pixel-minded in silhouette, but cleaner, more polished, and less blocky.</text>
+</svg>

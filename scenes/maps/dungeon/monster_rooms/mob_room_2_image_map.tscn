@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://bglg4j452fbhl"]
+
+[ext_resource type="Texture2D" uid="uid://rvaqbd0xkmwq" path="res://art/Map/MobRoom2.png" id="1_bg"]
+[ext_resource type="PackedScene" uid="uid://bfmq6f3w6i4p0" path="res://scenes/characters/player.tscn" id="2_player"]
+[ext_resource type="Script" uid="uid://xllbkxgna7ev" path="res://scripts/camera/follow_camera.gd" id="3_camera"]
+[ext_resource type="Texture2D" uid="uid://18ifdhj5m307" path="res://art/map/MobRoom2_backdrop.png" id="4_backdrop"]
+[ext_resource type="Script" path="res://scripts/maps/dungeon_room_2d.gd" id="5_room"]
+
+[node name="MobRoom2ImageMap" type="Node2D" unique_id=537548297]
+script = ExtResource("5_room")
+room_id = &"mob_room_2"
+room_display_name = "Small Mob Room 02"
+region_kind = 0
+room_type = 1
+room_type_label = "Monster Room (Low Difficulty)"
+gameplay_tags = PackedStringArray("dungeon", "combat", "monster_room", "small_mob_room")
+encounter_level = 1
+
+[node name="Map" type="Node2D" parent="." unique_id=905143305]
+scale = Vector2(0.5, 0.5)
+
+[node name="Backdrop" type="Sprite2D" parent="Map" unique_id=612881203]
+z_index = -10
+position = Vector2(-768, -512)
+texture = ExtResource("4_backdrop")
+centered = false
+
+[node name="Background" type="Sprite2D" parent="Map" unique_id=713356215]
+position = Vector2(0, -2)
+texture = ExtResource("1_bg")
+centered = false
+
+[node name="Ground" type="StaticBody2D" parent="Map" unique_id=1142714810]
+collision_mask = 0
+
+[node name="LeftRubblePile" type="CollisionPolygon2D" parent="Map/Ground" unique_id=674128686]
+polygon = PackedVector2Array(170, 848, 186, 810, 186, 784, 210, 784, 210, 758, 236, 758, 236, 728, 260, 728, 260, 698, 288, 698, 288, 670, 316, 670, 316, 646, 366, 646, 366, 670, 376, 670, 376, 698, 402, 698, 402, 726, 430, 726, 430, 756, 454, 756, 455, 784, 476, 784, 476, 808, 520, 848)
+
+[node name="P01_LeftTopSlope" type="CollisionPolygon2D" parent="Map/Ground" unique_id=1901651018]
+polygon = PackedVector2Array(262, 194, 280, 188, 330, 140, 348, 170, 292, 218, 292, 336, 262, 334)
+
+[node name="P02_TopMain" type="CollisionPolygon2D" parent="Map/Ground" unique_id=1831630581]
+polygon = PackedVector2Array(332, 140, 1170, 138, 1242, 196, 1242, 216, 1242, 390, 1214, 390, 1214, 216, 1164, 170, 348, 170)
+
+[node name="P03_RightTopSlope" type="CollisionPolygon2D" parent="Map/Ground" unique_id=2087817806]
+polygon = PackedVector2Array(1110, 128, 1170, 182, 1180, 192, 1120, 138)
+
+[node name="P04_LeftUpperMain" type="CollisionPolygon2D" parent="Map/Ground" unique_id=491011052]
+polygon = PackedVector2Array(58, 334, 294, 336, 294, 366, 58, 366)
+
+[node name="P07_RightUpperMain" type="CollisionPolygon2D" parent="Map/Ground" unique_id=1515292292]
+polygon = PackedVector2Array(1212, 384, 1488, 382, 1488, 416, 1212, 418)
+
+[node name="P08_RightLowerMain" type="CollisionPolygon2D" parent="Map/Ground" unique_id=813157962]
+position = Vector2(0, -20)
+polygon = PackedVector2Array(854, 730, 1248, 732, 1248, 762, 854, 764)
+
+[node name="P09_BottomLeftFloor" type="CollisionPolygon2D" parent="Map/Ground" unique_id=330355268]
+polygon = PackedVector2Array(30, 812, 56.317078, 812.0763, 54, 368, 100, 368, 102, 810, 722, 810, 720, 842, 30, 844)
+
+[node name="P10_BottomRiseToRightShelf" type="CollisionPolygon2D" parent="Map/Ground" unique_id=1969753126]
+polygon = PackedVector2Array(722, 812, 854, 710, 854, 744, 722, 842)
+
+[node name="P11_BottomRightFloor" type="CollisionPolygon2D" parent="Map/Ground" unique_id=771364356]
+polygon = PackedVector2Array(1248, 736, 1266, 736, 1266, 758, 1298, 758, 1298, 782, 1322, 782, 1322, 808, 1435.3113, 808, 1434, 416, 1484, 416, 1484, 808, 1510, 808, 1510, 842, 1404, 842, 1300, 842)
+
+[node name="Platforms" type="StaticBody2D" parent="Map" unique_id=1389724631]
+collision_layer = 4
+collision_mask = 0
+
+[node name="P05_CenterMidMain" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=293308322]
+polygon = PackedVector2Array(420, 532, 838, 536, 840, 562, 422, 564)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="P06_CenterToRightUpperSlope" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=710847640]
+polygon = PackedVector2Array(838, 548, 1008, 384, 1018, 394, 848, 558)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="P04_LeftUpperMain2" type="CollisionPolygon2D" parent="Map/Ground" unique_id=1941222274]
+position = Vector2(238, 2)
+polygon = PackedVector2Array(58, 330, 316, 330, 316, 366, 58, 366)
+
+[node name="P07_RightUpperMain2" type="CollisionPolygon2D" parent="Map/Ground" unique_id=2086673400]
+position = Vector2(-206, 2)
+polygon = PackedVector2Array(1212, 384, 1416, 384, 1414, 414, 1212, 418)
+
+[node name="Ladders" type="Node2D" parent="Map" unique_id=1689081810]
+
+[node name="Ladder01" type="Area2D" parent="Map/Ladders" unique_id=999362347]
+position = Vector2(506, 443)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Ladders/Ladder01" unique_id=1257657798]
+polygon = PackedVector2Array(-14, -106, 32, -101, 28, 81, -14, 81)
+
+[node name="Ladder02" type="Area2D" parent="Map/Ladders" unique_id=1544353919]
+position = Vector2(1002, 560)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Ladders/Ladder02" unique_id=378260314]
+polygon = PackedVector2Array(-12, -168, 34, -170, 36, 146, -14, 146)
+
+[node name="Player" parent="." unique_id=1836860044 instance=ExtResource("2_player")]
+position = Vector2(684, 400)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1844484931]
+position = Vector2(96, 384)
+zoom = Vector2(2, 2)
+process_callback = 0
+script = ExtResource("3_camera")
+target_path = NodePath("../Player")

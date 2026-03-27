@@ -1,0 +1,217 @@
+<svg width="1800" height="1200" viewBox="0 0 1800 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#171C27"/>
+      <stop offset="1" stop-color="#0D1017"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#232A38"/>
+      <stop offset="1" stop-color="#171C26"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+  </defs>
+
+  <rect width="1800" height="1200" fill="url(#bg)"/>
+  <rect x="40" y="40" width="1720" height="1120" rx="22" fill="#10141C" stroke="#2B3445" stroke-width="2"/>
+
+  <text x="80" y="108" fill="#F0E5C8" font-family="Georgia, serif" font-size="34">Map Module Sheet V1</text>
+  <text x="80" y="156" fill="#CDE9E5" font-family="Georgia, serif" font-size="60">High-Res Pixel Fantasy Ruins</text>
+  <text x="80" y="196" fill="#8FA2AE" font-family="Georgia, serif" font-size="24">Ground, platforms, walls, arches, doors, braziers, rune stones and altar props</text>
+
+  <g shape-rendering="crispEdges">
+    <rect x="70" y="240" width="520" height="420" rx="14" fill="url(#panel)" stroke="#303A4C"/>
+    <rect x="640" y="240" width="520" height="420" rx="14" fill="url(#panel)" stroke="#303A4C"/>
+    <rect x="1210" y="240" width="520" height="420" rx="14" fill="url(#panel)" stroke="#303A4C"/>
+    <rect x="70" y="700" width="520" height="420" rx="14" fill="url(#panel)" stroke="#303A4C"/>
+    <rect x="640" y="700" width="520" height="420" rx="14" fill="url(#panel)" stroke="#303A4C"/>
+    <rect x="1210" y="700" width="520" height="420" rx="14" fill="url(#panel)" stroke="#303A4C"/>
+  </g>
+
+  <text x="96" y="286" fill="#E9DABA" font-family="Georgia, serif" font-size="28">Ground / Platforms</text>
+  <text x="666" y="286" fill="#E9DABA" font-family="Georgia, serif" font-size="28">Walls / Columns</text>
+  <text x="1236" y="286" fill="#E9DABA" font-family="Georgia, serif" font-size="28">Arches / Doors</text>
+  <text x="96" y="746" fill="#E9DABA" font-family="Georgia, serif" font-size="28">Props / Braziers</text>
+  <text x="666" y="746" fill="#E9DABA" font-family="Georgia, serif" font-size="28">Rune / Sacred Pieces</text>
+  <text x="1236" y="746" fill="#E9DABA" font-family="Georgia, serif" font-size="28">Assembly Preview</text>
+
+  <g shape-rendering="crispEdges">
+    <rect x="100" y="330" width="220" height="38" fill="#5A6474"/>
+    <rect x="100" y="368" width="220" height="16" fill="#343C4B"/>
+    <rect x="114" y="316" width="192" height="14" fill="#7A8598"/>
+    <rect x="132" y="384" width="18" height="60" fill="#222936"/>
+    <rect x="270" y="384" width="18" height="60" fill="#222936"/>
+
+    <rect x="350" y="330" width="180" height="28" fill="#5D6878"/>
+    <rect x="364" y="318" width="152" height="12" fill="#818C9E"/>
+    <rect x="372" y="358" width="16" height="50" fill="#232A36"/>
+    <rect x="492" y="358" width="16" height="50" fill="#232A36"/>
+
+    <rect x="100" y="470" width="180" height="28" fill="#535D6C"/>
+    <rect x="118" y="458" width="144" height="12" fill="#737F91"/>
+    <rect x="100" y="498" width="180" height="14" fill="#303744"/>
+
+    <rect x="320" y="470" width="220" height="42" fill="#4E5868"/>
+    <rect x="336" y="454" width="188" height="16" fill="#707B8D"/>
+    <rect x="320" y="512" width="220" height="18" fill="#2C3341"/>
+
+    <rect x="112" y="548" width="420" height="18" fill="#212834"/>
+    <rect x="112" y="566" width="420" height="8" fill="#151A23"/>
+  </g>
+
+  <text x="100" y="620" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Ground block</text>
+  <text x="350" y="620" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Narrow platform</text>
+  <text x="100" y="646" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">One-way ledge</text>
+  <text x="320" y="646" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Heavy platform</text>
+
+  <g shape-rendering="crispEdges">
+    <rect x="700" y="320" width="90" height="250" fill="#2C3442"/>
+    <rect x="716" y="320" width="14" height="250" fill="#415064"/>
+    <rect x="750" y="320" width="14" height="250" fill="#415064"/>
+    <rect x="688" y="306" width="114" height="14" fill="#7E899A"/>
+
+    <rect x="840" y="300" width="140" height="270" fill="#27303D"/>
+    <rect x="860" y="300" width="18" height="270" fill="#3A4555"/>
+    <rect x="906" y="300" width="18" height="270" fill="#3A4555"/>
+    <rect x="952" y="300" width="18" height="270" fill="#3A4555"/>
+    <rect x="824" y="286" width="172" height="14" fill="#707D8F"/>
+
+    <rect x="1020" y="338" width="96" height="232" fill="#222A35"/>
+    <rect x="1038" y="338" width="12" height="232" fill="#354050"/>
+    <rect x="1070" y="338" width="12" height="232" fill="#354050"/>
+    <rect x="1008" y="324" width="120" height="14" fill="#687486"/>
+
+    <rect x="718" y="590" width="390" height="18" fill="#1C222D"/>
+  </g>
+
+  <text x="698" y="620" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Thin column</text>
+  <text x="840" y="620" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Wide wall piece</text>
+  <text x="1018" y="620" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Damaged pillar</text>
+
+  <g shape-rendering="crispEdges">
+    <rect x="1280" y="516" width="160" height="18" fill="#5A6474"/>
+    <rect x="1444" y="516" width="160" height="18" fill="#5A6474"/>
+    <rect x="1294" y="502" width="132" height="14" fill="#7A8699"/>
+    <rect x="1458" y="502" width="132" height="14" fill="#7A8699"/>
+    <rect x="1310" y="332" width="18" height="184" fill="#2A3240"/>
+    <rect x="1556" y="332" width="18" height="184" fill="#2A3240"/>
+    <rect x="1318" y="332" width="10" height="184" fill="#405063"/>
+    <rect x="1556" y="332" width="10" height="184" fill="#405063"/>
+    <rect x="1362" y="292" width="160" height="24" fill="#7B8799"/>
+    <rect x="1380" y="274" width="124" height="18" fill="#9BA8BC"/>
+    <rect x="1398" y="256" width="88" height="18" fill="#B6C5D7"/>
+    <rect x="1374" y="316" width="16" height="18" fill="#748194"/>
+    <rect x="1494" y="316" width="16" height="18" fill="#748194"/>
+
+    <rect x="1258" y="344" width="120" height="220" fill="#232B37"/>
+    <rect x="1274" y="330" width="88" height="14" fill="#667487"/>
+    <rect x="1412" y="344" width="120" height="220" fill="#232B37"/>
+    <rect x="1428" y="330" width="88" height="14" fill="#667487"/>
+    <rect x="1310" y="362" width="170" height="202" fill="#131922"/>
+    <rect x="1362" y="410" width="64" height="154" fill="#1C2430"/>
+  </g>
+
+  <text x="1260" y="620" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Large arch</text>
+  <text x="1468" y="620" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Door frame / gate</text>
+
+  <g shape-rendering="crispEdges">
+    <rect x="120" y="828" width="80" height="160" fill="#242C38"/>
+    <rect x="138" y="808" width="44" height="20" fill="#6A7588"/>
+    <rect x="145" y="784" width="30" height="24" fill="#A4B0C4"/>
+    <rect x="154" y="744" width="12" height="40" fill="#DDEBF7"/>
+    <rect x="136" y="988" width="48" height="14" fill="#151A23"/>
+
+    <rect x="250" y="860" width="70" height="128" fill="#2A313D"/>
+    <rect x="262" y="846" width="46" height="14" fill="#5F6C80"/>
+    <rect x="264" y="820" width="42" height="26" fill="#41312B"/>
+    <rect x="272" y="790" width="26" height="30" fill="#5A402F"/>
+    <rect x="278" y="766" width="14" height="24" fill="#F3A33E"/>
+
+    <rect x="380" y="904" width="132" height="84" fill="#242B37"/>
+    <rect x="398" y="892" width="96" height="12" fill="#627083"/>
+    <rect x="414" y="876" width="64" height="16" fill="#8A97AB"/>
+    <rect x="428" y="846" width="36" height="30" fill="#D6E7F2"/>
+    <rect x="446" y="836" width="8" height="10" fill="#6DE4CF"/>
+  </g>
+
+  <g>
+    <circle cx="285" cy="776" r="22" fill="#F2A03A" opacity="0.9"/>
+    <circle cx="285" cy="776" r="54" fill="#F2A03A" opacity="0.14" filter="url(#glow)"/>
+  </g>
+
+  <text x="120" y="1042" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Statue base</text>
+  <text x="250" y="1042" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Brazier</text>
+  <text x="380" y="1042" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Small altar</text>
+
+  <g shape-rendering="crispEdges">
+    <rect x="700" y="892" width="140" height="96" fill="#27303C"/>
+    <rect x="718" y="878" width="104" height="14" fill="#617084"/>
+    <rect x="738" y="850" width="64" height="28" fill="#9FAEC3"/>
+    <rect x="764" y="802" width="12" height="48" fill="#74E6D2"/>
+    <rect x="778" y="812" width="12" height="38" fill="#4CB89C"/>
+
+    <rect x="888" y="836" width="92" height="152" fill="#222A36"/>
+    <rect x="904" y="820" width="60" height="16" fill="#5B677A"/>
+    <rect x="918" y="790" width="32" height="30" fill="#D7EBF5"/>
+    <rect x="926" y="740" width="16" height="50" fill="#68E0CB"/>
+    <rect x="920" y="720" width="28" height="20" fill="#A2FFF0"/>
+
+    <rect x="1016" y="874" width="100" height="114" fill="#29313E"/>
+    <rect x="1030" y="860" width="72" height="14" fill="#647083"/>
+    <rect x="1046" y="830" width="40" height="30" fill="#D8EEF7"/>
+    <rect x="1054" y="788" width="24" height="42" fill="#5DCCB2"/>
+  </g>
+
+  <g opacity="0.18">
+    <circle cx="777" cy="804" r="72" fill="#77E8D4" filter="url(#glow)"/>
+    <circle cx="934" cy="730" r="76" fill="#77E8D4" filter="url(#glow)"/>
+    <circle cx="1066" cy="796" r="68" fill="#77E8D4" filter="url(#glow)"/>
+  </g>
+
+  <text x="700" y="1042" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Rune altar</text>
+  <text x="888" y="1042" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Rune obelisk</text>
+  <text x="1016" y="1042" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Sacred stone</text>
+
+  <g shape-rendering="crispEdges">
+    <rect x="1270" y="964" width="380" height="20" fill="#2D3441"/>
+    <rect x="1270" y="984" width="380" height="10" fill="#191E27"/>
+
+    <rect x="1296" y="920" width="180" height="28" fill="#576170"/>
+    <rect x="1310" y="908" width="152" height="12" fill="#748093"/>
+    <rect x="1330" y="948" width="16" height="48" fill="#232A35"/>
+    <rect x="1428" y="948" width="16" height="48" fill="#232A35"/>
+
+    <rect x="1380" y="792" width="160" height="20" fill="#717D90"/>
+    <rect x="1396" y="774" width="128" height="18" fill="#9AA8BD"/>
+    <rect x="1416" y="754" width="88" height="20" fill="#C2D0DE"/>
+    <rect x="1378" y="812" width="18" height="108" fill="#2A3240"/>
+    <rect x="1524" y="812" width="18" height="108" fill="#2A3240"/>
+    <rect x="1290" y="834" width="100" height="130" fill="#232B37"/>
+    <rect x="1530" y="834" width="90" height="130" fill="#232B37"/>
+    <rect x="1418" y="836" width="84" height="128" fill="#121822"/>
+    <rect x="1448" y="872" width="24" height="92" fill="#1C2430"/>
+
+    <rect x="1508" y="906" width="14" height="28" fill="#4A372C"/>
+    <rect x="1506" y="934" width="18" height="8" fill="#6B4B31"/>
+  </g>
+
+  <g>
+    <circle cx="1515" cy="946" r="18" fill="#F1A13A" opacity="0.88"/>
+    <circle cx="1515" cy="946" r="44" fill="#F1A13A" opacity="0.12" filter="url(#glow)"/>
+  </g>
+
+  <g shape-rendering="crispEdges">
+    <rect x="1450" y="924" width="18" height="40" fill="#20252E"/>
+    <rect x="1456" y="910" width="8" height="14" fill="#E7D8BC"/>
+    <rect x="1468" y="930" width="18" height="6" fill="#90A5B5"/>
+    <rect x="1444" y="938" width="8" height="18" fill="#20252E"/>
+    <rect x="1462" y="938" width="8" height="18" fill="#20252E"/>
+    <rect x="1448" y="964" width="8" height="18" fill="#20252E"/>
+    <rect x="1462" y="964" width="8" height="18" fill="#20252E"/>
+  </g>
+
+  <text x="1260" y="1042" fill="#8EA0AC" font-family="Georgia, serif" font-size="18">Example room assembly</text>
+
+  <text x="78" y="1138" fill="#7E90A0" font-family="Georgia, serif" font-size="20">Design rules: clear platform silhouettes, stone as core material, warm fire for safety, cyan rune glow for danger or mystery.</text>
+</svg>

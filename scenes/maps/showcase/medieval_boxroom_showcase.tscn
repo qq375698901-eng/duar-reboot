@@ -1,0 +1,376 @@
+[gd_scene load_steps=24 format=3]
+
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile18.png" id="1_t18"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile19.png" id="2_t19"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile20.png" id="3_t20"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile21.png" id="4_t21"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile22.png" id="5_t22"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile23.png" id="6_t23"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile24.png" id="7_t24"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile79.png" id="8_t79"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile80.png" id="9_t80"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile87.png" id="10_t87"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile88.png" id="11_t88"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile89.png" id="12_t89"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile90.png" id="13_t90"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Objects/door1.png" id="14_door"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Objects/torch.png" id="15_torch"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Objects/lever1.png" id="16_lever"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Objects/barrel.png" id="17_barrel"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Objects/chest_closed.png" id="18_chest"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Objects/shield.png" id="19_shield"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Objects/stairs_full.png" id="20_ladder"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Objects/walls1.png" id="21_wall_r"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Objects/walls2.png" id="22_wall_l"]
+[ext_resource type="Texture2D" path="res://art/Medieval/PNG/Tiles/tile127.png" id="23_bg_a"]
+
+[node name="MedievalBoxroomShowcase" type="Node2D"]
+
+[node name="Backdrop" type="ColorRect" parent="."]
+offset_left = -1200.0
+offset_top = -800.0
+offset_right = 1200.0
+offset_bottom = 800.0
+color = Color(0.0392157, 0.0470588, 0.0745098, 1)
+
+[node name="RoomBody" type="ColorRect" parent="."]
+offset_left = -430.0
+offset_top = -230.0
+offset_right = 430.0
+offset_bottom = 250.0
+color = Color(0.235294, 0.286275, 0.439216, 1)
+
+[node name="InnerPanel" type="ColorRect" parent="."]
+offset_left = -360.0
+offset_top = -120.0
+offset_right = 360.0
+offset_bottom = 120.0
+color = Color(0.121569, 0.156863, 0.254902, 1)
+
+[node name="Map" type="Node2D" parent="."]
+position = Vector2(-430, -230)
+
+[node name="LeftWallCap" type="Sprite2D" parent="Map"]
+position = Vector2(48, 432)
+centered = false
+texture = ExtResource("22_wall_l")
+
+[node name="LeftWall1" type="Sprite2D" parent="Map"]
+position = Vector2(64, 480)
+centered = false
+texture = ExtResource("7_t24")
+flip_h = true
+
+[node name="LeftWall2" type="Sprite2D" parent="Map"]
+position = Vector2(64, 528)
+centered = false
+texture = ExtResource("7_t24")
+flip_h = true
+
+[node name="RightWallCap" type="Sprite2D" parent="Map"]
+position = Vector2(816, 240)
+centered = false
+texture = ExtResource("21_wall_r")
+
+[node name="RightWall1" type="Sprite2D" parent="Map"]
+position = Vector2(800, 288)
+centered = false
+texture = ExtResource("7_t24")
+
+[node name="RightWall2" type="Sprite2D" parent="Map"]
+position = Vector2(800, 336)
+centered = false
+texture = ExtResource("7_t24")
+
+[node name="RightWall3" type="Sprite2D" parent="Map"]
+position = Vector2(800, 384)
+centered = false
+texture = ExtResource("7_t24")
+
+[node name="RightWall4" type="Sprite2D" parent="Map"]
+position = Vector2(800, 432)
+centered = false
+texture = ExtResource("7_t24")
+
+[node name="RightWall5" type="Sprite2D" parent="Map"]
+position = Vector2(800, 480)
+centered = false
+texture = ExtResource("7_t24")
+
+[node name="RightWall6" type="Sprite2D" parent="Map"]
+position = Vector2(800, 528)
+centered = false
+texture = ExtResource("7_t24")
+
+[node name="RoofLeftSlope1" type="Sprite2D" parent="Map"]
+position = Vector2(112, 160)
+centered = false
+texture = ExtResource("8_t79")
+
+[node name="RoofLeftSlope2" type="Sprite2D" parent="Map"]
+position = Vector2(160, 112)
+centered = false
+texture = ExtResource("8_t79")
+
+[node name="RoofTop1" type="Sprite2D" parent="Map"]
+position = Vector2(208, 64)
+centered = false
+texture = ExtResource("1_t18")
+
+[node name="RoofTop2" type="Sprite2D" parent="Map"]
+position = Vector2(256, 64)
+centered = false
+texture = ExtResource("2_t19")
+
+[node name="RoofTop3" type="Sprite2D" parent="Map"]
+position = Vector2(304, 64)
+centered = false
+texture = ExtResource("3_t20")
+
+[node name="RoofTop4" type="Sprite2D" parent="Map"]
+position = Vector2(352, 64)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="RoofTop5" type="Sprite2D" parent="Map"]
+position = Vector2(400, 64)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="RoofTop6" type="Sprite2D" parent="Map"]
+position = Vector2(448, 64)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="RoofTop7" type="Sprite2D" parent="Map"]
+position = Vector2(496, 64)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="RoofTop8" type="Sprite2D" parent="Map"]
+position = Vector2(544, 64)
+centered = false
+texture = ExtResource("3_t20")
+
+[node name="RoofTop9" type="Sprite2D" parent="Map"]
+position = Vector2(592, 64)
+centered = false
+texture = ExtResource("2_t19")
+
+[node name="RoofTop10" type="Sprite2D" parent="Map"]
+position = Vector2(640, 64)
+centered = false
+texture = ExtResource("1_t18")
+
+[node name="RoofRightSlope1" type="Sprite2D" parent="Map"]
+position = Vector2(688, 112)
+centered = false
+texture = ExtResource("9_t80")
+
+[node name="RoofRightSlope2" type="Sprite2D" parent="Map"]
+position = Vector2(736, 160)
+centered = false
+texture = ExtResource("9_t80")
+
+[node name="FloorLeftDoor" type="Sprite2D" parent="Map"]
+position = Vector2(32, 480)
+centered = false
+texture = ExtResource("14_door")
+
+[node name="FloorLeft1" type="Sprite2D" parent="Map"]
+position = Vector2(96, 528)
+centered = false
+texture = ExtResource("6_t23")
+
+[node name="FloorLeft2" type="Sprite2D" parent="Map"]
+position = Vector2(144, 528)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="FloorLeft3" type="Sprite2D" parent="Map"]
+position = Vector2(192, 528)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="FloorLeft4" type="Sprite2D" parent="Map"]
+position = Vector2(240, 528)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="FloorSlopeUp1" type="Sprite2D" parent="Map"]
+position = Vector2(336, 480)
+centered = false
+texture = ExtResource("10_t87")
+
+[node name="FloorSlopeUp2" type="Sprite2D" parent="Map"]
+position = Vector2(384, 432)
+centered = false
+texture = ExtResource("10_t87")
+
+[node name="FloorPeakLeft" type="Sprite2D" parent="Map"]
+position = Vector2(432, 384)
+centered = false
+texture = ExtResource("12_t89")
+
+[node name="FloorPeakRight" type="Sprite2D" parent="Map"]
+position = Vector2(480, 384)
+centered = false
+texture = ExtResource("12_t89")
+flip_h = true
+
+[node name="FloorSlopeDown1" type="Sprite2D" parent="Map"]
+position = Vector2(528, 432)
+centered = false
+texture = ExtResource("13_t90")
+
+[node name="FloorSlopeDown2" type="Sprite2D" parent="Map"]
+position = Vector2(576, 480)
+centered = false
+texture = ExtResource("13_t90")
+
+[node name="FloorRight1" type="Sprite2D" parent="Map"]
+position = Vector2(624, 528)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="FloorRight2" type="Sprite2D" parent="Map"]
+position = Vector2(672, 528)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="FloorRight3" type="Sprite2D" parent="Map"]
+position = Vector2(720, 528)
+centered = false
+texture = ExtResource("4_t21")
+
+[node name="TopSmallLeft1" type="Sprite2D" parent="Map"]
+position = Vector2(256, 192)
+centered = false
+texture = ExtResource("1_t18")
+
+[node name="TopSmallLeft2" type="Sprite2D" parent="Map"]
+position = Vector2(304, 192)
+centered = false
+texture = ExtResource("2_t19")
+
+[node name="TopSmallRight1" type="Sprite2D" parent="Map"]
+position = Vector2(528, 192)
+centered = false
+texture = ExtResource("1_t18")
+
+[node name="TopSmallRight2" type="Sprite2D" parent="Map"]
+position = Vector2(576, 192)
+centered = false
+texture = ExtResource("2_t19")
+
+[node name="MidLeft1" type="Sprite2D" parent="Map"]
+position = Vector2(112, 304)
+centered = false
+texture = ExtResource("1_t18")
+
+[node name="MidLeft2" type="Sprite2D" parent="Map"]
+position = Vector2(160, 304)
+centered = false
+texture = ExtResource("2_t19")
+
+[node name="MidLeft3" type="Sprite2D" parent="Map"]
+position = Vector2(208, 304)
+centered = false
+texture = ExtResource("3_t20")
+
+[node name="MidLeft4" type="Sprite2D" parent="Map"]
+position = Vector2(256, 304)
+centered = false
+texture = ExtResource("5_t22")
+
+[node name="MidRight1" type="Sprite2D" parent="Map"]
+position = Vector2(720, 384)
+centered = false
+texture = ExtResource("1_t18")
+
+[node name="MidRight2" type="Sprite2D" parent="Map"]
+position = Vector2(768, 384)
+centered = false
+texture = ExtResource("2_t19")
+
+[node name="Ladder" type="Sprite2D" parent="Map"]
+position = Vector2(528, 352)
+centered = false
+texture = ExtResource("20_ladder")
+
+[node name="Shield" type="Sprite2D" parent="Map"]
+position = Vector2(412, 392)
+centered = false
+texture = ExtResource("19_shield")
+
+[node name="LeverLeft" type="Sprite2D" parent="Map"]
+position = Vector2(40, 336)
+centered = false
+texture = ExtResource("16_lever")
+
+[node name="LeverMid" type="Sprite2D" parent="Map"]
+position = Vector2(224, 176)
+centered = false
+texture = ExtResource("16_lever")
+
+[node name="TorchRight" type="Sprite2D" parent="Map"]
+position = Vector2(736, 304)
+centered = false
+texture = ExtResource("15_torch")
+
+[node name="BarrelRight" type="Sprite2D" parent="Map"]
+position = Vector2(760, 360)
+centered = false
+texture = ExtResource("17_barrel")
+
+[node name="ChestTopRight" type="Sprite2D" parent="Map"]
+position = Vector2(600, 176)
+centered = false
+texture = ExtResource("18_chest")
+
+[node name="BgPatchTopLeft" type="Sprite2D" parent="Map"]
+position = Vector2(144, 96)
+centered = false
+texture = ExtResource("23_bg_a")
+
+[node name="BgPatchTopMid" type="Sprite2D" parent="Map"]
+position = Vector2(432, 96)
+centered = false
+texture = ExtResource("23_bg_a")
+
+[node name="BgPatchTopRight" type="Sprite2D" parent="Map"]
+position = Vector2(672, 144)
+centered = false
+texture = ExtResource("23_bg_a")
+
+[node name="Ground" type="StaticBody2D" parent="Map"]
+collision_layer = 1
+
+[node name="MainFloorCollision" type="CollisionPolygon2D" parent="Map/Ground"]
+polygon = PackedVector2Array(96, 528, 288, 528, 336, 480, 384, 432, 432, 384, 480, 384, 528, 432, 576, 480, 624, 528, 768, 528, 768, 760, 96, 760)
+
+[node name="RoofCollision" type="CollisionPolygon2D" parent="Map/Ground"]
+polygon = PackedVector2Array(112, 208, 160, 160, 208, 112, 688, 112, 736, 160, 784, 208, 784, 240, 112, 240)
+
+[node name="TopLeftPlatformCollision" type="CollisionPolygon2D" parent="Map/Ground"]
+polygon = PackedVector2Array(256, 192, 352, 192, 352, 208, 256, 208)
+
+[node name="TopRightPlatformCollision" type="CollisionPolygon2D" parent="Map/Ground"]
+polygon = PackedVector2Array(528, 192, 624, 192, 624, 208, 528, 208)
+
+[node name="MidLeftPlatformCollision" type="CollisionPolygon2D" parent="Map/Ground"]
+polygon = PackedVector2Array(112, 304, 304, 304, 304, 320, 112, 320)
+
+[node name="MidRightPlatformCollision" type="CollisionPolygon2D" parent="Map/Ground"]
+polygon = PackedVector2Array(720, 384, 816, 384, 816, 400, 720, 400)
+
+[node name="LeftWallCollision" type="CollisionPolygon2D" parent="Map/Ground"]
+polygon = PackedVector2Array(48, 432, 96, 432, 96, 624, 48, 624)
+
+[node name="RightWallCollision" type="CollisionPolygon2D" parent="Map/Ground"]
+polygon = PackedVector2Array(800, 240, 848, 240, 848, 624, 800, 624)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 50)
+enabled = true
+zoom = Vector2(1.2, 1.2)

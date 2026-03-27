@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmc3f1g5y7k2n"]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/characters/training_dummy.gd" id="2_dummy"]
+
+[node name="TrainingDummy" instance=ExtResource("1_player")]
+script = ExtResource("2_dummy")
+
+[node name="DamagePopups" type="Node2D" parent="."]
+
+[node name="StatusLabel" type="Label" parent="."]
+offset_left = -26.0
+offset_top = -82.0
+offset_right = 26.0
+offset_bottom = -36.0
+theme_override_colors/font_color = Color(0.937255, 0.921569, 0.823529, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "DUMMY\nIDLE"

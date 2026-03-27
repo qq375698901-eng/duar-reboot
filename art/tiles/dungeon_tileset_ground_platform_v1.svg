@@ -1,0 +1,249 @@
+<svg width="512" height="384" viewBox="0 0 512 384" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <symbol id="ground_01" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect width="64" height="64" fill="#2A303B"/>
+        <rect y="4" width="64" height="8" fill="#5B6678"/>
+        <rect y="12" width="64" height="4" fill="#434C5C"/>
+        <rect x="0" y="16" width="16" height="16" fill="#313846"/>
+        <rect x="16" y="16" width="20" height="16" fill="#38404F"/>
+        <rect x="36" y="16" width="12" height="16" fill="#313846"/>
+        <rect x="48" y="16" width="16" height="16" fill="#3A4251"/>
+        <rect x="0" y="32" width="12" height="16" fill="#3C4454"/>
+        <rect x="12" y="32" width="24" height="16" fill="#2F3644"/>
+        <rect x="36" y="32" width="16" height="16" fill="#394150"/>
+        <rect x="52" y="32" width="12" height="16" fill="#2E3542"/>
+        <rect x="0" y="48" width="20" height="16" fill="#323947"/>
+        <rect x="20" y="48" width="16" height="16" fill="#3C4454"/>
+        <rect x="36" y="48" width="28" height="16" fill="#2D3441"/>
+        <rect x="8" y="24" width="4" height="8" fill="#1E232C"/>
+        <rect x="28" y="36" width="4" height="12" fill="#1E232C"/>
+        <rect x="44" y="20" width="4" height="12" fill="#1E232C"/>
+        <rect x="52" y="52" width="4" height="4" fill="#6FD2B8"/>
+      </g>
+    </symbol>
+
+    <symbol id="ground_02" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect width="64" height="64" fill="#29303A"/>
+        <rect y="4" width="64" height="8" fill="#626E81"/>
+        <rect y="12" width="64" height="4" fill="#454E5E"/>
+        <rect x="0" y="16" width="24" height="20" fill="#343B49"/>
+        <rect x="24" y="16" width="16" height="20" fill="#2E3543"/>
+        <rect x="40" y="16" width="24" height="20" fill="#394150"/>
+        <rect x="0" y="36" width="16" height="12" fill="#303745"/>
+        <rect x="16" y="36" width="20" height="12" fill="#3D4656"/>
+        <rect x="36" y="36" width="12" height="12" fill="#323947"/>
+        <rect x="48" y="36" width="16" height="12" fill="#414A5A"/>
+        <rect x="0" y="48" width="28" height="16" fill="#313846"/>
+        <rect x="28" y="48" width="12" height="16" fill="#3C4454"/>
+        <rect x="40" y="48" width="24" height="16" fill="#2D3441"/>
+        <rect x="12" y="20" width="8" height="4" fill="#6FD2B8"/>
+        <rect x="20" y="24" width="4" height="8" fill="#6FD2B8"/>
+        <rect x="44" y="44" width="4" height="12" fill="#1C2129"/>
+      </g>
+    </symbol>
+
+    <symbol id="ground_03" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect width="64" height="64" fill="#262D37"/>
+        <rect y="4" width="64" height="8" fill="#5C687A"/>
+        <rect y="12" width="64" height="4" fill="#40495A"/>
+        <rect x="0" y="16" width="12" height="16" fill="#2E3542"/>
+        <rect x="12" y="16" width="16" height="16" fill="#3B4352"/>
+        <rect x="28" y="16" width="20" height="16" fill="#313846"/>
+        <rect x="48" y="16" width="16" height="16" fill="#394150"/>
+        <rect x="0" y="32" width="20" height="16" fill="#3D4656"/>
+        <rect x="20" y="32" width="12" height="16" fill="#2D3441"/>
+        <rect x="32" y="32" width="20" height="16" fill="#38404F"/>
+        <rect x="52" y="32" width="12" height="16" fill="#2E3542"/>
+        <rect x="0" y="48" width="16" height="16" fill="#313846"/>
+        <rect x="16" y="48" width="24" height="16" fill="#414A5B"/>
+        <rect x="40" y="48" width="24" height="16" fill="#2C333F"/>
+        <rect x="28" y="16" width="4" height="16" fill="#1D222B"/>
+        <rect x="8" y="52" width="8" height="4" fill="#6FD2B8"/>
+      </g>
+    </symbol>
+
+    <symbol id="ground_04" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect width="64" height="64" fill="#28303A"/>
+        <rect y="4" width="64" height="8" fill="#647085"/>
+        <rect y="12" width="64" height="4" fill="#475061"/>
+        <rect x="0" y="16" width="16" height="20" fill="#323947"/>
+        <rect x="16" y="16" width="16" height="20" fill="#3E4757"/>
+        <rect x="32" y="16" width="16" height="20" fill="#303744"/>
+        <rect x="48" y="16" width="16" height="20" fill="#39414F"/>
+        <rect x="0" y="36" width="24" height="12" fill="#3C4555"/>
+        <rect x="24" y="36" width="16" height="12" fill="#2E3543"/>
+        <rect x="40" y="36" width="24" height="12" fill="#404958"/>
+        <rect x="0" y="48" width="12" height="16" fill="#2C333F"/>
+        <rect x="12" y="48" width="20" height="16" fill="#38404F"/>
+        <rect x="32" y="48" width="16" height="16" fill="#313846"/>
+        <rect x="48" y="48" width="16" height="16" fill="#414A5B"/>
+        <rect x="8" y="24" width="4" height="4" fill="#6FD2B8"/>
+        <rect x="36" y="56" width="8" height="4" fill="#6FD2B8"/>
+      </g>
+    </symbol>
+
+    <symbol id="ground_05" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect width="64" height="64" fill="#262C35"/>
+        <rect y="4" width="64" height="8" fill="#5A6678"/>
+        <rect y="12" width="64" height="4" fill="#424A59"/>
+        <rect x="0" y="16" width="20" height="16" fill="#333A47"/>
+        <rect x="20" y="16" width="12" height="16" fill="#404959"/>
+        <rect x="32" y="16" width="20" height="16" fill="#2E3542"/>
+        <rect x="52" y="16" width="12" height="16" fill="#38404E"/>
+        <rect x="0" y="32" width="16" height="16" fill="#3C4554"/>
+        <rect x="16" y="32" width="24" height="16" fill="#2F3644"/>
+        <rect x="40" y="32" width="8" height="16" fill="#3A4251"/>
+        <rect x="48" y="32" width="16" height="16" fill="#303744"/>
+        <rect x="0" y="48" width="24" height="16" fill="#2D3441"/>
+        <rect x="24" y="48" width="16" height="16" fill="#40495A"/>
+        <rect x="40" y="48" width="24" height="16" fill="#313846"/>
+        <rect x="20" y="20" width="4" height="8" fill="#1D222A"/>
+        <rect x="48" y="52" width="4" height="8" fill="#1D222A"/>
+      </g>
+    </symbol>
+
+    <symbol id="ground_06" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect width="64" height="64" fill="#29303A"/>
+        <rect y="4" width="64" height="8" fill="#667286"/>
+        <rect y="12" width="64" height="4" fill="#4A5365"/>
+        <rect x="0" y="16" width="12" height="20" fill="#313846"/>
+        <rect x="12" y="16" width="24" height="20" fill="#3D4656"/>
+        <rect x="36" y="16" width="16" height="20" fill="#2F3643"/>
+        <rect x="52" y="16" width="12" height="20" fill="#38404F"/>
+        <rect x="0" y="36" width="20" height="12" fill="#404959"/>
+        <rect x="20" y="36" width="12" height="12" fill="#303744"/>
+        <rect x="32" y="36" width="20" height="12" fill="#3A4251"/>
+        <rect x="52" y="36" width="12" height="12" fill="#2D3441"/>
+        <rect x="0" y="48" width="12" height="16" fill="#313846"/>
+        <rect x="12" y="48" width="20" height="16" fill="#404A5A"/>
+        <rect x="32" y="48" width="16" height="16" fill="#2F3643"/>
+        <rect x="48" y="48" width="16" height="16" fill="#394150"/>
+        <rect x="8" y="24" width="4" height="4" fill="#6FD2B8"/>
+        <rect x="12" y="20" width="4" height="4" fill="#6FD2B8"/>
+      </g>
+    </symbol>
+
+    <symbol id="ground_07" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect width="64" height="64" fill="#272E38"/>
+        <rect y="4" width="64" height="8" fill="#5D697C"/>
+        <rect y="12" width="64" height="4" fill="#434C5D"/>
+        <rect x="0" y="16" width="16" height="16" fill="#303744"/>
+        <rect x="16" y="16" width="16" height="16" fill="#3C4555"/>
+        <rect x="32" y="16" width="16" height="16" fill="#2E3542"/>
+        <rect x="48" y="16" width="16" height="16" fill="#39414F"/>
+        <rect x="0" y="32" width="12" height="16" fill="#404959"/>
+        <rect x="12" y="32" width="20" height="16" fill="#303744"/>
+        <rect x="32" y="32" width="12" height="16" fill="#38404F"/>
+        <rect x="44" y="32" width="20" height="16" fill="#2D3441"/>
+        <rect x="0" y="48" width="20" height="16" fill="#313846"/>
+        <rect x="20" y="48" width="12" height="16" fill="#40495A"/>
+        <rect x="32" y="48" width="20" height="16" fill="#2F3644"/>
+        <rect x="52" y="48" width="12" height="16" fill="#3A4251"/>
+        <rect x="28" y="16" width="4" height="16" fill="#1D222B"/>
+        <rect x="12" y="56" width="8" height="4" fill="#6FD2B8"/>
+      </g>
+    </symbol>
+
+    <symbol id="ground_08" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect width="64" height="64" fill="#28303A"/>
+        <rect y="4" width="64" height="8" fill="#626F83"/>
+        <rect y="12" width="64" height="4" fill="#475061"/>
+        <rect x="0" y="16" width="24" height="16" fill="#313846"/>
+        <rect x="24" y="16" width="16" height="16" fill="#3D4656"/>
+        <rect x="40" y="16" width="24" height="16" fill="#2F3644"/>
+        <rect x="0" y="32" width="16" height="16" fill="#404959"/>
+        <rect x="16" y="32" width="8" height="16" fill="#303744"/>
+        <rect x="24" y="32" width="24" height="16" fill="#394150"/>
+        <rect x="48" y="32" width="16" height="16" fill="#2D3441"/>
+        <rect x="0" y="48" width="16" height="16" fill="#313846"/>
+        <rect x="16" y="48" width="24" height="16" fill="#40495A"/>
+        <rect x="40" y="48" width="12" height="16" fill="#2F3644"/>
+        <rect x="52" y="48" width="12" height="16" fill="#394150"/>
+        <rect x="52" y="20" width="4" height="12" fill="#1C2129"/>
+        <rect x="8" y="20" width="8" height="4" fill="#6FD2B8"/>
+      </g>
+    </symbol>
+
+    <symbol id="platform_01" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect x="0" y="28" width="64" height="8" fill="#6B778B"/>
+        <rect x="0" y="36" width="64" height="4" fill="#40495A"/>
+        <rect x="4" y="24" width="56" height="4" fill="#9AA6B9"/>
+        <rect x="4" y="20" width="8" height="4" fill="#6FD2B8"/>
+        <rect x="16" y="20" width="8" height="4" fill="#6FD2B8"/>
+        <rect x="28" y="20" width="8" height="4" fill="#6FD2B8"/>
+        <rect x="40" y="20" width="8" height="4" fill="#6FD2B8"/>
+        <rect x="52" y="20" width="8" height="4" fill="#6FD2B8"/>
+      </g>
+    </symbol>
+
+    <symbol id="platform_02" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect x="0" y="28" width="64" height="8" fill="#667185"/>
+        <rect x="0" y="36" width="64" height="4" fill="#3C4454"/>
+        <rect x="4" y="24" width="56" height="4" fill="#929EB2"/>
+        <rect x="8" y="40" width="8" height="4" fill="#1D222A"/>
+        <rect x="28" y="40" width="8" height="4" fill="#1D222A"/>
+        <rect x="48" y="40" width="8" height="4" fill="#1D222A"/>
+      </g>
+    </symbol>
+
+    <symbol id="platform_03" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect x="0" y="28" width="64" height="8" fill="#6A7589"/>
+        <rect x="0" y="36" width="64" height="4" fill="#3E4757"/>
+        <rect x="4" y="24" width="56" height="4" fill="#9AA6BA"/>
+        <rect x="12" y="20" width="8" height="4" fill="#6FD2B8"/>
+        <rect x="44" y="20" width="8" height="4" fill="#6FD2B8"/>
+        <rect x="24" y="40" width="16" height="4" fill="#1D222A"/>
+      </g>
+    </symbol>
+
+    <symbol id="platform_04" viewBox="0 0 64 64">
+      <g shape-rendering="crispEdges">
+        <rect x="0" y="28" width="64" height="8" fill="#647084"/>
+        <rect x="0" y="36" width="64" height="4" fill="#3C4555"/>
+        <rect x="4" y="24" width="56" height="4" fill="#8F9BAF"/>
+        <rect x="4" y="20" width="12" height="4" fill="#6FD2B8"/>
+        <rect x="20" y="20" width="8" height="4" fill="#6FD2B8"/>
+        <rect x="36" y="20" width="12" height="4" fill="#6FD2B8"/>
+        <rect x="52" y="20" width="8" height="4" fill="#6FD2B8"/>
+        <rect x="12" y="40" width="8" height="4" fill="#1D222A"/>
+        <rect x="40" y="40" width="8" height="4" fill="#1D222A"/>
+      </g>
+    </symbol>
+  </defs>
+
+  <g>
+    <use href="#ground_01" x="0" y="0"/>
+    <use href="#ground_02" x="64" y="0"/>
+    <use href="#ground_03" x="128" y="0"/>
+    <use href="#ground_04" x="192" y="0"/>
+    <use href="#ground_05" x="256" y="0"/>
+    <use href="#ground_06" x="320" y="0"/>
+    <use href="#ground_07" x="384" y="0"/>
+    <use href="#ground_08" x="448" y="0"/>
+
+    <use href="#platform_01" x="0" y="64"/>
+    <use href="#platform_02" x="64" y="64"/>
+    <use href="#platform_03" x="128" y="64"/>
+    <use href="#platform_04" x="192" y="64"/>
+
+    <use href="#ground_02" x="0" y="128"/>
+    <use href="#ground_04" x="64" y="128"/>
+    <use href="#ground_06" x="128" y="128"/>
+    <use href="#ground_08" x="192" y="128"/>
+    <use href="#platform_02" x="256" y="128"/>
+    <use href="#platform_04" x="320" y="128"/>
+    <use href="#ground_03" x="384" y="128"/>
+    <use href="#ground_07" x="448" y="128"/>
+  </g>
+</svg>

@@ -1,0 +1,89 @@
+{
+    "name":  "dungeon_shieldguard",
+    "display_name":  "Dungeon Shieldguard",
+    "frame_width":  48,
+    "frame_height":  48,
+    "background":  "transparent",
+    "fixed_frame_size":  true,
+    "baseline_y":  41,
+    "facing":  "right",
+    "notes":  [
+                  "all frames share a fixed 48x48 canvas",
+                  "transparent background",
+                  "designed for frame-by-frame 2D side-action enemy animation",
+                  "sprite sheets contain no overlapping frames",
+                  "shield-forward silhouette with explicit guard posture"
+              ],
+    "animations":  [
+                       {
+                           "name":  "idle",
+                           "file":  "dungeon_shieldguard_idle_strip.png",
+                           "frames":  4,
+                           "fps":  5,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "move",
+                           "file":  "dungeon_shieldguard_move_strip.png",
+                           "frames":  6,
+                           "fps":  7,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "guard",
+                           "file":  "dungeon_shieldguard_guard_strip.png",
+                           "frames":  2,
+                           "fps":  6,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "attack",
+                           "file":  "dungeon_shieldguard_attack_strip.png",
+                           "frames":  7,
+                           "fps":  10,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "hit",
+                           "file":  "dungeon_shieldguard_hit_strip.png",
+                           "frames":  3,
+                           "fps":  8,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "launch",
+                           "file":  "dungeon_shieldguard_launch_strip.png",
+                           "frames":  2,
+                           "fps":  8,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "down",
+                           "file":  "dungeon_shieldguard_down_strip.png",
+                           "frames":  2,
+                           "fps":  6,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "get_up",
+                           "file":  "dungeon_shieldguard_get_up_strip.png",
+                           "frames":  5,
+                           "fps":  8,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "grabbed",
+                           "file":  "dungeon_shieldguard_grabbed_strip.png",
+                           "frames":  2,
+                           "fps":  6,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "death",
+                           "file":  "dungeon_shieldguard_death_strip.png",
+                           "frames":  4,
+                           "fps":  8,
+                           "loop":  false
+                       }
+                   ]
+}
