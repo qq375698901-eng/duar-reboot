@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/dungeon_lancer.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/dungeon_lancer_sprite.tscn" id="2_visuals"]
 [ext_resource type="Script" path="res://scripts/enemies/enemy_attack_hitbox_2d.gd" id="3_hitbox"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemy_status_bars.tscn" id="4_status_bars"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(12, 26)
@@ -36,5 +37,7 @@ shape = SubResource("RectangleShape2D_attack")
 target_position = Vector2(0, 18)
 collision_mask = 5
 enabled = true
+
+[node name="StatusBars" parent="." instance=ExtResource("4_status_bars")]
 
 [node name="DamagePopups" type="Node2D" parent="."]

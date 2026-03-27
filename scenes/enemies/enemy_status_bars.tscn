@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/enemy_status_bars.gd" id="1_script"]
+
+[node name="StatusBars" type="Control"]
+offset_left = -18.0
+offset_top = -56.0
+offset_right = 18.0
+offset_bottom = -50.0
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="HpBar" type="Control" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 36.0
+offset_bottom = 6.0
+mouse_filter = 2
+
+[node name="HpBg" type="ColorRect" parent="HpBar"]
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 34.0
+offset_bottom = 5.0
+color = Color(0.113725, 0.0509804, 0.0509804, 0.9)
+
+[node name="HpFill" type="ColorRect" parent="HpBar"]
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 34.0
+offset_bottom = 5.0
+color = Color(0.839216, 0.188235, 0.188235, 1)
+
+[node name="HpFrame" type="ColorRect" parent="HpBar"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 36.0
+offset_bottom = 6.0
+color = Color(0, 0, 0, 0)

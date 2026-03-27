@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/projectiles/enemy_firebomb_projectile.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://art/projectiles/dungeon_firebomb.png" id="2_texture"]
+[ext_resource type="PackedScene" path="res://scenes/hazards/enemy_fire_patch.tscn" id="3_fire_patch"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
+radius = 4.5
+
+[node name="EnemyFirebombProjectile" type="Area2D"]
+collision_layer = 0
+collision_mask = 7
+monitoring = true
+monitorable = false
+script = ExtResource("1_script")
+fire_patch_scene = ExtResource("3_fire_patch")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_texture")
+centered = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0)
+shape = SubResource("CircleShape2D_hit")

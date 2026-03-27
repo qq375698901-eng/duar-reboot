@@ -22,6 +22,7 @@ enum BehaviorState {
 const WORLD_LAYER := 1
 const CHARACTER_LAYER := 2
 const PLATFORM_LAYER := 3
+const ENEMY_COLLISION_GROUP := &"enemy_bodies"
 const ATTACK_LUNGE_START_FRAME := 2
 const ATTACK_LUNGE_END_FRAME := 4
 const ATTACK_ACTIVE_FRAMES := {
@@ -108,6 +109,7 @@ const COUNTER_ATTACK_ACTIVE_FRAMES := {
 @onready var attack_pivot: Node2D = $AttackPivot
 @onready var attack_hitbox: EnemyAttackHitbox2D = $AttackPivot/AttackHitbox
 @onready var attack_shape: CollisionShape2D = $AttackPivot/AttackHitbox/CollisionShape2D
+@onready var status_bars: EnemyStatusBars = $StatusBars
 @onready var damage_popups_root: Node2D = $DamagePopups
 
 var _top_state: TopState = TopState.OPERABLE
@@ -131,9 +133,11 @@ var _turn_delay_timer := 0.0
 var _attack_locked_position := Vector2.ZERO
 var _has_attack_lock := false
 var _attack_burst_started := false
+var _registered_collision_exception_ids: Dictionary = {}
 
 
 func _ready() -> void:
+	add_to_group(ENEMY_COLLISION_GROUP)
 	_current_hp = max_hp
 	animated_sprite.animation_finished.connect(_on_animated_sprite_animation_finished)
 	animated_sprite.frame_changed.connect(_on_animated_sprite_frame_changed)
@@ -141,8 +145,10 @@ func _ready() -> void:
 	attack_hitbox.configure(self, _build_attack_payload())
 	attack_hitbox.set_active(false)
 	_refresh_target()
+	_sync_nonblocking_collisions()
 	_sync_facing()
 	_apply_collision_profile()
+	update_status_bars()
 	_update_animation_state()
 
 
@@ -150,6 +156,7 @@ func _physics_process(delta: float) -> void:
 	_update_hit_flash(delta)
 	_update_damage_popups(delta)
 	_refresh_target()
+	_sync_nonblocking_collisions()
 
 	if _top_state == TopState.DEAD:
 		velocity = Vector2.ZERO
@@ -257,6 +264,7 @@ func apply_damage(raw_damage: float) -> void:
 	trigger_hit_flash()
 	_show_damage_popup(final_damage)
 	_current_hp = clampf(_current_hp - final_damage, 0.0, max_hp)
+	update_status_bars()
 	if _current_hp <= 0.0:
 		die()
 
@@ -338,6 +346,13 @@ func get_current_hp() -> float:
 	return _current_hp
 
 
+func update_status_bars() -> void:
+	if status_bars == null:
+		return
+	status_bars.set_bar_visible(_top_state != TopState.DEAD)
+	status_bars.set_hp(_current_hp, max_hp)
+
+
 func _physics_operable(delta: float) -> void:
 	_update_behavior(delta)
 	if is_on_floor():
@@ -407,6 +422,7 @@ func die() -> void:
 	_top_state = TopState.DEAD
 	velocity = Vector2.ZERO
 	_apply_collision_profile()
+	update_status_bars()
 	animated_sprite.play(&"death")
 
 
@@ -601,6 +617,35 @@ func _refresh_target() -> void:
 	var named_player := current_scene.find_child("Player", true, false)
 	if named_player is Node2D and _is_valid_target(named_player as Node2D):
 		_target = named_player as Node2D
+
+
+func _sync_nonblocking_collisions() -> void:
+	if not is_inside_tree():
+		return
+
+	if _has_valid_target() and _target is PhysicsBody2D:
+		_register_collision_exception(_target as PhysicsBody2D)
+
+	for node in get_tree().get_nodes_in_group(ENEMY_COLLISION_GROUP):
+		if node == self:
+			continue
+		if node is PhysicsBody2D:
+			_register_collision_exception(node as PhysicsBody2D)
+
+
+func _register_collision_exception(body: PhysicsBody2D) -> void:
+	if body == null:
+		return
+	if not is_instance_valid(body):
+		return
+
+	var body_id := body.get_instance_id()
+	if _registered_collision_exception_ids.has(body_id):
+		return
+
+	_registered_collision_exception_ids[body_id] = true
+	add_collision_exception_with(body)
+	body.add_collision_exception_with(self)
 
 
 func _has_valid_target() -> bool:
@@ -815,7 +860,7 @@ func _apply_collision_profile() -> void:
 		return
 
 	collision_layer = _layer_bit(CHARACTER_LAYER)
-	collision_mask = _layer_bit(WORLD_LAYER) | _layer_bit(PLATFORM_LAYER) | _layer_bit(CHARACTER_LAYER)
+	collision_mask = _layer_bit(WORLD_LAYER) | _layer_bit(PLATFORM_LAYER)
 
 
 func _on_attack_hitbox_target_hit(target: Node, _attack_id: StringName, attack_data: Dictionary) -> void:

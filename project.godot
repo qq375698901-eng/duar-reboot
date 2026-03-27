@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="duar reboot"
-run/main_scene="res://scenes/maps/dungeon/monster_rooms/mob_room_1_image_map.tscn"
+run/main_scene="res://scenes/maps/dungeon/mob_room_1_image_map.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 

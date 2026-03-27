@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://xllbkxgna7ev" path="res://scripts/camera/follow_camera.gd" id="2_qxw2d"]
 [ext_resource type="PackedScene" uid="uid://dmc3f1g5y7k2n" path="res://scenes/characters/training_dummy.tscn" id="3_dummy"]
 [ext_resource type="Script" uid="uid://trosn7d4qroj" path="res://scripts/debug/forced_get_up_checker.gd" id="4_checker"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/dungeon_shieldguard.tscn" id="5_kl0bv"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/dungeon_firebomber.tscn" id="5_kl0bv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(1400, 24)
@@ -105,5 +105,5 @@ player_path = NodePath("../TrainingDummy")
 indicator_path = NodePath("../UiLayer/ForcedGetUpPanel/Indicator")
 label_path = NodePath("../UiLayer/ForcedGetUpPanel/Label")
 
-[node name="DungeonShieldguard" parent="." unique_id=384246273 instance=ExtResource("5_kl0bv")]
-position = Vector2(-273, 55)
+[node name="DungeonFirebomber" parent="." unique_id=136990744 instance=ExtResource("5_kl0bv")]
+position = Vector2(-265, 59)

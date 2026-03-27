@@ -1,19 +1,17 @@
-[gd_scene format=3 uid="uid://cpk3rh2hwqcaw"]
+[gd_scene format=3 uid="uid://cx7vnbucog53m"]
 
 [ext_resource type="Texture2D" uid="uid://w171uq7sgm4b" path="res://art/Map/MobRoom1.png" id="1_bg"]
 [ext_resource type="PackedScene" uid="uid://bfmq6f3w6i4p0" path="res://scenes/characters/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/dungeon_knifeman.tscn" id="3_enemy"]
 [ext_resource type="Script" uid="uid://xllbkxgna7ev" path="res://scripts/camera/follow_camera.gd" id="4_camera"]
-[ext_resource type="Script" path="res://scripts/maps/dungeon_room_2d.gd" id="5_room"]
+[ext_resource type="Script" uid="uid://bs6dsnbqv7qa6" path="res://scripts/maps/dungeon_room_2d.gd" id="5_room"]
 
 [node name="MobRoom1ImageMap" type="Node2D" unique_id=897676830]
 script = ExtResource("5_room")
 room_id = &"mob_room_1"
 room_display_name = "Small Mob Room 01"
-region_kind = 0
 room_type = 1
 room_type_label = "Monster Room (Low Difficulty)"
-gameplay_tags = PackedStringArray("dungeon", "combat", "monster_room", "small_mob_room")
 encounter_level = 1
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1580773611]

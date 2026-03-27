@@ -1,0 +1,82 @@
+{
+    "name":  "dungeon_firebomber",
+    "display_name":  "Dungeon Firebomber",
+    "frame_width":  48,
+    "frame_height":  48,
+    "background":  "transparent",
+    "fixed_frame_size":  true,
+    "baseline_y":  41,
+    "facing":  "right",
+    "notes":  [
+                  "all frames share a fixed 48x48 canvas",
+                  "transparent background",
+                  "designed for frame-by-frame 2D side-action enemy animation",
+                  "sprite sheets contain no overlapping frames",
+                  "fire-bottle silhouette with clear grab-lift-throw poses"
+              ],
+    "animations":  [
+                       {
+                           "name":  "idle",
+                           "file":  "dungeon_firebomber_idle_strip.png",
+                           "frames":  4,
+                           "fps":  5,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "move",
+                           "file":  "dungeon_firebomber_move_strip.png",
+                           "frames":  6,
+                           "fps":  8,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "attack",
+                           "file":  "dungeon_firebomber_attack_strip.png",
+                           "frames":  8,
+                           "fps":  10,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "hit",
+                           "file":  "dungeon_firebomber_hit_strip.png",
+                           "frames":  3,
+                           "fps":  9,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "launch",
+                           "file":  "dungeon_firebomber_launch_strip.png",
+                           "frames":  2,
+                           "fps":  8,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "down",
+                           "file":  "dungeon_firebomber_down_strip.png",
+                           "frames":  2,
+                           "fps":  6,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "get_up",
+                           "file":  "dungeon_firebomber_get_up_strip.png",
+                           "frames":  5,
+                           "fps":  8,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "grabbed",
+                           "file":  "dungeon_firebomber_grabbed_strip.png",
+                           "frames":  2,
+                           "fps":  6,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "death",
+                           "file":  "dungeon_firebomber_death_strip.png",
+                           "frames":  4,
+                           "fps":  8,
+                           "loop":  false
+                       }
+                   ]
+}

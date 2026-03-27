@@ -686,6 +686,7 @@ func apply_launch_by_distance_from_source(source_is_on_left: bool, height_px: fl
 	if _top_state == TopState.DOWN:
 		return
 
+	interrupt_weapon_operation_state()
 	var horizontal_sign := 1 if source_is_on_left else -1
 	var launch_height := maxf(0.0, height_px)
 	var launch_vy := -sqrt(maxf(0.0, 2.0 * gravity_force * launch_height))
