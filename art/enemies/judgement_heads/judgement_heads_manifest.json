@@ -1,0 +1,234 @@
+{
+    "name":  "judgement_heads",
+    "display_name":  "Judgement Boss Heads",
+    "frame_width":  96,
+    "frame_height":  96,
+    "background":  "transparent",
+    "fixed_frame_size":  true,
+    "baseline_y":  74,
+    "facing":  "right",
+    "notes":  [
+                  "five independent head modules for the first boss",
+                  "shared ancient stone judgement mechanism art direction",
+                  "no pillar body, no arena art, no combined full boss sprite",
+                  "all strips use fixed 96x96 cells with transparent backgrounds",
+                  "heads are drawn facing right by default and can be mirrored in engine when needed"
+              ],
+    "heads":  [
+                  {
+                      "id":  "judgement_fire_head",
+                      "display_name":  "Fire Head",
+                      "style":  "fire",
+                      "preview":  "judgement_fire_head_preview_4x.png",
+                      "animations":  [
+                                         {
+                                             "name":  "idle",
+                                             "file":  "judgement_fire_head_idle_strip.png",
+                                             "frames":  4,
+                                             "fps":  6,
+                                             "loop":  true
+                                         },
+                                         {
+                                             "name":  "active",
+                                             "file":  "judgement_fire_head_active_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "cast",
+                                             "file":  "judgement_fire_head_cast_strip.png",
+                                             "frames":  6,
+                                             "fps":  9,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "hit",
+                                             "file":  "judgement_fire_head_hit_strip.png",
+                                             "frames":  3,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "break",
+                                             "file":  "judgement_fire_head_break_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "judgement_thunder_head",
+                      "display_name":  "Thunder Head",
+                      "style":  "thunder",
+                      "preview":  "judgement_thunder_head_preview_4x.png",
+                      "animations":  [
+                                         {
+                                             "name":  "idle",
+                                             "file":  "judgement_thunder_head_idle_strip.png",
+                                             "frames":  4,
+                                             "fps":  6,
+                                             "loop":  true
+                                         },
+                                         {
+                                             "name":  "active",
+                                             "file":  "judgement_thunder_head_active_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "cast",
+                                             "file":  "judgement_thunder_head_cast_strip.png",
+                                             "frames":  6,
+                                             "fps":  9,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "hit",
+                                             "file":  "judgement_thunder_head_hit_strip.png",
+                                             "frames":  3,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "break",
+                                             "file":  "judgement_thunder_head_break_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "judgement_wind_head",
+                      "display_name":  "Wind Head",
+                      "style":  "wind",
+                      "preview":  "judgement_wind_head_preview_4x.png",
+                      "animations":  [
+                                         {
+                                             "name":  "idle",
+                                             "file":  "judgement_wind_head_idle_strip.png",
+                                             "frames":  4,
+                                             "fps":  6,
+                                             "loop":  true
+                                         },
+                                         {
+                                             "name":  "active",
+                                             "file":  "judgement_wind_head_active_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "cast",
+                                             "file":  "judgement_wind_head_cast_strip.png",
+                                             "frames":  6,
+                                             "fps":  9,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "hit",
+                                             "file":  "judgement_wind_head_hit_strip.png",
+                                             "frames":  3,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "break",
+                                             "file":  "judgement_wind_head_break_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "judgement_guard_head",
+                      "display_name":  "Guard Head",
+                      "style":  "guard",
+                      "preview":  "judgement_guard_head_preview_4x.png",
+                      "animations":  [
+                                         {
+                                             "name":  "idle",
+                                             "file":  "judgement_guard_head_idle_strip.png",
+                                             "frames":  4,
+                                             "fps":  6,
+                                             "loop":  true
+                                         },
+                                         {
+                                             "name":  "active",
+                                             "file":  "judgement_guard_head_active_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "cast",
+                                             "file":  "judgement_guard_head_cast_strip.png",
+                                             "frames":  6,
+                                             "fps":  9,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "hit",
+                                             "file":  "judgement_guard_head_hit_strip.png",
+                                             "frames":  3,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "break",
+                                             "file":  "judgement_guard_head_break_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "judgement_restore_head",
+                      "display_name":  "Restore Head",
+                      "style":  "restore",
+                      "preview":  "judgement_restore_head_preview_4x.png",
+                      "animations":  [
+                                         {
+                                             "name":  "idle",
+                                             "file":  "judgement_restore_head_idle_strip.png",
+                                             "frames":  4,
+                                             "fps":  6,
+                                             "loop":  true
+                                         },
+                                         {
+                                             "name":  "active",
+                                             "file":  "judgement_restore_head_active_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "cast",
+                                             "file":  "judgement_restore_head_cast_strip.png",
+                                             "frames":  6,
+                                             "fps":  9,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "hit",
+                                             "file":  "judgement_restore_head_hit_strip.png",
+                                             "frames":  3,
+                                             "fps":  8,
+                                             "loop":  false
+                                         },
+                                         {
+                                             "name":  "break",
+                                             "file":  "judgement_restore_head_break_strip.png",
+                                             "frames":  5,
+                                             "fps":  8,
+                                             "loop":  false
+                                         }
+                                     ]
+                  }
+              ]
+}

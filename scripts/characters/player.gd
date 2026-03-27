@@ -161,6 +161,7 @@ var _guard_counter_ready := false
 var _super_armor_active := false
 var _pending_plain_action_method: StringName = &""
 var _pending_plain_action_expire_at := 0.0
+var _movement_speed_modifiers: Dictionary = {}
 
 
 func _ready() -> void:
@@ -283,7 +284,7 @@ func physics_ground(delta: float) -> void:
 		return
 
 	if _input_x != 0:
-		velocity.x = move_toward(velocity.x, _input_x * max_walk_speed, walk_accel * delta)
+		velocity.x = move_toward(velocity.x, _input_x * get_effective_walk_speed(), walk_accel * delta)
 		update_facing(_input_x)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, ground_friction * delta)
@@ -309,7 +310,7 @@ func physics_air(delta: float) -> void:
 		velocity = Vector2.ZERO
 		return
 
-	var target_speed := float(_input_x) * _air_speed_cap
+	var target_speed := float(_input_x) * get_effective_air_speed_cap()
 	var accel := walk_accel * air_no_input_decel_scale
 	if _input_x != 0:
 		accel = walk_accel * air_accel_scale
@@ -330,7 +331,7 @@ func physics_climb() -> void:
 		start_ladder_jump()
 		return
 
-	velocity = Vector2(0.0, -float(_input_y) * climb_speed)
+	velocity = Vector2(0.0, -float(_input_y) * get_effective_climb_speed())
 
 
 func physics_stun(delta: float) -> void:
@@ -440,7 +441,7 @@ func begin_ground_jump() -> void:
 
 	if run_jump:
 		var carry_speed := maxf(absf(velocity.x), get_max_run_speed()) * run_jump_horizontal_mult
-		_air_speed_cap = get_max_run_speed() * run_jump_horizontal_mult
+		_air_speed_cap = get_base_run_speed() * run_jump_horizontal_mult
 		velocity.x = float(horizontal_sign) * carry_speed
 	else:
 		_air_speed_cap = max_walk_speed
@@ -498,7 +499,7 @@ func start_ladder_jump() -> void:
 		jump_sign = _input_x
 
 	_move_phase = MovePhase.AIR
-	_air_speed_cap = get_max_run_speed()
+	_air_speed_cap = get_base_run_speed()
 	velocity.x = float(jump_sign) * get_max_run_speed()
 	velocity.y = jump_velocity_full * sqrt(ladder_jump_height_ratio)
 	_jump_started_at = get_time_seconds()
@@ -528,8 +529,66 @@ func _exit_run_state() -> void:
 	_run_active = false
 
 
-func get_max_run_speed() -> float:
+func get_base_run_speed() -> float:
 	return max_walk_speed * (1.0 + run_speed_bonus_ratio)
+
+
+func get_movement_speed_scale() -> float:
+	var scale: float = 1.0
+	for key in _movement_speed_modifiers.keys():
+		scale *= clampf(float(_movement_speed_modifiers[key]), 0.1, 4.0)
+	return clampf(scale, 0.1, 4.0)
+
+
+func get_effective_walk_speed() -> float:
+	return max_walk_speed * get_movement_speed_scale()
+
+
+func get_max_run_speed() -> float:
+	return get_base_run_speed() * get_movement_speed_scale()
+
+
+func get_effective_climb_speed() -> float:
+	return climb_speed * get_movement_speed_scale()
+
+
+func get_effective_air_speed_cap() -> float:
+	return _air_speed_cap * get_movement_speed_scale()
+
+
+func set_movement_speed_modifier(source_key: StringName, scale: float) -> void:
+	if source_key == &"":
+		return
+
+	var clamped_scale: float = clampf(scale, 0.1, 4.0)
+	if is_equal_approx(clamped_scale, 1.0):
+		_movement_speed_modifiers.erase(source_key)
+	else:
+		_movement_speed_modifiers[source_key] = clamped_scale
+	_clamp_velocity_to_current_movement_caps()
+
+
+func clear_movement_speed_modifier(source_key: StringName) -> void:
+	if source_key == &"":
+		return
+
+	_movement_speed_modifiers.erase(source_key)
+	_clamp_velocity_to_current_movement_caps()
+
+
+func _clamp_velocity_to_current_movement_caps() -> void:
+	if _move_phase == MovePhase.CLIMB:
+		var climb_cap: float = get_effective_climb_speed()
+		velocity.y = clampf(velocity.y, -climb_cap, climb_cap)
+		return
+
+	var horizontal_cap: float = get_effective_walk_speed()
+	if _move_phase == MovePhase.AIR:
+		horizontal_cap = get_effective_air_speed_cap()
+	elif _run_active or _move_phase == MovePhase.RUN_SKID:
+		horizontal_cap = get_max_run_speed()
+
+	velocity.x = signf(velocity.x) * minf(absf(velocity.x), horizontal_cap)
 
 
 func get_effective_gravity() -> float:
@@ -714,11 +773,12 @@ func apply_launch_from_source(source_is_on_left: bool, height_coef: float, dista
 func receive_weapon_hit(attack_data: Dictionary, source: Node) -> void:
 	var raw_damage: float = attack_data.get("damage", 0.0)
 	var defense_ratio := get_equipped_defense_ratio()
+	var guard_break: bool = bool(attack_data.get("guard_break", false))
 	var source_is_on_left := true
 	if source is Node2D:
 		source_is_on_left = (source as Node2D).global_position.x < global_position.x
 
-	if can_guard_attack_from(source):
+	if not guard_break and can_guard_attack_from(source):
 		_last_received_damage_raw = raw_damage
 		_last_received_damage_final = raw_damage * (1.0 - defense_ratio) * (1.0 - guard_damage_reduction_ratio)
 		apply_damage(_last_received_damage_final)
@@ -1090,7 +1150,7 @@ func update_animation_state() -> void:
 				MovePhase.CLIMB:
 					if absf(velocity.y) > 5.0:
 						target = "climb"
-						speed_scale = clampf(absf(velocity.y) / climb_speed * 1.6, 0.8, 1.8)
+						speed_scale = clampf(absf(velocity.y) / maxf(1.0, get_effective_climb_speed()) * 1.6, 0.8, 1.8)
 					else:
 						target = "climb_idle"
 				MovePhase.RUN_SKID:
@@ -1098,12 +1158,12 @@ func update_animation_state() -> void:
 				MovePhase.AIR:
 					target = "jump_up" if velocity.y < 0.0 else "fall"
 				MovePhase.GROUND:
-					if _run_active or absf(velocity.x) > max_walk_speed + 10.0:
+					if _run_active or absf(velocity.x) > get_effective_walk_speed() + 10.0:
 						target = "run"
-						speed_scale = clampf(absf(velocity.x) / get_max_run_speed() * 1.35, 0.9, 1.5)
+						speed_scale = clampf(absf(velocity.x) / maxf(1.0, get_max_run_speed()) * 1.35, 0.9, 1.5)
 					elif absf(velocity.x) > 8.0:
 						target = "walk"
-						speed_scale = clampf(absf(velocity.x) / max_walk_speed * 1.25, 0.8, 1.35)
+						speed_scale = clampf(absf(velocity.x) / maxf(1.0, get_effective_walk_speed()) * 1.25, 0.8, 1.35)
 					else:
 						target = "idle"
 
@@ -1393,7 +1453,7 @@ func _on_weapon_attack_state_changed(active: bool) -> void:
 		_weapon_attack_hold_run = false
 		_exit_run_state()
 		if _move_phase == MovePhase.GROUND:
-			velocity.x = signf(velocity.x) * minf(absf(velocity.x), max_walk_speed)
+			velocity.x = signf(velocity.x) * minf(absf(velocity.x), get_effective_walk_speed())
 
 
 func _on_weapon_startup_hold_requested(duration_sec: float) -> void:

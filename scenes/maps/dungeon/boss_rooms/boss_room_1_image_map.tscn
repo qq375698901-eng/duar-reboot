@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://bno8y44f144rs"]
+
+[ext_resource type="Texture2D" uid="uid://cv4j1c7x20jwp" path="res://art/Map/Boss_room1.png" id="1_bg"]
+[ext_resource type="PackedScene" uid="uid://bfmq6f3w6i4p0" path="res://scenes/characters/player.tscn" id="2_player"]
+[ext_resource type="Script" uid="uid://xllbkxgna7ev" path="res://scripts/camera/follow_camera.gd" id="3_camera"]
+[ext_resource type="Texture2D" uid="uid://c6rqcm7camkus" path="res://art/Map/Boss_room1_backdrop.png" id="4_backdrop"]
+[ext_resource type="Script" uid="uid://bs6dsnbqv7qa6" path="res://scripts/maps/dungeon_room_2d.gd" id="5_room"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/judgement_wind_head.tscn" id="6_wind_head"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/judgement_restore_head.tscn" id="7_restore_head"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/judgement_guard_head.tscn" id="8_guard_head"]
+
+[node name="BossRoom1ImageMap" type="Node2D" unique_id=1900152975]
+script = ExtResource("5_room")
+room_id = &"boss_room_1"
+room_display_name = "Boss Room 01"
+room_type = 4
+room_type_label = "Boss Room (High Difficulty)"
+encounter_level = 3
+
+[node name="Map" type="Node2D" parent="." unique_id=1542391347]
+scale = Vector2(0.5, 0.5)
+
+[node name="Backdrop" type="Sprite2D" parent="Map" unique_id=1883322651]
+z_index = -10
+position = Vector2(-768, -512)
+texture = ExtResource("4_backdrop")
+centered = false
+
+[node name="Background" type="Sprite2D" parent="Map" unique_id=1564554794]
+texture = ExtResource("1_bg")
+centered = false
+
+[node name="Ground" type="StaticBody2D" parent="Map" unique_id=2122495294]
+collision_mask = 0
+
+[node name="G01_TopBorder" type="CollisionPolygon2D" parent="Map/Ground" unique_id=2000903479]
+position = Vector2(10, -8)
+polygon = PackedVector2Array(96, 78, 1440, 78, 1440, 110, 96, 110)
+
+[node name="G02_LeftBorder" type="CollisionPolygon2D" parent="Map/Ground" unique_id=1410631685]
+position = Vector2(32, -14)
+polygon = PackedVector2Array(96, 78, 128, 78, 128, 946, 96, 946)
+
+[node name="G03_RightBorder" type="CollisionPolygon2D" parent="Map/Ground" unique_id=480445984]
+position = Vector2(-32, -4)
+polygon = PackedVector2Array(1408, 78, 1440, 78, 1440, 946, 1408, 946)
+
+[node name="G04_BottomBorder" type="CollisionPolygon2D" parent="Map/Ground" unique_id=5331087]
+position = Vector2(-30, -12)
+polygon = PackedVector2Array(96, 914, 1440, 914, 1440, 946, 96, 946)
+
+[node name="Platforms" type="StaticBody2D" parent="Map" unique_id=1882561699]
+collision_layer = 4
+collision_mask = 0
+
+[node name="P01_LeftTopPlatform" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=1108066519]
+polygon = PackedVector2Array(318, 206, 636, 206, 636, 240, 318, 240)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="P02_RightTopPlatform" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=935684763]
+position = Vector2(-82, 18)
+polygon = PackedVector2Array(1006, 188, 1310, 190, 1310, 220, 1006, 220)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="P03_LeftMidPlatform" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=483766085]
+polygon = PackedVector2Array(316, 444, 638, 444, 638, 478, 316, 476)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="P04_RightMidPlatform" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=1504068627]
+position = Vector2(-80, -34)
+polygon = PackedVector2Array(1006, 478, 1304, 480, 1304, 510, 1006, 510)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="P05_LeftBottomPlatform" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=1453708987]
+polygon = PackedVector2Array(318, 726, 636, 724, 636, 756, 318, 756)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="P06_RightBottomPlatform" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=1003754386]
+position = Vector2(-82, -46)
+polygon = PackedVector2Array(1006, 770, 1308, 770, 1308, 802, 1006, 802)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="Ladders" type="Node2D" parent="Map" unique_id=2019985744]
+
+[node name="Ladder01" type="Area2D" parent="Map/Ladders" unique_id=1212989455]
+position = Vector2(468, 340)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Ladders/Ladder01" unique_id=929302959]
+position = Vector2(-4, 20)
+polygon = PackedVector2Array(-14, -146, 26, -144, 28, 90, -14, 90)
+
+[node name="Ladder02" type="Area2D" parent="Map/Ladders" unique_id=261460929]
+position = Vector2(556, 326)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Ladders/Ladder02" unique_id=255601282]
+position = Vector2(-6, 32)
+polygon = PackedVector2Array(-16, -148, 28, -148, 28, 86, -16, 86)
+
+[node name="Ladder03" type="Area2D" parent="Map/Ladders" unique_id=185300421]
+position = Vector2(474, 622)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Ladders/Ladder03" unique_id=1949842748]
+position = Vector2(-10, -48)
+polygon = PackedVector2Array(-14, -132, 28, -132, 28, 148, -14, 146)
+
+[node name="Ladder04" type="Area2D" parent="Map/Ladders" unique_id=130672065]
+position = Vector2(1006, 338)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Ladders/Ladder04" unique_id=697954102]
+position = Vector2(-8, 0)
+polygon = PackedVector2Array(-12, -124, 28, -124, 28, 110, -14, 110)
+
+[node name="Ladder05" type="Area2D" parent="Map/Ladders" unique_id=1114546904]
+position = Vector2(1088, 352)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Ladders/Ladder05" unique_id=532933995]
+polygon = PackedVector2Array(-14, -146, 32, -144, 32, 90, -12, 90)
+
+[node name="Ladder06" type="Area2D" parent="Map/Ladders" unique_id=1967117519]
+position = Vector2(1098, 584)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Ladders/Ladder06" unique_id=2138498818]
+position = Vector2(-6, -6)
+polygon = PackedVector2Array(-12, -132, 28, -132, 26, 146, -14, 146)
+
+[node name="Player" parent="." unique_id=2089126232 instance=ExtResource("2_player")]
+position = Vector2(120, 450)
+
+[node name="JudgementWindHeadTest" parent="." unique_id=1321738369 instance=ExtResource("6_wind_head")]
+position = Vector2(350, 354)
+starting_hp_ratio = 0.55
+
+[node name="JudgementRestoreHeadTest" parent="." unique_id=554373545 instance=ExtResource("7_restore_head")]
+position = Vector2(427, 151)
+
+[node name="JudgementGuardHeadTest" parent="." instance=ExtResource("8_guard_head")]
+position = Vector2(512, 151)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=122505619]
+position = Vector2(384, 256)
+zoom = Vector2(2, 2)
+process_callback = 0
+script = ExtResource("3_camera")
+target_path = NodePath("../Player")

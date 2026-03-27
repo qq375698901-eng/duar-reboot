@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/hazards/judgement_wind_field.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_field"]
+size = Vector2(768, 512)
+
+[node name="JudgementWindField" type="Area2D"]
+z_index = 12
+z_as_relative = false
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_field")
