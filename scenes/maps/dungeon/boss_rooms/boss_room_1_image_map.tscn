@@ -149,10 +149,10 @@ position = Vector2(350, 354)
 starting_hp_ratio = 0.55
 
 [node name="JudgementRestoreHeadTest" parent="." unique_id=554373545 instance=ExtResource("7_restore_head")]
-position = Vector2(427, 151)
+position = Vector2(421, 128)
 
-[node name="JudgementGuardHeadTest" parent="." instance=ExtResource("8_guard_head")]
-position = Vector2(512, 151)
+[node name="JudgementGuardHeadTest" parent="." unique_id=1272133161 instance=ExtResource("8_guard_head")]
+position = Vector2(341, 231)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=122505619]
 position = Vector2(384, 256)
