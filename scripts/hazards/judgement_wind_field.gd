@@ -5,6 +5,7 @@ signal field_enabled()
 signal field_disabled()
 
 @export var slow_scale: float = 0.55
+@export var jump_scale: float = 0.5
 @export var pulse_speed: float = 2.2
 @export var mist_color: Color = Color(0.66, 0.75, 0.82, 0.10)
 @export var ring_color: Color = Color(0.78, 0.87, 0.94, 0.18)
@@ -15,6 +16,7 @@ signal field_disabled()
 
 var owner_body: Node
 var modifier_key: StringName = &""
+var jump_modifier_key: StringName = &""
 var _active: bool = false
 var _affected_body_ids: Dictionary = {}
 
@@ -44,11 +46,14 @@ func _exit_tree() -> void:
 	_clear_all_modifiers()
 
 
-func configure(owner_node: Node, slow_modifier_key: StringName, resolved_slow_scale: float = -1.0) -> void:
+func configure(owner_node: Node, slow_modifier_key: StringName, resolved_slow_scale: float = -1.0, resolved_jump_scale: float = -1.0) -> void:
 	owner_body = owner_node
 	modifier_key = slow_modifier_key
+	jump_modifier_key = StringName("%s_jump" % slow_modifier_key)
 	if resolved_slow_scale > 0.0:
 		slow_scale = resolved_slow_scale
+	if resolved_jump_scale > 0.0:
+		jump_scale = resolved_jump_scale
 
 
 func is_field_active() -> bool:
@@ -112,6 +117,10 @@ func _is_valid_slow_target(body: Node) -> bool:
 		return false
 	if not body.has_method("clear_movement_speed_modifier"):
 		return false
+	if not body.has_method("set_jump_height_modifier"):
+		return false
+	if not body.has_method("clear_jump_height_modifier"):
+		return false
 	if body.has_method("is_dead") and body.call("is_dead"):
 		return false
 	return true
@@ -127,6 +136,7 @@ func _apply_slow_to_body(body: Node) -> void:
 
 	_affected_body_ids[body_id] = true
 	body.call("set_movement_speed_modifier", modifier_key, slow_scale)
+	body.call("set_jump_height_modifier", jump_modifier_key, jump_scale)
 
 
 func _clear_slow_from_body(body: Node) -> void:
@@ -134,7 +144,7 @@ func _clear_slow_from_body(body: Node) -> void:
 		return
 	if not is_instance_valid(body):
 		return
-	if modifier_key == &"":
+	if modifier_key == &"" and jump_modifier_key == &"":
 		return
 
 	var body_id: int = body.get_instance_id()
@@ -142,11 +152,14 @@ func _clear_slow_from_body(body: Node) -> void:
 		return
 
 	_affected_body_ids.erase(body_id)
-	body.call("clear_movement_speed_modifier", modifier_key)
+	if modifier_key != &"":
+		body.call("clear_movement_speed_modifier", modifier_key)
+	if jump_modifier_key != &"":
+		body.call("clear_jump_height_modifier", jump_modifier_key)
 
 
 func _clear_all_modifiers() -> void:
-	if modifier_key == &"":
+	if modifier_key == &"" and jump_modifier_key == &"":
 		_affected_body_ids.clear()
 		return
 
@@ -157,8 +170,10 @@ func _clear_all_modifiers() -> void:
 		var body: Node = instance_from_id(body_id) as Node
 		if body == null or not is_instance_valid(body):
 			continue
-		if body.has_method("clear_movement_speed_modifier"):
+		if modifier_key != &"" and body.has_method("clear_movement_speed_modifier"):
 			body.call("clear_movement_speed_modifier", modifier_key)
+		if jump_modifier_key != &"" and body.has_method("clear_jump_height_modifier"):
+			body.call("clear_jump_height_modifier", jump_modifier_key)
 
 
 func _draw() -> void:

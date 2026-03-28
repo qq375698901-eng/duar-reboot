@@ -1,34 +1,36 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://goqjyi6adod4"]
 
-[ext_resource type="Script" path="res://scripts/enemies/judgement_wind_head.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bx3inlwm62as7" path="res://scripts/enemies/judgement_wind_head.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/judgement_wind_head_sprite.tscn" id="2_visuals"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/enemy_status_bars.tscn" id="3_status_bars"]
 [ext_resource type="PackedScene" path="res://scenes/hazards/judgement_wind_field.tscn" id="4_wind_field"]
-[ext_resource type="Script" path="res://scripts/enemies/judgement_guard_mark_overlay.gd" id="5_guard_overlay"]
+[ext_resource type="Script" uid="uid://b8oedpm1oqc61" path="res://scripts/enemies/judgement_guard_mark_overlay.gd" id="5_guard_overlay"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(42, 34)
+size = Vector2(45, 68)
 
-[node name="JudgementWindHead" type="CharacterBody2D"]
+[node name="JudgementWindHead" type="CharacterBody2D" unique_id=374390010]
 script = ExtResource("1_script")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -18)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=901050977]
+position = Vector2(1.5, -35)
 shape = SubResource("RectangleShape2D_body")
 
-[node name="Visuals" parent="." instance=ExtResource("2_visuals")]
+[node name="Visuals" parent="." unique_id=1163916935 instance=ExtResource("2_visuals")]
 position = Vector2(0, -30)
 
-[node name="GuardMarkOverlay" type="Node2D" parent="."]
+[node name="GuardMarkOverlay" type="Node2D" parent="." unique_id=1867838156]
 z_index = 20
 z_as_relative = false
 script = ExtResource("5_guard_overlay")
 
-[node name="WindField" parent="." instance=ExtResource("4_wind_field")]
+[node name="WindField" parent="." unique_id=2089229294 instance=ExtResource("4_wind_field")]
 position = Vector2(0, 86)
 
-[node name="StatusBars" parent="." instance=ExtResource("3_status_bars")]
-offset_left = -26.0
+[node name="StatusBars" parent="." unique_id=949767261 instance=ExtResource("3_status_bars")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -17.0
 offset_top = -78.0
-offset_right = 26.0
+offset_right = 19.0
 offset_bottom = -72.0

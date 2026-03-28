@@ -1,6 +1,11 @@
 extends CharacterBody2D
 class_name JudgementGuardHead
 
+signal head_skill_activated(head: Node)
+signal head_cycle_finished(head: Node)
+signal head_damaged(head: Node, source: Node)
+signal head_broken(head: Node)
+
 enum HeadState {
 	IDLE,
 	ACTIVE,
@@ -13,11 +18,12 @@ enum HeadState {
 const CHARACTER_LAYER := 2
 const ENEMY_COLLISION_GROUP := &"enemy_bodies"
 const JUDGEMENT_HEAD_GROUP := &"judgement_head_units"
+const HEAD_KIND := &"guard"
 
 @export var target_path: NodePath
 
 @export_group("Combat Stats")
-@export var max_hp: float = 190.0
+@export var max_hp: float = 2000.0
 @export var hit_flash_duration: float = 0.12
 @export var hit_flash_color: Color = Color(1.0, 0.42, 0.42, 1.0)
 
@@ -45,6 +51,8 @@ var _target: Node2D
 var _guard_target: Node2D
 var _guard_time_left: float = 0.0
 var _registered_collision_exception_ids: Dictionary = {}
+var _controller_driven: bool = false
+var _cycle_in_progress: bool = false
 
 
 func _ready() -> void:
@@ -71,9 +79,10 @@ func _physics_process(delta: float) -> void:
 
 	match _state:
 		HeadState.IDLE:
-			_cycle_cooldown_left = maxf(0.0, _cycle_cooldown_left - delta)
-			if _cycle_cooldown_left <= 0.0:
-				_enter_state(HeadState.ACTIVE)
+			if not _controller_driven:
+				_cycle_cooldown_left = maxf(0.0, _cycle_cooldown_left - delta)
+				if _cycle_cooldown_left <= 0.0:
+					_enter_state(HeadState.ACTIVE)
 		HeadState.GUARDING:
 			_update_guarding(delta)
 		_:
@@ -92,12 +101,13 @@ func receive_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
 		return
 
 	var raw_damage: float = maxf(0.0, float(attack_data.get("damage", 0.0)))
+	if raw_damage > 0.0:
+		head_damaged.emit(self, _source)
 	apply_damage(raw_damage)
 	if is_dead():
 		return
 
 	trigger_hit_flash()
-	_enter_state(HeadState.HIT)
 
 
 func receive_grabbed_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
@@ -105,12 +115,13 @@ func receive_grabbed_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
 		return
 
 	var raw_damage: float = maxf(0.0, float(attack_data.get("damage", 0.0)))
+	if raw_damage > 0.0:
+		head_damaged.emit(self, _source)
 	apply_damage(raw_damage)
 	if is_dead():
 		return
 
 	trigger_hit_flash()
-	_enter_state(HeadState.HIT)
 
 
 func apply_damage(raw_damage: float) -> void:
@@ -148,6 +159,29 @@ func get_head_hp_ratio() -> float:
 	return clampf(_current_hp / max_hp, 0.0, 1.0)
 
 
+func get_judgement_head_kind() -> StringName:
+	return HEAD_KIND
+
+
+func set_controller_driven(enabled: bool) -> void:
+	_controller_driven = enabled
+	if enabled:
+		_cycle_cooldown_left = 0.0
+
+
+func is_available_for_controller() -> bool:
+	return not is_dead() and _state == HeadState.IDLE
+
+
+func begin_controlled_skill_cycle() -> bool:
+	if not is_available_for_controller():
+		return false
+	_controller_driven = true
+	_cycle_in_progress = true
+	_enter_state(HeadState.ACTIVE)
+	return true
+
+
 func can_receive_guard_mark() -> bool:
 	return not is_dead()
 
@@ -174,6 +208,7 @@ func die() -> void:
 	update_status_bars()
 	animated_sprite.play(&"break")
 	queue_redraw()
+	head_broken.emit(self)
 
 
 func is_dead() -> bool:
@@ -204,12 +239,18 @@ func _begin_guarding(target: Node2D) -> void:
 	if _guard_target.has_method("apply_guard_mark"):
 		_guard_target.call("apply_guard_mark", self, reflect_ratio)
 	_enter_state(HeadState.GUARDING)
+	head_skill_activated.emit(self)
 
 
 func _finish_guard_cycle(cooldown_sec: float = cycle_interval_sec) -> void:
 	_clear_guard_target()
 	_guard_time_left = 0.0
-	_cycle_cooldown_left = cooldown_sec
+	if _controller_driven and _cycle_in_progress:
+		_cycle_in_progress = false
+		head_cycle_finished.emit(self)
+		_cycle_cooldown_left = 0.0
+	else:
+		_cycle_cooldown_left = cooldown_sec
 	_enter_state(HeadState.IDLE)
 
 
@@ -247,6 +288,9 @@ func _on_animated_sprite_animation_finished() -> void:
 				if _guard_target != null and _guard_time_left > 0.0:
 					_enter_state(HeadState.GUARDING)
 				else:
+					if _controller_driven and _cycle_in_progress:
+						_cycle_in_progress = false
+						head_cycle_finished.emit(self)
 					_enter_state(HeadState.IDLE)
 		_:
 			pass
@@ -267,8 +311,26 @@ func _pick_guard_target() -> Node2D:
 	if candidates.is_empty():
 		return null
 
-	var candidate_index: int = randi() % candidates.size()
-	return candidates[candidate_index]
+	var lowest_hp_ratio: float = INF
+	var lowest_candidates: Array[Node2D] = []
+	for candidate in candidates:
+		var hp_ratio: float = 1.0
+		if candidate.has_method("get_head_hp_ratio"):
+			hp_ratio = float(candidate.call("get_head_hp_ratio"))
+		hp_ratio = clampf(hp_ratio, 0.0, 1.0)
+
+		if hp_ratio < lowest_hp_ratio - 0.001:
+			lowest_hp_ratio = hp_ratio
+			lowest_candidates.clear()
+			lowest_candidates.append(candidate)
+		elif is_equal_approx(hp_ratio, lowest_hp_ratio):
+			lowest_candidates.append(candidate)
+
+	if lowest_candidates.is_empty():
+		return candidates[0]
+
+	var candidate_index: int = randi() % lowest_candidates.size()
+	return lowest_candidates[candidate_index]
 
 
 func _is_valid_guard_target(candidate: Node2D) -> bool:

@@ -5,9 +5,12 @@
 [ext_resource type="Script" uid="uid://xllbkxgna7ev" path="res://scripts/camera/follow_camera.gd" id="3_camera"]
 [ext_resource type="Texture2D" uid="uid://c6rqcm7camkus" path="res://art/Map/Boss_room1_backdrop.png" id="4_backdrop"]
 [ext_resource type="Script" uid="uid://bs6dsnbqv7qa6" path="res://scripts/maps/dungeon_room_2d.gd" id="5_room"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/judgement_wind_head.tscn" id="6_wind_head"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/judgement_restore_head.tscn" id="7_restore_head"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/judgement_guard_head.tscn" id="8_guard_head"]
+[ext_resource type="PackedScene" uid="uid://goqjyi6adod4" path="res://scenes/enemies/judgement_wind_head.tscn" id="6_wind_head"]
+[ext_resource type="PackedScene" uid="uid://cnp6b34ge3b03" path="res://scenes/enemies/judgement_restore_head.tscn" id="7_restore_head"]
+[ext_resource type="PackedScene" uid="uid://chxoqsgspd7li" path="res://scenes/enemies/judgement_guard_head.tscn" id="8_guard_head"]
+[ext_resource type="PackedScene" uid="uid://bgysq3b57pycb" path="res://scenes/enemies/judgement_thunder_head.tscn" id="9_thunder_head"]
+[ext_resource type="PackedScene" uid="uid://b1j016p72ql7e" path="res://scenes/enemies/judgement_fire_head.tscn" id="10_fire_head"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/judgement_boss_controller.tscn" id="11_boss_controller"]
 
 [node name="BossRoom1ImageMap" type="Node2D" unique_id=1900152975]
 script = ExtResource("5_room")
@@ -145,14 +148,21 @@ polygon = PackedVector2Array(-12, -132, 28, -132, 26, 146, -14, 146)
 position = Vector2(120, 450)
 
 [node name="JudgementWindHeadTest" parent="." unique_id=1321738369 instance=ExtResource("6_wind_head")]
-position = Vector2(350, 354)
-starting_hp_ratio = 0.55
+position = Vector2(344, 316)
 
 [node name="JudgementRestoreHeadTest" parent="." unique_id=554373545 instance=ExtResource("7_restore_head")]
 position = Vector2(421, 128)
 
 [node name="JudgementGuardHeadTest" parent="." unique_id=1272133161 instance=ExtResource("8_guard_head")]
-position = Vector2(341, 231)
+position = Vector2(343, 201)
+
+[node name="JudgementThunderHeadTest" parent="." unique_id=733015244 instance=ExtResource("9_thunder_head")]
+position = Vector2(432, 252)
+
+[node name="JudgementFireHeadTest" parent="." unique_id=1294022112 instance=ExtResource("10_fire_head")]
+position = Vector2(439, 356)
+
+[node name="JudgementBossController" parent="." instance=ExtResource("11_boss_controller")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=122505619]
 position = Vector2(384, 256)

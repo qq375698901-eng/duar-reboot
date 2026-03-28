@@ -1,5 +1,10 @@
 extends CharacterBody2D
 
+const PlayerAttributeProfile = preload("res://scripts/characters/player_attribute_profile.gd")
+
+signal attribute_profile_changed(snapshot: Dictionary)
+signal resources_changed(current_hp: float, max_hp: float, current_mp: float, max_mp: float)
+
 enum TopState {
 	OPERABLE,
 	STUN,
@@ -70,6 +75,7 @@ const ATTACK_MOTION_BACKWARD := -1
 @export var hit_flash_color: Color = Color(1.0, 0.35, 0.35, 1.0)
 @export var max_hp: float = 100.0
 @export var max_mp: float = 100.0
+@export var base_mp_regen_per_sec: float = 0.0
 @export var debug_hit_damage: float = 10.0
 @export var skill_zc_mp_cost: float = 10.0
 @export var zxc_input_link_window: float = 0.06
@@ -89,6 +95,10 @@ const ATTACK_MOTION_BACKWARD := -1
 @export_range(0.0, 1.0, 0.01) var guard_damage_reduction_ratio: float = 0.9
 @export var guard_counter_window_sec: float = 0.2
 @export var guard_input_link_window: float = 0.05
+
+@export_group("Character Attributes")
+@export_enum("MartialArtist") var starting_profession: int = 0
+@export var starting_free_stat_points: int = 0
 
 @onready var visuals: Node2D = $Visuals
 @onready var body_pivot: Node2D = $Visuals/BodyPivot
@@ -162,18 +172,22 @@ var _super_armor_active := false
 var _pending_plain_action_method: StringName = &""
 var _pending_plain_action_expire_at := 0.0
 var _movement_speed_modifiers: Dictionary = {}
+var _jump_height_modifiers: Dictionary = {}
+var _attribute_profile: PlayerAttributeProfile
 
 
 func _ready() -> void:
 	_ensure_input_actions()
-	_air_speed_cap = max_walk_speed
-	_current_hp = max_hp
-	_current_mp = max_mp
+	_setup_attribute_profile()
+	_air_speed_cap = get_attribute_walk_speed()
+	_current_hp = get_effective_max_hp()
+	_current_mp = get_effective_max_mp()
 	reset_visual_pose()
 	update_facing(facing)
 	apply_collision_profile()
 	update_animation_state()
 	update_status_bars()
+	attribute_profile_changed.emit(get_attribute_snapshot())
 	_setup_eye_trail_dots()
 	_refresh_buff_eye_visuals()
 
@@ -194,6 +208,7 @@ func _physics_process(delta: float) -> void:
 	handle_debug_weapon_inputs()
 	handle_debug_hit_inputs()
 	update_hit_flash(delta)
+	_apply_passive_mp_regen(delta)
 	update_attack_buff_visuals()
 
 	if _top_state == TopState.GRABBED:
@@ -275,7 +290,7 @@ func physics_ground(delta: float) -> void:
 			return
 
 		if _input_x == _run_sign:
-			velocity.x = move_toward(velocity.x, _run_sign * get_max_run_speed(), walk_accel * delta)
+			velocity.x = move_toward(velocity.x, _run_sign * get_max_run_speed(), get_effective_walk_accel() * delta)
 		else:
 			_run_sign = _input_x
 			velocity.x = _run_sign * get_max_run_speed()
@@ -284,7 +299,7 @@ func physics_ground(delta: float) -> void:
 		return
 
 	if _input_x != 0:
-		velocity.x = move_toward(velocity.x, _input_x * get_effective_walk_speed(), walk_accel * delta)
+		velocity.x = move_toward(velocity.x, _input_x * get_effective_walk_speed(), get_effective_walk_accel() * delta)
 		update_facing(_input_x)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, ground_friction * delta)
@@ -311,9 +326,9 @@ func physics_air(delta: float) -> void:
 		return
 
 	var target_speed := float(_input_x) * get_effective_air_speed_cap()
-	var accel := walk_accel * air_no_input_decel_scale
+	var accel := get_effective_walk_accel() * air_no_input_decel_scale
 	if _input_x != 0:
-		accel = walk_accel * air_accel_scale
+		accel = get_effective_walk_accel() * air_accel_scale
 		update_facing(_input_x)
 
 	velocity.x = move_toward(velocity.x, target_speed, accel * delta)
@@ -322,7 +337,7 @@ func physics_air(delta: float) -> void:
 
 func physics_climb() -> void:
 	if not has_ladder_overlap():
-		exit_climb_to_air(max_walk_speed)
+		exit_climb_to_air(get_attribute_walk_speed())
 		return
 
 	global_position.x = _ladder_snap_x
@@ -435,7 +450,7 @@ func begin_ground_jump() -> void:
 	elif absf(velocity.x) > 0.1:
 		horizontal_sign = sign_to_int(velocity.x)
 
-	velocity.y = jump_velocity_full
+	velocity.y = jump_velocity_full * get_jump_height_scale()
 	_jump_started_at = get_time_seconds()
 	_move_phase = MovePhase.AIR
 
@@ -444,7 +459,7 @@ func begin_ground_jump() -> void:
 		_air_speed_cap = get_base_run_speed() * run_jump_horizontal_mult
 		velocity.x = float(horizontal_sign) * carry_speed
 	else:
-		_air_speed_cap = max_walk_speed
+		_air_speed_cap = get_attribute_walk_speed()
 
 
 func handle_jump_cut() -> void:
@@ -501,7 +516,7 @@ func start_ladder_jump() -> void:
 	_move_phase = MovePhase.AIR
 	_air_speed_cap = get_base_run_speed()
 	velocity.x = float(jump_sign) * get_max_run_speed()
-	velocity.y = jump_velocity_full * sqrt(ladder_jump_height_ratio)
+	velocity.y = jump_velocity_full * get_jump_height_scale() * sqrt(ladder_jump_height_ratio)
 	_jump_started_at = get_time_seconds()
 	update_facing(jump_sign)
 
@@ -529,8 +544,172 @@ func _exit_run_state() -> void:
 	_run_active = false
 
 
+func _setup_attribute_profile() -> void:
+	_attribute_profile = PlayerAttributeProfile.new()
+	_attribute_profile.set_profession(starting_profession)
+	if starting_free_stat_points > 0:
+		_attribute_profile.add_free_stat_points(starting_free_stat_points)
+
+
+func get_attribute_snapshot() -> Dictionary:
+	if _attribute_profile == null:
+		return {}
+
+	var snapshot := _attribute_profile.build_snapshot()
+	snapshot["effective_max_hp"] = get_effective_max_hp()
+	snapshot["effective_max_mp"] = get_effective_max_mp()
+	snapshot["current_hp"] = _current_hp
+	snapshot["current_mp"] = _current_mp
+	return snapshot
+
+
+func get_profession_name() -> String:
+	if _attribute_profile == null:
+		return ""
+	return _attribute_profile.get_profession_name()
+
+
+func get_free_stat_points() -> int:
+	if _attribute_profile == null:
+		return 0
+	return _attribute_profile.get_free_stat_points()
+
+
+func add_free_stat_points(amount: int) -> void:
+	if _attribute_profile == null or amount <= 0:
+		return
+
+	var old_max_hp := get_effective_max_hp()
+	var old_max_mp := get_effective_max_mp()
+	_attribute_profile.add_free_stat_points(amount)
+	_apply_attribute_runtime_refresh(old_max_hp, old_max_mp)
+
+
+func allocate_free_stat_points(attribute_id: StringName, amount: int = 1) -> bool:
+	if _attribute_profile == null:
+		return false
+
+	var old_max_hp := get_effective_max_hp()
+	var old_max_mp := get_effective_max_mp()
+	var spent := _attribute_profile.spend_free_stat_points(attribute_id, amount)
+	if not spent:
+		return false
+
+	_apply_attribute_runtime_refresh(old_max_hp, old_max_mp)
+	return true
+
+
+func refund_free_stat_points(attribute_id: StringName, amount: int = 1) -> bool:
+	if _attribute_profile == null:
+		return false
+
+	var old_max_hp := get_effective_max_hp()
+	var old_max_mp := get_effective_max_mp()
+	var refunded := _attribute_profile.refund_free_stat_points(attribute_id, amount)
+	if not refunded:
+		return false
+
+	_apply_attribute_runtime_refresh(old_max_hp, old_max_mp)
+	return true
+
+
+func get_total_attribute_value(attribute_id: StringName) -> int:
+	if _attribute_profile == null:
+		return 0
+	return _attribute_profile.get_total_stat(attribute_id)
+
+
+func get_attack_attribute_damage_multiplier() -> float:
+	if _attribute_profile == null:
+		return 1.0
+	return _attribute_profile.get_attack_damage_multiplier()
+
+
+func get_attribute_movement_speed_scale() -> float:
+	if _attribute_profile == null:
+		return 1.0
+	return _attribute_profile.get_movement_speed_multiplier()
+
+
+func get_attribute_acceleration_multiplier() -> float:
+	if _attribute_profile == null:
+		return 1.0
+	return _attribute_profile.get_acceleration_multiplier()
+
+
+func get_effective_max_hp() -> float:
+	if _attribute_profile == null:
+		return max_hp
+	return max_hp * _attribute_profile.get_hp_multiplier()
+
+
+func get_effective_max_mp() -> float:
+	if _attribute_profile == null:
+		return max_mp
+	return max_mp * _attribute_profile.get_mp_multiplier()
+
+
+func get_effective_mp_regen_per_sec() -> float:
+	if _attribute_profile == null:
+		return base_mp_regen_per_sec
+	return _attribute_profile.get_mp_regen_per_sec(base_mp_regen_per_sec)
+
+
+func get_current_hp() -> float:
+	return _current_hp
+
+
+func get_current_mp() -> float:
+	return _current_mp
+
+
+func _apply_attribute_runtime_refresh(old_max_hp: float, old_max_mp: float) -> void:
+	var new_max_hp := get_effective_max_hp()
+	var new_max_mp := get_effective_max_mp()
+	var hp_ratio := 1.0
+	var mp_ratio := 1.0
+	if old_max_hp > 0.0:
+		hp_ratio = clampf(_current_hp / old_max_hp, 0.0, 1.0)
+	if old_max_mp > 0.0:
+		mp_ratio = clampf(_current_mp / old_max_mp, 0.0, 1.0)
+
+	_current_hp = clampf(new_max_hp * hp_ratio, 0.0, new_max_hp)
+	_current_mp = clampf(new_max_mp * mp_ratio, 0.0, new_max_mp)
+	if _infinite_mp:
+		_current_mp = new_max_mp
+	if _move_phase == MovePhase.AIR:
+		_air_speed_cap = compute_fall_air_cap()
+	else:
+		_air_speed_cap = get_attribute_walk_speed()
+
+	_clamp_velocity_to_current_movement_caps()
+	update_status_bars()
+	attribute_profile_changed.emit(get_attribute_snapshot())
+
+
+func _apply_passive_mp_regen(delta: float) -> void:
+	if delta <= 0.0 or _infinite_mp:
+		if _infinite_mp:
+			var max_effective_mp := get_effective_max_mp()
+			if not is_equal_approx(_current_mp, max_effective_mp):
+				_current_mp = max_effective_mp
+				update_status_bars()
+		return
+
+	var regen_per_sec := get_effective_mp_regen_per_sec()
+	if regen_per_sec <= 0.0 or _current_mp >= get_effective_max_mp():
+		return
+
+	_current_mp = clampf(_current_mp + regen_per_sec * delta, 0.0, get_effective_max_mp())
+	update_status_bars()
+
+
+func get_attribute_walk_speed() -> float:
+	return max_walk_speed * get_attribute_movement_speed_scale()
+
+
 func get_base_run_speed() -> float:
-	return max_walk_speed * (1.0 + run_speed_bonus_ratio)
+	return get_attribute_walk_speed() * (1.0 + run_speed_bonus_ratio)
 
 
 func get_movement_speed_scale() -> float:
@@ -540,8 +719,15 @@ func get_movement_speed_scale() -> float:
 	return clampf(scale, 0.1, 4.0)
 
 
+func get_jump_height_scale() -> float:
+	var scale: float = 1.0
+	for key in _jump_height_modifiers.keys():
+		scale *= clampf(float(_jump_height_modifiers[key]), 0.1, 4.0)
+	return clampf(scale, 0.1, 4.0)
+
+
 func get_effective_walk_speed() -> float:
-	return max_walk_speed * get_movement_speed_scale()
+	return get_attribute_walk_speed() * get_movement_speed_scale()
 
 
 func get_max_run_speed() -> float:
@@ -549,7 +735,11 @@ func get_max_run_speed() -> float:
 
 
 func get_effective_climb_speed() -> float:
-	return climb_speed * get_movement_speed_scale()
+	return climb_speed * get_attribute_movement_speed_scale() * get_movement_speed_scale()
+
+
+func get_effective_walk_accel() -> float:
+	return walk_accel * get_attribute_acceleration_multiplier()
 
 
 func get_effective_air_speed_cap() -> float:
@@ -574,6 +764,24 @@ func clear_movement_speed_modifier(source_key: StringName) -> void:
 
 	_movement_speed_modifiers.erase(source_key)
 	_clamp_velocity_to_current_movement_caps()
+
+
+func set_jump_height_modifier(source_key: StringName, scale: float) -> void:
+	if source_key == &"":
+		return
+
+	var clamped_scale: float = clampf(scale, 0.1, 4.0)
+	if is_equal_approx(clamped_scale, 1.0):
+		_jump_height_modifiers.erase(source_key)
+	else:
+		_jump_height_modifiers[source_key] = clamped_scale
+
+
+func clear_jump_height_modifier(source_key: StringName) -> void:
+	if source_key == &"":
+		return
+
+	_jump_height_modifiers.erase(source_key)
 
 
 func _clamp_velocity_to_current_movement_caps() -> void:
@@ -605,9 +813,9 @@ func get_launch_travel_time_for_height(height_px: float) -> float:
 
 
 func compute_fall_air_cap() -> float:
-	if absf(velocity.x) > max_walk_speed * air_run_carry_threshold:
+	if absf(velocity.x) > get_effective_walk_speed() * air_run_carry_threshold:
 		return get_max_run_speed()
-	return max_walk_speed
+	return get_attribute_walk_speed()
 
 
 func refresh_ladder_state() -> void:
@@ -850,13 +1058,16 @@ func get_equipped_defense_ratio() -> float:
 
 func apply_damage(raw_damage: float) -> void:
 	var final_damage := maxf(0.0, raw_damage)
-	_current_hp = clampf(_current_hp - final_damage, 0.0, max_hp)
+	_current_hp = clampf(_current_hp - final_damage, 0.0, get_effective_max_hp())
 	update_status_bars()
 
 
 func update_status_bars() -> void:
-	_update_bar_fill(hp_fill, _current_hp, max_hp)
-	_update_bar_fill(mp_fill, _current_mp, max_mp)
+	var effective_max_hp := get_effective_max_hp()
+	var effective_max_mp := get_effective_max_mp()
+	_update_bar_fill(hp_fill, _current_hp, effective_max_hp)
+	_update_bar_fill(mp_fill, _current_mp, effective_max_mp)
+	resources_changed.emit(_current_hp, effective_max_hp, _current_mp, effective_max_mp)
 
 
 func _update_bar_fill(fill_rect: ColorRect, current_value: float, max_value: float) -> void:
@@ -887,21 +1098,21 @@ func consume_mp(cost: float) -> bool:
 	if _infinite_mp:
 		return true
 
-	_current_mp = clampf(_current_mp - maxf(0.0, cost), 0.0, max_mp)
+	_current_mp = clampf(_current_mp - maxf(0.0, cost), 0.0, get_effective_max_mp())
 	update_status_bars()
 	return true
 
 
 func restore_debug_resources() -> void:
-	_current_hp = max_hp
-	_current_mp = max_mp
+	_current_hp = get_effective_max_hp()
+	_current_mp = get_effective_max_mp()
 	update_status_bars()
 
 
 func toggle_infinite_mp() -> void:
 	_infinite_mp = not _infinite_mp
 	if _infinite_mp:
-		_current_mp = max_mp
+		_current_mp = get_effective_max_mp()
 	update_status_bars()
 
 

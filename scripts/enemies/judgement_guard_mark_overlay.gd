@@ -1,13 +1,17 @@
 extends Node2D
 
+var _last_active_state: bool = false
+
 
 func _ready() -> void:
 	set_process(true)
 
 
 func _process(_delta: float) -> void:
-	if _has_active_guard_mark():
+	var active_now: bool = _has_active_guard_mark()
+	if active_now or _last_active_state != active_now:
 		queue_redraw()
+	_last_active_state = active_now
 
 
 func _draw() -> void:

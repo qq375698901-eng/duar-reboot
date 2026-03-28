@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dmc3f1g5y7k2n" path="res://scenes/characters/training_dummy.tscn" id="3_dummy"]
 [ext_resource type="Script" uid="uid://trosn7d4qroj" path="res://scripts/debug/forced_get_up_checker.gd" id="4_checker"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/dungeon_overseer.tscn" id="5_kl0bv"]
+[ext_resource type="PackedScene" path="res://scenes/ui/battle_inventory_panel.tscn" id="6_battle_inventory"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(1400, 24)
@@ -49,6 +50,8 @@ script = ExtResource("2_qxw2d")
 target_path = NodePath("../Player")
 
 [node name="UiLayer" type="CanvasLayer" parent="." unique_id=1729606775]
+
+[node name="BattleInventoryPanel" parent="UiLayer" instance=ExtResource("6_battle_inventory")]
 
 [node name="DebugPanel" type="Panel" parent="UiLayer" unique_id=735052185]
 offset_left = 28.0

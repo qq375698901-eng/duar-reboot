@@ -1,0 +1,398 @@
+[gd_scene format=3 uid="uid://ipofs4i8d5yq"]
+
+[ext_resource type="Texture2D" uid="uid://d1807stw5fube" path="res://art/ui/town_set_01/town_background_hub.svg" id="1_bg"]
+[ext_resource type="Texture2D" uid="uid://b7ho51kxkhiqy" path="res://art/ui/town_set_01/town_panel_large.svg" id="2_panel_large"]
+[ext_resource type="Texture2D" uid="uid://cnpxh8wnk7dnl" path="res://art/ui/town_set_01/town_panel_side.svg" id="3_panel_side"]
+[ext_resource type="Texture2D" uid="uid://d4ntvqv1cdtru" path="res://art/ui/town_set_01/town_button_secondary.svg" id="4_button_secondary"]
+[ext_resource type="Texture2D" uid="uid://bt8y0ci6sjtpm" path="res://art/ui/town_set_01/town_button_primary.svg" id="5_button_primary"]
+[ext_resource type="Texture2D" uid="uid://buqsaiobtnjs5" path="res://art/ui/town_set_01/town_tab_active.svg" id="6_tab"]
+[ext_resource type="Texture2D" uid="uid://byveixuym1b2f" path="res://art/ui/town_set_01/town_icon_frame.svg" id="7_icon_frame"]
+[ext_resource type="Script" path="res://scripts/ui/town_hub_main_ui.gd" id="8_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/town_character_panel.tscn" id="9_character_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/town_inventory_panel.tscn" id="10_inventory_panel"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_button"]
+
+[node name="TownHubMainUi" type="Control" unique_id=608256062]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("8_script")
+
+[node name="Background" type="TextureRect" parent="." unique_id=2009033733]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("1_bg")
+expand_mode = 1
+
+[node name="ScreenTint" type="ColorRect" parent="." unique_id=1222631345]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+color = Color(0.02, 0.03, 0.05, 0.22)
+
+[node name="HeaderTag" type="TextureRect" parent="." unique_id=823416331]
+layout_mode = 0
+offset_left = 86.0
+offset_top = 54.0
+offset_right = 306.0
+offset_bottom = 126.0
+mouse_filter = 2
+texture = ExtResource("6_tab")
+expand_mode = 1
+
+[node name="HeaderTagLabel" type="Label" parent="HeaderTag" unique_id=1138862312]
+layout_mode = 0
+offset_right = 220.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.95, 0.93, 0.88, 1)
+theme_override_font_sizes/font_size = 24
+text = "城镇主页"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Title" type="Label" parent="." unique_id=1818839273]
+layout_mode = 0
+offset_left = 94.0
+offset_top = 152.0
+offset_right = 604.0
+offset_bottom = 212.0
+theme_override_colors/font_color = Color(0.94, 0.93, 0.9, 1)
+theme_override_font_sizes/font_size = 42
+text = "铁狱营地"
+
+[node name="Subtitle" type="Label" parent="." unique_id=256421510]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 214.0
+offset_right = 700.0
+offset_bottom = 252.0
+theme_override_colors/font_color = Color(0.63, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "局外中枢 UI 原型：属性总览 + 主功能入口"
+
+[node name="MainInfoPanel" type="TextureRect" parent="." unique_id=53359533]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 276.0
+offset_right = 1052.0
+offset_bottom = 916.0
+mouse_filter = 2
+texture = ExtResource("2_panel_large")
+expand_mode = 1
+
+[node name="MainInfoTitle" type="Label" parent="MainInfoPanel" unique_id=316909603]
+layout_mode = 0
+offset_left = 94.0
+offset_top = 104.0
+offset_right = 420.0
+offset_bottom = 144.0
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 26
+text = "人物状态总览"
+
+[node name="MainInfoSubtitle" type="Label" parent="MainInfoPanel" unique_id=973521535]
+layout_mode = 0
+offset_left = 94.0
+offset_top = 146.0
+offset_right = 494.0
+offset_bottom = 174.0
+theme_override_colors/font_color = Color(0.6, 0.68, 0.74, 1)
+theme_override_font_sizes/font_size = 16
+text = "当前先作为占位区，不录入具体系统数据"
+
+[node name="PortraitFrame" type="TextureRect" parent="MainInfoPanel" unique_id=107401930]
+layout_mode = 0
+offset_left = 89.0
+offset_top = 178.0
+offset_right = 281.0
+offset_bottom = 370.0
+mouse_filter = 2
+texture = ExtResource("7_icon_frame")
+expand_mode = 1
+
+[node name="PortraitPlaceholder" type="Label" parent="MainInfoPanel/PortraitFrame" unique_id=622981575]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 28.0
+offset_right = 172.0
+offset_bottom = 162.0
+theme_override_colors/font_color = Color(0.63, 0.71, 0.75, 1)
+theme_override_font_sizes/font_size = 18
+text = "角色展示
+占位"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BlockTitleA" type="Label" parent="MainInfoPanel" unique_id=2109790132]
+layout_mode = 0
+offset_left = 376.0
+offset_top = 218.0
+offset_right = 520.0
+offset_bottom = 252.0
+theme_override_colors/font_color = Color(0.82, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 20
+text = "基础资料"
+
+[node name="BlockHintA" type="Label" parent="MainInfoPanel" unique_id=296204487]
+layout_mode = 0
+offset_left = 376.0
+offset_top = 258.0
+offset_right = 612.0
+offset_bottom = 344.0
+theme_override_colors/font_color = Color(0.58, 0.66, 0.72, 1)
+theme_override_font_sizes/font_size = 17
+text = "姓名 / 职业 / 等级
+生命 / 法力 / 货币"
+
+[node name="BlockTitleB" type="Label" parent="MainInfoPanel" unique_id=285545687]
+layout_mode = 0
+offset_left = 642.0
+offset_top = 218.0
+offset_right = 786.0
+offset_bottom = 252.0
+theme_override_colors/font_color = Color(0.82, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 20
+text = "战斗属性"
+
+[node name="BlockHintB" type="Label" parent="MainInfoPanel" unique_id=399891045]
+layout_mode = 0
+offset_left = 642.0
+offset_top = 258.0
+offset_right = 832.0
+offset_bottom = 344.0
+theme_override_colors/font_color = Color(0.58, 0.66, 0.72, 1)
+theme_override_font_sizes/font_size = 17
+text = "攻击 / 防御 / 重量
+韧性 / 特效 / 词条"
+
+[node name="WideBlockTitle" type="Label" parent="MainInfoPanel" unique_id=362891762]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 386.0
+offset_right = 460.0
+offset_bottom = 422.0
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+text = "属性详情与状态信息区"
+
+[node name="WideBlockHint" type="Label" parent="MainInfoPanel" unique_id=1567286163]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 454.0
+offset_right = 854.0
+offset_bottom = 598.0
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 18
+text = "这里预留给你后续的人物详细面板。
+可以承接属性列表、装备摘要、被动词条、状态 Buff、专精信息、职业特性等内容。
+当前场景先只固定信息结构和视觉层级。"
+
+[node name="SideNavPanel" type="TextureRect" parent="." unique_id=1331163744]
+layout_mode = 0
+offset_left = 1136.0
+offset_top = 276.0
+offset_right = 1556.0
+offset_bottom = 996.0
+mouse_filter = 2
+texture = ExtResource("3_panel_side")
+expand_mode = 1
+
+[node name="SideNavTitle" type="Label" parent="SideNavPanel" unique_id=1905487356]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 92.0
+offset_right = 240.0
+offset_bottom = 128.0
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 24
+text = "功能入口"
+
+[node name="SideNavHint" type="Label" parent="SideNavPanel" unique_id=1212930198]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 132.0
+offset_right = 294.0
+offset_bottom = 172.0
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 16
+text = "城镇内主要操作导航"
+
+[node name="InventoryButton" type="Button" parent="." unique_id=1497694089]
+layout_mode = 0
+offset_left = 1186.0
+offset_top = 476.0
+offset_right = 1506.0
+offset_bottom = 564.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="InventoryButton" unique_id=1626472810]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 88.0
+mouse_filter = 2
+texture = ExtResource("4_button_secondary")
+expand_mode = 1
+
+[node name="Text" type="Label" parent="InventoryButton" unique_id=1037256844]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.96, 1)
+theme_override_font_sizes/font_size = 30
+text = "库存"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InventoryTag" type="Label" parent="InventoryButton" unique_id=267062049]
+layout_mode = 0
+offset_top = 12.0
+offset_right = 320.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.51, 0.82, 0.76, 1)
+theme_override_font_sizes/font_size = 12
+text = "INVENTORY"
+horizontal_alignment = 1
+
+[node name="CharacterButton" type="Button" parent="." unique_id=81323424]
+layout_mode = 0
+offset_left = 1186.0
+offset_top = 586.0
+offset_right = 1506.0
+offset_bottom = 674.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="CharacterButton" unique_id=1755437315]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 88.0
+mouse_filter = 2
+texture = ExtResource("4_button_secondary")
+expand_mode = 1
+
+[node name="Text" type="Label" parent="CharacterButton" unique_id=660453501]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.96, 1)
+theme_override_font_sizes/font_size = 30
+text = "人物"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CharacterTag" type="Label" parent="CharacterButton" unique_id=791107983]
+layout_mode = 0
+offset_top = 12.0
+offset_right = 320.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.51, 0.82, 0.76, 1)
+theme_override_font_sizes/font_size = 12
+text = "CHARACTER"
+horizontal_alignment = 1
+
+[node name="AuctionButton" type="Button" parent="." unique_id=674566104]
+layout_mode = 0
+offset_left = 1186.0
+offset_top = 696.0
+offset_right = 1506.0
+offset_bottom = 784.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="AuctionButton" unique_id=1088235842]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 88.0
+mouse_filter = 2
+texture = ExtResource("4_button_secondary")
+expand_mode = 1
+
+[node name="Text" type="Label" parent="AuctionButton" unique_id=1230787196]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.96, 1)
+theme_override_font_sizes/font_size = 30
+text = "拍卖行"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AuctionTag" type="Label" parent="AuctionButton" unique_id=2138605519]
+layout_mode = 0
+offset_top = 12.0
+offset_right = 320.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.51, 0.82, 0.76, 1)
+theme_override_font_sizes/font_size = 12
+text = "AUCTION"
+horizontal_alignment = 1
+
+[node name="EnterDungeonButton" type="Button" parent="." unique_id=290494131]
+layout_mode = 0
+offset_left = 1186.0
+offset_top = 830.0
+offset_right = 1506.0
+offset_bottom = 918.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="EnterDungeonButton" unique_id=1899014380]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 88.0
+mouse_filter = 2
+texture = ExtResource("5_button_primary")
+expand_mode = 1
+
+[node name="Text" type="Label" parent="EnterDungeonButton" unique_id=611091124]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0.98, 0.95, 0.9, 1)
+theme_override_font_sizes/font_size = 30
+text = "进入地牢"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnterDungeonTag" type="Label" parent="EnterDungeonButton" unique_id=370536175]
+layout_mode = 0
+offset_top = 12.0
+offset_right = 320.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.93, 0.8, 0.47, 1)
+theme_override_font_sizes/font_size = 12
+text = "ENTER DUNGEON"
+horizontal_alignment = 1
+
+[node name="CharacterScreen" parent="." instance=ExtResource("9_character_panel")]
+z_index = 100
+
+[node name="InventoryScreen" parent="." instance=ExtResource("10_inventory_panel")]
+z_index = 100
+
+[node name="FooterHint" type="Label" parent="." unique_id=1474841941]
+layout_mode = 0
+offset_left = 98.0
+offset_top = 1004.0
+offset_right = 1158.0
+offset_bottom = 1040.0
+theme_override_colors/font_color = Color(0.47, 0.56, 0.62, 1)
+theme_override_font_sizes/font_size = 16
+text = "当前为城镇主 UI 场景原型。按钮已预留为真实节点，后续可以直接挂接库存、角色、拍卖行和地牢入口逻辑。"

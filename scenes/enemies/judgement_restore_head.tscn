@@ -1,29 +1,31 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://cnp6b34ge3b03"]
 
-[ext_resource type="Script" path="res://scripts/enemies/judgement_restore_head.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dukqb2bjnv4qa" path="res://scripts/enemies/judgement_restore_head.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/judgement_restore_head_sprite.tscn" id="2_visuals"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/enemy_status_bars.tscn" id="3_status_bars"]
-[ext_resource type="Script" path="res://scripts/enemies/judgement_guard_mark_overlay.gd" id="4_guard_overlay"]
+[ext_resource type="Script" uid="uid://b8oedpm1oqc61" path="res://scripts/enemies/judgement_guard_mark_overlay.gd" id="4_guard_overlay"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(42, 34)
+size = Vector2(55, 70)
 
-[node name="JudgementRestoreHead" type="CharacterBody2D"]
+[node name="JudgementRestoreHead" type="CharacterBody2D" unique_id=904685171]
 script = ExtResource("1_script")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -18)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=574091125]
+position = Vector2(-0.5, -34)
 shape = SubResource("RectangleShape2D_body")
 
-[node name="Visuals" parent="." instance=ExtResource("2_visuals")]
+[node name="Visuals" parent="." unique_id=1522457369 instance=ExtResource("2_visuals")]
 position = Vector2(0, -30)
 
-[node name="GuardMarkOverlay" type="Node2D" parent="."]
+[node name="GuardMarkOverlay" type="Node2D" parent="." unique_id=420689426]
 z_index = 20
 z_as_relative = false
 script = ExtResource("4_guard_overlay")
 
-[node name="StatusBars" parent="." instance=ExtResource("3_status_bars")]
+[node name="StatusBars" parent="." unique_id=1763077079 instance=ExtResource("3_status_bars")]
+layout_mode = 3
+anchors_preset = 0
 offset_left = -26.0
 offset_top = -78.0
 offset_right = 26.0

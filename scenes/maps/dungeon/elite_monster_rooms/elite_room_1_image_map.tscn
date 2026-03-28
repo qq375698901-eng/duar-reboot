@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://c0jhgdkenmc5m"]
 
 [ext_resource type="Texture2D" uid="uid://bya53q7nvf3kr" path="res://art/Map/EliteRoom1.png" id="1_bg"]
-[ext_resource type="PackedScene" uid="uid://bfmq6f3w6i4p0" path="res://scenes/characters/player.tscn" id="2_player"]
 [ext_resource type="Script" uid="uid://xllbkxgna7ev" path="res://scripts/camera/follow_camera.gd" id="3_camera"]
-[ext_resource type="Texture2D" uid="uid://dvdkj20nj5l2x" path="res://art/map/EliteRoom1_backdrop.png" id="4_backdrop"]
+[ext_resource type="Texture2D" uid="uid://dvdkj20nj5l2x" path="res://art/Map/EliteRoom1_backdrop.png" id="4_backdrop"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/dungeon_overseer.tscn" id="5_1kou1"]
 [ext_resource type="Script" uid="uid://bs6dsnbqv7qa6" path="res://scripts/maps/dungeon_room_2d.gd" id="5_room"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/dungeon_firebomber.tscn" id="6_rhstj"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/dungeon_shieldguard.tscn" id="7_544ry"]
 
 [node name="EliteRoom1ImageMap" type="Node2D" unique_id=1310405121]
 script = ExtResource("5_room")
@@ -100,12 +102,17 @@ collision_mask = 0
 position = Vector2(286, -28)
 polygon = PackedVector2Array(-300, -118, -266, -118, -264, 176, -300, 176)
 
-[node name="Player" parent="." unique_id=1711506119 instance=ExtResource("2_player")]
-position = Vector2(160, 70)
-
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1168132504]
 position = Vector2(384, 360)
 zoom = Vector2(2, 2)
 process_callback = 0
 script = ExtResource("3_camera")
-target_path = NodePath("../Player")
+
+[node name="DungeonOverseer" parent="." unique_id=1607229209 instance=ExtResource("5_1kou1")]
+position = Vector2(418, 218)
+
+[node name="DungeonFirebomber" parent="." unique_id=811577393 instance=ExtResource("6_rhstj")]
+position = Vector2(490, 218)
+
+[node name="DungeonShieldguard" parent="." unique_id=640849904 instance=ExtResource("7_544ry")]
+position = Vector2(346, 214)

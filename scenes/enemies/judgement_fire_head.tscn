@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=3 uid="uid://b1j016p72ql7e"]
+
+[ext_resource type="Script" uid="uid://bie35jk165u3a" path="res://scripts/enemies/judgement_fire_head.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/judgement_fire_head_sprite.tscn" id="2_visuals"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/enemy_status_bars.tscn" id="3_status_bars"]
+[ext_resource type="Script" uid="uid://b8oedpm1oqc61" path="res://scripts/enemies/judgement_guard_mark_overlay.gd" id="4_guard_overlay"]
+[ext_resource type="Script" path="res://scripts/enemies/judgement_fire_binding_overlay.gd" id="5_fire_overlay"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(48, 68)
+
+[node name="JudgementFireHead" type="CharacterBody2D" unique_id=1437994501]
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=478668762]
+position = Vector2(0, -35)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Visuals" parent="." unique_id=1360215280 instance=ExtResource("2_visuals")]
+position = Vector2(0, -30)
+
+[node name="FireBindingOverlay" type="Node2D" parent="." unique_id=343321177]
+z_index = 21
+z_as_relative = false
+script = ExtResource("5_fire_overlay")
+
+[node name="GuardMarkOverlay" type="Node2D" parent="." unique_id=1356603028]
+z_index = 20
+z_as_relative = false
+script = ExtResource("4_guard_overlay")
+
+[node name="BlastsRoot" type="Node2D" parent="." unique_id=1010239243]
+z_index = 15
+z_as_relative = false
+
+[node name="StatusBars" parent="." unique_id=807463026 instance=ExtResource("3_status_bars")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -26.0
+offset_top = -78.0
+offset_right = 26.0
+offset_bottom = -72.0

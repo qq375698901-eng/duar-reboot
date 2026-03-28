@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/judgement_boss_controller.gd" id="1_controller_script"]
+
+[node name="JudgementBossController" type="Node"]
+script = ExtResource("1_controller_script")

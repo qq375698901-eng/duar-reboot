@@ -1,6 +1,11 @@
 extends CharacterBody2D
 class_name JudgementRestoreHead
 
+signal head_skill_activated(head: Node)
+signal head_cycle_finished(head: Node)
+signal head_damaged(head: Node, source: Node)
+signal head_broken(head: Node)
+
 enum HeadState {
 	IDLE,
 	ACTIVE,
@@ -14,11 +19,12 @@ enum HeadState {
 const CHARACTER_LAYER := 2
 const ENEMY_COLLISION_GROUP := &"enemy_bodies"
 const JUDGEMENT_HEAD_GROUP := &"judgement_head_units"
+const HEAD_KIND := &"restore"
 
 @export var target_path: NodePath
 
 @export_group("Combat Stats")
-@export var max_hp: float = 165.0
+@export var max_hp: float = 2000.0
 @export var hit_flash_duration: float = 0.12
 @export var hit_flash_color: Color = Color(1.0, 0.42, 0.42, 1.0)
 
@@ -59,6 +65,8 @@ var _heal_channel_time: float = 0.0
 var _registered_collision_exception_ids: Dictionary = {}
 var _guard_mark_source: Node2D
 var _guard_reflect_ratio: float = 1.0
+var _controller_driven: bool = false
+var _cycle_in_progress: bool = false
 
 
 func _ready() -> void:
@@ -85,9 +93,10 @@ func _physics_process(delta: float) -> void:
 
 	match _state:
 		HeadState.IDLE:
-			_cycle_cooldown_left = maxf(0.0, _cycle_cooldown_left - delta)
-			if _cycle_cooldown_left <= 0.0:
-				_enter_state(HeadState.ACTIVE)
+			if not _controller_driven:
+				_cycle_cooldown_left = maxf(0.0, _cycle_cooldown_left - delta)
+				if _cycle_cooldown_left <= 0.0:
+					_enter_state(HeadState.ACTIVE)
 		HeadState.HEALING:
 			_update_healing(delta)
 		_:
@@ -128,6 +137,8 @@ func receive_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
 		return
 
 	var raw_damage: float = maxf(0.0, float(attack_data.get("damage", 0.0)))
+	if raw_damage > 0.0:
+		head_damaged.emit(self, _source)
 	apply_damage(raw_damage)
 	_apply_guard_reflect(raw_damage, _source)
 	if is_dead():
@@ -136,8 +147,6 @@ func receive_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
 	trigger_hit_flash()
 	if _state == HeadState.HEALING or _state == HeadState.CAST:
 		_interrupt_healing_cycle()
-	else:
-		_enter_state(HeadState.HIT)
 
 
 func receive_grabbed_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
@@ -145,6 +154,8 @@ func receive_grabbed_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
 		return
 
 	var raw_damage: float = maxf(0.0, float(attack_data.get("damage", 0.0)))
+	if raw_damage > 0.0:
+		head_damaged.emit(self, _source)
 	apply_damage(raw_damage)
 	_apply_guard_reflect(raw_damage, _source)
 	if is_dead():
@@ -153,8 +164,6 @@ func receive_grabbed_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
 	trigger_hit_flash()
 	if _state == HeadState.HEALING or _state == HeadState.CAST:
 		_interrupt_healing_cycle()
-	else:
-		_enter_state(HeadState.HIT)
 
 
 func apply_damage(raw_damage: float) -> void:
@@ -190,6 +199,29 @@ func get_head_hp_ratio() -> float:
 	if max_hp <= 0.0:
 		return 0.0
 	return clampf(_current_hp / max_hp, 0.0, 1.0)
+
+
+func get_judgement_head_kind() -> StringName:
+	return HEAD_KIND
+
+
+func set_controller_driven(enabled: bool) -> void:
+	_controller_driven = enabled
+	if enabled:
+		_cycle_cooldown_left = 0.0
+
+
+func is_available_for_controller() -> bool:
+	return not is_dead() and _state == HeadState.IDLE
+
+
+func begin_controlled_skill_cycle() -> bool:
+	if not is_available_for_controller():
+		return false
+	_controller_driven = true
+	_cycle_in_progress = true
+	_enter_state(HeadState.ACTIVE)
+	return true
 
 
 func can_receive_guard_mark() -> bool:
@@ -247,6 +279,7 @@ func die() -> void:
 	update_status_bars()
 	animated_sprite.play(&"break")
 	queue_redraw()
+	head_broken.emit(self)
 
 
 func is_dead() -> bool:
@@ -277,13 +310,19 @@ func _begin_healing(target: Node2D) -> void:
 	_heal_channel_time = 0.0
 	_heal_tick_left = 0.0
 	_enter_state(HeadState.HEALING)
+	head_skill_activated.emit(self)
 
 
 func _finish_healing_cycle(cooldown_sec: float = cycle_interval_sec) -> void:
 	_heal_target = null
 	_heal_tick_left = 0.0
 	_heal_channel_time = 0.0
-	_cycle_cooldown_left = cooldown_sec
+	if _controller_driven and _cycle_in_progress:
+		_cycle_in_progress = false
+		head_cycle_finished.emit(self)
+		_cycle_cooldown_left = 0.0
+	else:
+		_cycle_cooldown_left = cooldown_sec
 	_enter_state(HeadState.IDLE)
 
 
@@ -291,7 +330,12 @@ func _interrupt_healing_cycle() -> void:
 	_heal_target = null
 	_heal_tick_left = 0.0
 	_heal_channel_time = 0.0
-	_cycle_cooldown_left = interrupted_cycle_delay_sec
+	if _controller_driven and _cycle_in_progress:
+		_cycle_in_progress = false
+		head_cycle_finished.emit(self)
+		_cycle_cooldown_left = 0.0
+	else:
+		_cycle_cooldown_left = interrupted_cycle_delay_sec
 	_enter_state(HeadState.INTERRUPTED)
 
 
@@ -300,12 +344,8 @@ func _update_healing(delta: float) -> void:
 	_heal_tick_left = maxf(0.0, _heal_tick_left - delta)
 
 	if not _is_valid_heal_target(_heal_target):
-		_heal_target = _pick_heal_target()
-		if _heal_target == null:
-			if _heal_tick_left <= 0.0:
-				_heal_tick_left = retarget_retry_interval_sec
-			return
-		_heal_tick_left = 0.0
+		_finish_healing_cycle(retarget_retry_interval_sec)
+		return
 
 	if _heal_tick_left > 0.0:
 		return
@@ -319,6 +359,8 @@ func _update_healing(delta: float) -> void:
 	_heal_tick_left = maxf(0.05, current_tick_interval)
 	if _heal_target.has_method("apply_head_heal"):
 		_heal_target.call("apply_head_heal", current_heal_per_tick)
+	if not _is_valid_heal_target(_heal_target):
+		_finish_healing_cycle(cycle_interval_sec)
 
 
 func _apply_guard_reflect(raw_damage: float, source: Node) -> void:
@@ -365,7 +407,7 @@ func _on_animated_sprite_animation_finished() -> void:
 		HeadState.HEALING:
 			if _state == HeadState.HEALING:
 				animated_sprite.play(&"cast")
-		HeadState.HIT, HeadState.INTERRUPTED:
+		HeadState.INTERRUPTED:
 			_enter_state(HeadState.IDLE)
 		_:
 			pass

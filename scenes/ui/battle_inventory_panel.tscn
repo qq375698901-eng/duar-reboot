@@ -1,0 +1,233 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_panel_side.svg" id="1_panel_side"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_tab_active.svg" id="2_tab"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_icon_frame.svg" id="3_icon_frame"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_slot_small.svg" id="4_slot_small"]
+[ext_resource type="Script" path="res://scripts/ui/battle_inventory_panel.gd" id="5_script"]
+
+[node name="BattleInventoryPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_script")
+backpack_grid_path = NodePath("PanelShell/BackpackCard/BackpackGrid")
+slot_texture = ExtResource("4_slot_small")
+
+[node name="PanelShell" type="Control" parent="."]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -468.0
+offset_top = -694.0
+offset_right = -40.0
+offset_bottom = -54.0
+mouse_filter = 2
+
+[node name="MainPanel" type="TextureRect" parent="PanelShell"]
+offset_right = 428.0
+offset_bottom = 640.0
+mouse_filter = 2
+texture = ExtResource("1_panel_side")
+expand_mode = 1
+modulate = Color(1, 1, 1, 0.98)
+
+[node name="InnerShade" type="ColorRect" parent="PanelShell"]
+offset_left = 26.0
+offset_top = 26.0
+offset_right = 402.0
+offset_bottom = 614.0
+mouse_filter = 2
+color = Color(0.06, 0.08, 0.11, 0.76)
+
+[node name="HeaderTab" type="TextureRect" parent="PanelShell"]
+offset_left = 32.0
+offset_top = 28.0
+offset_right = 212.0
+offset_bottom = 88.0
+mouse_filter = 2
+texture = ExtResource("2_tab")
+expand_mode = 1
+
+[node name="HeaderTabLabel" type="Label" parent="PanelShell/HeaderTab"]
+offset_right = 180.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(0.95, 0.93, 0.88, 1)
+theme_override_font_sizes/font_size = 20
+text = "战局背包"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Title" type="Label" parent="PanelShell"]
+offset_left = 34.0
+offset_top = 104.0
+offset_right = 254.0
+offset_bottom = 138.0
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 28
+text = "战局携带物"
+
+[node name="Subtitle" type="Label" parent="PanelShell"]
+offset_left = 36.0
+offset_top = 142.0
+offset_right = 332.0
+offset_bottom = 166.0
+theme_override_colors/font_color = Color(0.6, 0.68, 0.74, 1)
+theme_override_font_sizes/font_size = 14
+text = "更轻量的局内背包，占屏更小，方便战斗中查看。"
+
+[node name="EquipCard" type="ColorRect" parent="PanelShell"]
+offset_left = 34.0
+offset_top = 190.0
+offset_right = 394.0
+offset_bottom = 316.0
+mouse_filter = 2
+color = Color(0.11, 0.14, 0.18, 0.94)
+
+[node name="EquipTopBar" type="ColorRect" parent="PanelShell/EquipCard"]
+offset_right = 360.0
+offset_bottom = 8.0
+mouse_filter = 2
+color = Color(0.55, 0.48, 0.28, 1)
+
+[node name="EquipSlotFrame" type="TextureRect" parent="PanelShell/EquipCard"]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 102.0
+offset_bottom = 102.0
+mouse_filter = 2
+texture = ExtResource("3_icon_frame")
+expand_mode = 1
+
+[node name="EquipSlotLabel" type="Label" parent="PanelShell/EquipCard/EquipSlotFrame"]
+offset_left = 10.0
+offset_top = 12.0
+offset_right = 74.0
+offset_bottom = 70.0
+theme_override_colors/font_color = Color(0.68, 0.75, 0.79, 1)
+theme_override_font_sizes/font_size = 14
+text = "武器槽"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EquipTitle" type="Label" parent="PanelShell/EquipCard"]
+offset_left = 118.0
+offset_top = 24.0
+offset_right = 246.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 20
+text = "当前武器"
+
+[node name="EquipName" type="Label" parent="PanelShell/EquipCard"]
+offset_left = 118.0
+offset_top = 54.0
+offset_right = 310.0
+offset_bottom = 82.0
+theme_override_colors/font_color = Color(0.82, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 18
+text = "铁狱长剑"
+
+[node name="EquipMeta" type="Label" parent="PanelShell/EquipCard"]
+offset_left = 118.0
+offset_top = 86.0
+offset_right = 316.0
+offset_bottom = 116.0
+theme_override_colors/font_color = Color(0.6, 0.68, 0.74, 1)
+theme_override_font_sizes/font_size = 14
+text = "ATK 12    DEF 15%    掌握 Lv.4"
+
+[node name="CarryHint" type="Label" parent="PanelShell/EquipCard"]
+offset_left = 18.0
+offset_top = 108.0
+offset_right = 336.0
+offset_bottom = 122.0
+theme_override_colors/font_color = Color(0.44, 0.8, 0.73, 1)
+theme_override_font_sizes/font_size = 12
+text = "当前只显示战局中随身携带的装备与物资"
+
+[node name="BackpackCard" type="ColorRect" parent="PanelShell"]
+offset_left = 34.0
+offset_top = 338.0
+offset_right = 394.0
+offset_bottom = 624.0
+mouse_filter = 2
+color = Color(0.11, 0.14, 0.18, 0.94)
+
+[node name="BackpackTopBar" type="ColorRect" parent="PanelShell/BackpackCard"]
+offset_right = 360.0
+offset_bottom = 8.0
+mouse_filter = 2
+color = Color(0.37, 0.43, 0.51, 1)
+
+[node name="BackpackTitle" type="Label" parent="PanelShell/BackpackCard"]
+offset_left = 22.0
+offset_top = 18.0
+offset_right = 122.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+text = "背包"
+
+[node name="BackpackSubtitle" type="Label" parent="PanelShell/BackpackCard"]
+offset_left = 24.0
+offset_top = 48.0
+offset_right = 144.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(0.6, 0.68, 0.74, 1)
+theme_override_font_sizes/font_size = 13
+text = "4 x 6 格"
+
+[node name="CapacityLabel" type="Label" parent="PanelShell/BackpackCard"]
+offset_left = 238.0
+offset_top = 22.0
+offset_right = 336.0
+offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.93, 0.8, 0.47, 1)
+theme_override_font_sizes/font_size = 13
+text = "负重 18 / 24"
+horizontal_alignment = 2
+
+[node name="BackpackGrid" type="GridContainer" parent="PanelShell/BackpackCard"]
+offset_left = 110.0
+offset_top = 78.0
+offset_right = 250.0
+offset_bottom = 266.0
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 4
+
+[node name="HintDivider" type="ColorRect" parent="PanelShell/BackpackCard"]
+visible = false
+offset_left = 22.0
+offset_top = 228.0
+offset_right = 338.0
+offset_bottom = 229.0
+mouse_filter = 2
+color = Color(0.28, 0.32, 0.38, 1)
+
+[node name="BottomHint" type="Label" parent="PanelShell/BackpackCard"]
+visible = false
+offset_left = 22.0
+offset_top = 230.0
+offset_right = 338.0
+offset_bottom = 254.0
+theme_override_colors/font_color = Color(0.57, 0.65, 0.71, 1)
+theme_override_font_sizes/font_size = 12
+text = "用于快速确认当前可撤离物资，不承担城镇仓库管理功能。"
+
+[node name="QuickKey" type="Label" parent="PanelShell"]
+offset_left = 282.0
+offset_top = 108.0
+offset_right = 390.0
+offset_bottom = 132.0
+theme_override_colors/font_color = Color(0.44, 0.8, 0.73, 1)
+theme_override_font_sizes/font_size = 13
+text = "TAB"
+horizontal_alignment = 2

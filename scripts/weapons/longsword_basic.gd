@@ -677,10 +677,16 @@ func _get_weapon_holder() -> Node:
 func _build_attack_payload(attack_id: StringName) -> Dictionary:
 	var attack_data: Dictionary = ATTACK_DEFINITIONS.get(String(attack_id), {}).duplicate(true)
 	var attack_coefficient := _get_attack_coefficient(attack_id)
+	var holder: Node = _get_weapon_holder()
+	var attribute_attack_multiplier := 1.0
+	if holder != null and holder.has_method("get_attack_attribute_damage_multiplier"):
+		attribute_attack_multiplier = float(holder.call("get_attack_attribute_damage_multiplier"))
+
 	attack_data["attack_id"] = String(attack_id)
 	attack_data["base_attack_power"] = base_attack_power
 	attack_data["attack_coefficient"] = attack_coefficient
-	attack_data["damage"] = base_attack_power * attack_coefficient
+	attack_data["attribute_attack_multiplier"] = attribute_attack_multiplier
+	attack_data["damage"] = base_attack_power * attack_coefficient * attribute_attack_multiplier
 	return attack_data
 
 

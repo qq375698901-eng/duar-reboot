@@ -1,0 +1,723 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_panel_large.svg" id="1_panel_large"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_panel_side.svg" id="2_panel_side"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_tab_active.svg" id="3_tab"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_icon_frame.svg" id="4_icon_frame"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_button_mini.svg" id="5_button_mini"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_icon_plus.svg" id="6_icon_plus"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_icon_class_swap.svg" id="7_icon_class_swap"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_icon_close.svg" id="8_icon_close"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_button"]
+
+[node name="CharacterScreen" type="Control"]
+visible = false
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 1
+
+[node name="OverlayDim" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 1
+color = Color(0.02, 0.03, 0.05, 0.72)
+
+[node name="PanelShell" type="Control" parent="."]
+offset_left = 248.0
+offset_top = 94.0
+offset_right = 1672.0
+offset_bottom = 954.0
+mouse_filter = 2
+
+[node name="MainPanel" type="TextureRect" parent="PanelShell"]
+offset_right = 1424.0
+offset_bottom = 860.0
+mouse_filter = 2
+texture = ExtResource("1_panel_large")
+expand_mode = 1
+
+[node name="HeaderTab" type="TextureRect" parent="PanelShell"]
+offset_left = 68.0
+offset_top = 30.0
+offset_right = 288.0
+offset_bottom = 102.0
+mouse_filter = 2
+texture = ExtResource("3_tab")
+expand_mode = 1
+
+[node name="HeaderTabLabel" type="Label" parent="PanelShell/HeaderTab"]
+offset_right = 220.0
+offset_bottom = 72.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.93, 0.88, 1)
+theme_override_font_sizes/font_size = 24
+text = "人物界面"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Title" type="Label" parent="PanelShell"]
+offset_left = 74.0
+offset_top = 112.0
+offset_right = 384.0
+offset_bottom = 154.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 36
+text = "人物总览"
+
+[node name="Subtitle" type="Label" parent="PanelShell"]
+offset_left = 78.0
+offset_top = 156.0
+offset_right = 676.0
+offset_bottom = 204.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 16
+text = "属性分配、武器掌握与职业专精界面原型。当前只实现 UI 视觉与动线，不接入任何系统数据。"
+autowrap_mode = 2
+
+[node name="CloseButton" type="Button" parent="PanelShell"]
+offset_left = 1294.0
+offset_top = 34.0
+offset_right = 1350.0
+offset_bottom = 90.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="PanelShell/CloseButton"]
+offset_right = 56.0
+offset_bottom = 56.0
+mouse_filter = 2
+texture = ExtResource("5_button_mini")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="PanelShell/CloseButton"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+texture = ExtResource("8_icon_close")
+expand_mode = 1
+
+[node name="ProfileCard" type="TextureRect" parent="PanelShell"]
+offset_left = 66.0
+offset_top = 228.0
+offset_right = 392.0
+offset_bottom = 802.0
+mouse_filter = 2
+texture = ExtResource("2_panel_side")
+expand_mode = 1
+
+[node name="PortraitFrame" type="TextureRect" parent="PanelShell/ProfileCard"]
+offset_left = 82.0
+offset_top = 74.0
+offset_right = 242.0
+offset_bottom = 234.0
+mouse_filter = 2
+texture = ExtResource("4_icon_frame")
+expand_mode = 1
+
+[node name="PortraitLabel" type="Label" parent="PanelShell/ProfileCard/PortraitFrame"]
+offset_left = 18.0
+offset_top = 24.0
+offset_right = 142.0
+offset_bottom = 136.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.65, 0.73, 0.77, 1)
+theme_override_font_sizes/font_size = 20
+text = "角色立绘\n占位"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProfileName" type="Label" parent="PanelShell/ProfileCard"]
+offset_left = 54.0
+offset_top = 262.0
+offset_right = 246.0
+offset_bottom = 298.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 26
+text = "伊索尔"
+
+[node name="ProfileJob" type="Label" parent="PanelShell/ProfileCard"]
+offset_left = 54.0
+offset_top = 302.0
+offset_right = 262.0
+offset_bottom = 332.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 17
+text = "流亡剑士 / 14级"
+
+[node name="ProfileFlavorTitle" type="Label" parent="PanelShell/ProfileCard"]
+offset_left = 54.0
+offset_top = 368.0
+offset_right = 180.0
+offset_bottom = 398.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 20
+text = "风格定位"
+
+[node name="ProfileFlavor" type="Label" parent="PanelShell/ProfileCard"]
+offset_left = 54.0
+offset_top = 406.0
+offset_right = 266.0
+offset_bottom = 482.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.74, 0.79, 0.84, 1)
+theme_override_font_sizes/font_size = 18
+text = "以坚实的近战压迫\n和反击节奏见长"
+autowrap_mode = 2
+
+[node name="ProfileMetaTitle" type="Label" parent="PanelShell/ProfileCard"]
+offset_left = 54.0
+offset_top = 506.0
+offset_right = 188.0
+offset_bottom = 536.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 20
+text = "状态摘要"
+
+[node name="ProfileMetaBody" type="Label" parent="PanelShell/ProfileCard"]
+offset_left = 54.0
+offset_top = 548.0
+offset_right = 268.0
+offset_bottom = 682.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 17
+text = "当前武器：铁狱长剑\n掌握方向：稳健近战\n构筑状态：均衡流派"
+autowrap_mode = 2
+
+[node name="StatsCard" type="ColorRect" parent="PanelShell"]
+offset_left = 426.0
+offset_top = 228.0
+offset_right = 902.0
+offset_bottom = 802.0
+mouse_filter = 2
+color = Color(0.12, 0.15, 0.2, 0.94)
+
+[node name="StatsTopBar" type="ColorRect" parent="PanelShell/StatsCard"]
+offset_right = 476.0
+offset_bottom = 12.0
+mouse_filter = 2
+color = Color(0.4, 0.46, 0.55, 1)
+
+[node name="StatsHeader" type="Label" parent="PanelShell/StatsCard"]
+offset_left = 34.0
+offset_top = 30.0
+offset_right = 194.0
+offset_bottom = 64.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 26
+text = "四维属性"
+
+[node name="StatsHint" type="Label" parent="PanelShell/StatsCard"]
+offset_left = 36.0
+offset_top = 66.0
+offset_right = 230.0
+offset_bottom = 92.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 15
+text = "当前为 UI 占位数据"
+
+[node name="FreePointLabel" type="Label" parent="PanelShell/StatsCard"]
+offset_left = 284.0
+offset_top = 28.0
+offset_right = 404.0
+offset_bottom = 54.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 18
+text = "自由属性点"
+
+[node name="FreePointValue" type="ColorRect" parent="PanelShell/StatsCard"]
+offset_left = 330.0
+offset_top = 58.0
+offset_right = 412.0
+offset_bottom = 126.0
+mouse_filter = 2
+color = Color(0.17, 0.21, 0.27, 1)
+
+[node name="FreePointText" type="Label" parent="PanelShell/StatsCard/FreePointValue"]
+offset_right = 82.0
+offset_bottom = 68.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.93, 0.8, 0.47, 1)
+theme_override_font_sizes/font_size = 28
+text = "8"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatRow1" type="ColorRect" parent="PanelShell/StatsCard"]
+offset_left = 30.0
+offset_top = 148.0
+offset_right = 442.0
+offset_bottom = 226.0
+mouse_filter = 2
+color = Color(0.1, 0.13, 0.17, 1)
+
+[node name="StatLabel" type="Label" parent="PanelShell/StatsCard/StatRow1"]
+offset_left = 22.0
+offset_top = 16.0
+offset_right = 114.0
+offset_bottom = 48.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+text = "力量"
+
+[node name="StatHint" type="Label" parent="PanelShell/StatsCard/StatRow1"]
+offset_left = 22.0
+offset_top = 44.0
+offset_right = 144.0
+offset_bottom = 62.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.54, 0.62, 0.68, 1)
+theme_override_font_sizes/font_size = 13
+text = "近战压制"
+
+[node name="StatValue" type="Label" parent="PanelShell/StatsCard/StatRow1"]
+offset_left = 274.0
+offset_top = 16.0
+offset_right = 322.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.82, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 24
+text = "12"
+horizontal_alignment = 1
+
+[node name="PlusButton" type="Button" parent="PanelShell/StatsCard/StatRow1"]
+offset_left = 346.0
+offset_top = 14.0
+offset_right = 394.0
+offset_bottom = 62.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="PanelShell/StatsCard/StatRow1/PlusButton"]
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("5_button_mini")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="PanelShell/StatsCard/StatRow1/PlusButton"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 36.0
+offset_bottom = 36.0
+mouse_filter = 2
+texture = ExtResource("6_icon_plus")
+expand_mode = 1
+
+[node name="StatRow2" type="ColorRect" parent="PanelShell/StatsCard"]
+offset_left = 30.0
+offset_top = 238.0
+offset_right = 442.0
+offset_bottom = 316.0
+mouse_filter = 2
+color = Color(0.1, 0.13, 0.17, 1)
+
+[node name="StatLabel" type="Label" parent="PanelShell/StatsCard/StatRow2"]
+offset_left = 22.0
+offset_top = 16.0
+offset_right = 114.0
+offset_bottom = 48.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+text = "敏捷"
+
+[node name="StatHint" type="Label" parent="PanelShell/StatsCard/StatRow2"]
+offset_left = 22.0
+offset_top = 44.0
+offset_right = 154.0
+offset_bottom = 62.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.54, 0.62, 0.68, 1)
+theme_override_font_sizes/font_size = 13
+text = "位移与节奏"
+
+[node name="StatValue" type="Label" parent="PanelShell/StatsCard/StatRow2"]
+offset_left = 274.0
+offset_top = 16.0
+offset_right = 322.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.82, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 24
+text = "15"
+horizontal_alignment = 1
+
+[node name="PlusButton" type="Button" parent="PanelShell/StatsCard/StatRow2"]
+offset_left = 346.0
+offset_top = 14.0
+offset_right = 394.0
+offset_bottom = 62.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="PanelShell/StatsCard/StatRow2/PlusButton"]
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("5_button_mini")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="PanelShell/StatsCard/StatRow2/PlusButton"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 36.0
+offset_bottom = 36.0
+mouse_filter = 2
+texture = ExtResource("6_icon_plus")
+expand_mode = 1
+
+[node name="StatRow3" type="ColorRect" parent="PanelShell/StatsCard"]
+offset_left = 30.0
+offset_top = 328.0
+offset_right = 442.0
+offset_bottom = 406.0
+mouse_filter = 2
+color = Color(0.1, 0.13, 0.17, 1)
+
+[node name="StatLabel" type="Label" parent="PanelShell/StatsCard/StatRow3"]
+offset_left = 22.0
+offset_top = 16.0
+offset_right = 114.0
+offset_bottom = 48.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+text = "体魄"
+
+[node name="StatHint" type="Label" parent="PanelShell/StatsCard/StatRow3"]
+offset_left = 22.0
+offset_top = 44.0
+offset_right = 154.0
+offset_bottom = 62.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.54, 0.62, 0.68, 1)
+theme_override_font_sizes/font_size = 13
+text = "生存与韧性"
+
+[node name="StatValue" type="Label" parent="PanelShell/StatsCard/StatRow3"]
+offset_left = 274.0
+offset_top = 16.0
+offset_right = 322.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.82, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 24
+text = "11"
+horizontal_alignment = 1
+
+[node name="PlusButton" type="Button" parent="PanelShell/StatsCard/StatRow3"]
+offset_left = 346.0
+offset_top = 14.0
+offset_right = 394.0
+offset_bottom = 62.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="PanelShell/StatsCard/StatRow3/PlusButton"]
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("5_button_mini")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="PanelShell/StatsCard/StatRow3/PlusButton"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 36.0
+offset_bottom = 36.0
+mouse_filter = 2
+texture = ExtResource("6_icon_plus")
+expand_mode = 1
+
+[node name="StatRow4" type="ColorRect" parent="PanelShell/StatsCard"]
+offset_left = 30.0
+offset_top = 418.0
+offset_right = 442.0
+offset_bottom = 496.0
+mouse_filter = 2
+color = Color(0.1, 0.13, 0.17, 1)
+
+[node name="StatLabel" type="Label" parent="PanelShell/StatsCard/StatRow4"]
+offset_left = 22.0
+offset_top = 16.0
+offset_right = 114.0
+offset_bottom = 48.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+text = "意志"
+
+[node name="StatHint" type="Label" parent="PanelShell/StatsCard/StatRow4"]
+offset_left = 22.0
+offset_top = 44.0
+offset_right = 154.0
+offset_bottom = 62.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.54, 0.62, 0.68, 1)
+theme_override_font_sizes/font_size = 13
+text = "技能与资源"
+
+[node name="StatValue" type="Label" parent="PanelShell/StatsCard/StatRow4"]
+offset_left = 274.0
+offset_top = 16.0
+offset_right = 322.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.82, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 24
+text = "9"
+horizontal_alignment = 1
+
+[node name="PlusButton" type="Button" parent="PanelShell/StatsCard/StatRow4"]
+offset_left = 346.0
+offset_top = 14.0
+offset_right = 394.0
+offset_bottom = 62.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="PanelShell/StatsCard/StatRow4/PlusButton"]
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("5_button_mini")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="PanelShell/StatsCard/StatRow4/PlusButton"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 36.0
+offset_bottom = 36.0
+mouse_filter = 2
+texture = ExtResource("6_icon_plus")
+expand_mode = 1
+
+[node name="StatsFooter" type="Label" parent="PanelShell/StatsCard"]
+offset_left = 34.0
+offset_top = 520.0
+offset_right = 412.0
+offset_bottom = 600.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 16
+text = "点击右侧加号进行属性分配。当前仅实现界面表现，不接入实际成长逻辑。"
+autowrap_mode = 2
+
+[node name="WeaponCard" type="TextureRect" parent="PanelShell"]
+offset_left = 942.0
+offset_top = 228.0
+offset_right = 1278.0
+offset_bottom = 468.0
+mouse_filter = 2
+texture = ExtResource("2_panel_side")
+expand_mode = 1
+
+[node name="WeaponTitle" type="Label" parent="PanelShell/WeaponCard"]
+offset_left = 56.0
+offset_top = 78.0
+offset_right = 190.0
+offset_bottom = 112.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 24
+text = "当前武器"
+
+[node name="WeaponName" type="Label" parent="PanelShell/WeaponCard"]
+offset_left = 56.0
+offset_top = 124.0
+offset_right = 240.0
+offset_bottom = 158.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.82, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 22
+text = "铁狱长剑"
+
+[node name="WeaponAtkLabel" type="Label" parent="PanelShell/WeaponCard"]
+offset_left = 56.0
+offset_top = 180.0
+offset_right = 156.0
+offset_bottom = 208.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 17
+text = "攻击力"
+
+[node name="WeaponAtkValue" type="Label" parent="PanelShell/WeaponCard"]
+offset_left = 206.0
+offset_top = 176.0
+offset_right = 278.0
+offset_bottom = 210.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+text = "12"
+horizontal_alignment = 2
+
+[node name="WeaponDefLabel" type="Label" parent="PanelShell/WeaponCard"]
+offset_left = 56.0
+offset_top = 216.0
+offset_right = 156.0
+offset_bottom = 244.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 17
+text = "防御值"
+
+[node name="WeaponDefValue" type="Label" parent="PanelShell/WeaponCard"]
+offset_left = 192.0
+offset_top = 212.0
+offset_right = 278.0
+offset_bottom = 246.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+text = "15%"
+horizontal_alignment = 2
+
+[node name="WeaponMasteryLabel" type="Label" parent="PanelShell/WeaponCard"]
+offset_left = 56.0
+offset_top = 252.0
+offset_right = 164.0
+offset_bottom = 280.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 17
+text = "掌握等级"
+
+[node name="WeaponMasteryValue" type="Label" parent="PanelShell/WeaponCard"]
+offset_left = 168.0
+offset_top = 248.0
+offset_right = 278.0
+offset_bottom = 282.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.93, 0.8, 0.47, 1)
+theme_override_font_sizes/font_size = 22
+text = "Lv.4"
+horizontal_alignment = 2
+
+[node name="ClassCard" type="TextureRect" parent="PanelShell"]
+offset_left = 942.0
+offset_top = 500.0
+offset_right = 1278.0
+offset_bottom = 790.0
+mouse_filter = 2
+texture = ExtResource("2_panel_side")
+expand_mode = 1
+
+[node name="ClassTitle" type="Label" parent="PanelShell/ClassCard"]
+offset_left = 56.0
+offset_top = 78.0
+offset_right = 190.0
+offset_bottom = 112.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 24
+text = "职业信息"
+
+[node name="ClassSwapButton" type="Button" parent="PanelShell/ClassCard"]
+offset_left = 236.0
+offset_top = 70.0
+offset_right = 292.0
+offset_bottom = 126.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_button")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_button")
+
+[node name="Background" type="TextureRect" parent="PanelShell/ClassCard/ClassSwapButton"]
+offset_right = 56.0
+offset_bottom = 56.0
+mouse_filter = 2
+texture = ExtResource("5_button_mini")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="PanelShell/ClassCard/ClassSwapButton"]
+offset_left = 14.0
+offset_top = 14.0
+offset_right = 42.0
+offset_bottom = 42.0
+mouse_filter = 2
+texture = ExtResource("7_icon_class_swap")
+expand_mode = 1
+
+[node name="ClassLabel" type="Label" parent="PanelShell/ClassCard"]
+offset_left = 56.0
+offset_top = 148.0
+offset_right = 170.0
+offset_bottom = 176.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 17
+text = "当前职业"
+
+[node name="ClassValue" type="Label" parent="PanelShell/ClassCard"]
+offset_left = 56.0
+offset_top = 178.0
+offset_right = 242.0
+offset_bottom = 212.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.82, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 24
+text = "流亡剑士"
+
+[node name="SpecLabel" type="Label" parent="PanelShell/ClassCard"]
+offset_left = 56.0
+offset_top = 238.0
+offset_right = 170.0
+offset_bottom = 266.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 17
+text = "专精等级"
+
+[node name="SpecValue" type="Label" parent="PanelShell/ClassCard"]
+offset_left = 56.0
+offset_top = 268.0
+offset_right = 242.0
+offset_bottom = 302.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.93, 0.8, 0.47, 1)
+theme_override_font_sizes/font_size = 24
+text = "3"
+
+[node name="ClassHint" type="Label" parent="PanelShell/ClassCard"]
+offset_left = 56.0
+offset_top = 328.0
+offset_right = 260.0
+offset_bottom = 406.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 15
+text = "右上角图标按钮用于更换职业。当前只实现界面表现。"
+autowrap_mode = 2

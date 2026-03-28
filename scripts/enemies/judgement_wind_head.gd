@@ -1,6 +1,11 @@
 extends CharacterBody2D
 class_name JudgementWindHead
 
+signal head_skill_activated(head: Node)
+signal head_cycle_finished(head: Node)
+signal head_damaged(head: Node, source: Node)
+signal head_broken(head: Node)
+
 enum HeadState {
 	IDLE,
 	ACTIVE,
@@ -14,11 +19,12 @@ const CHARACTER_LAYER := 2
 const ENEMY_COLLISION_GROUP := &"enemy_bodies"
 const JUDGEMENT_HEAD_GROUP := &"judgement_head_units"
 const CAST_TRIGGER_FRAME := 3
+const HEAD_KIND := &"wind"
 
 @export var target_path: NodePath
 
 @export_group("Combat Stats")
-@export var max_hp: float = 180.0
+@export var max_hp: float = 2000.0
 @export_range(0.05, 1.0, 0.05) var starting_hp_ratio: float = 1.0
 @export var hit_flash_duration: float = 0.12
 @export var hit_flash_color: Color = Color(1.0, 0.42, 0.42, 1.0)
@@ -28,7 +34,8 @@ const CAST_TRIGGER_FRAME := 3
 @export var cycle_interval_sec: float = 3.5
 @export var hit_recover_delay_sec: float = 0.8
 @export var wind_field_duration_sec: float = 3.2
-@export_range(0.1, 1.0, 0.05) var wind_slow_scale: float = 0.55
+@export_range(0.1, 1.0, 0.05) var wind_slow_scale: float = 0.275
+@export_range(0.1, 1.0, 0.05) var wind_jump_scale: float = 0.5
 
 @export_group("Guard Mark")
 @export var guard_mark_color: Color = Color(0.70, 0.78, 0.86, 0.42)
@@ -50,6 +57,8 @@ var _target: Node2D
 var _registered_collision_exception_ids: Dictionary = {}
 var _guard_mark_source: Node2D
 var _guard_reflect_ratio: float = 1.0
+var _controller_driven: bool = false
+var _cycle_in_progress: bool = false
 
 
 func _ready() -> void:
@@ -63,7 +72,7 @@ func _ready() -> void:
 	_sync_nonblocking_collisions()
 	_apply_collision_profile()
 	var slow_key: StringName = StringName("judgement_wind_field_%s" % get_instance_id())
-	wind_field.configure(self, slow_key, wind_slow_scale)
+	wind_field.configure(self, slow_key, wind_slow_scale, wind_jump_scale)
 	_fit_wind_field_to_room_background()
 	wind_field.set_field_active(false)
 	update_status_bars()
@@ -80,14 +89,19 @@ func _physics_process(delta: float) -> void:
 
 	match _state:
 		HeadState.IDLE:
-			_cycle_cooldown_left = maxf(0.0, _cycle_cooldown_left - delta)
-			if _cycle_cooldown_left <= 0.0:
-				_enter_state(HeadState.ACTIVE)
+			if not _controller_driven:
+				_cycle_cooldown_left = maxf(0.0, _cycle_cooldown_left - delta)
+				if _cycle_cooldown_left <= 0.0:
+					_enter_state(HeadState.ACTIVE)
 		HeadState.WIND_ACTIVE:
 			_field_time_left = maxf(0.0, _field_time_left - delta)
 			if _field_time_left <= 0.0:
 				_deactivate_wind_field()
-				_cycle_cooldown_left = cycle_interval_sec
+				if _controller_driven and _cycle_in_progress:
+					_cycle_in_progress = false
+					head_cycle_finished.emit(self)
+				else:
+					_cycle_cooldown_left = cycle_interval_sec
 				_enter_state(HeadState.IDLE)
 		_:
 			pass
@@ -102,13 +116,14 @@ func receive_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
 		return
 
 	var raw_damage: float = maxf(0.0, float(attack_data.get("damage", 0.0)))
+	if raw_damage > 0.0:
+		head_damaged.emit(self, _source)
 	apply_damage(raw_damage)
 	_apply_guard_reflect(raw_damage, _source)
 	if is_dead():
 		return
 
 	trigger_hit_flash()
-	_interrupt_cycle_with_hit()
 
 
 func receive_grabbed_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
@@ -116,13 +131,14 @@ func receive_grabbed_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
 		return
 
 	var raw_damage: float = maxf(0.0, float(attack_data.get("damage", 0.0)))
+	if raw_damage > 0.0:
+		head_damaged.emit(self, _source)
 	apply_damage(raw_damage)
 	_apply_guard_reflect(raw_damage, _source)
 	if is_dead():
 		return
 
 	trigger_hit_flash()
-	_interrupt_cycle_with_hit()
 
 
 func apply_damage(raw_damage: float) -> void:
@@ -158,6 +174,7 @@ func die() -> void:
 	_apply_collision_profile()
 	update_status_bars()
 	animated_sprite.play(&"break")
+	head_broken.emit(self)
 
 
 func is_dead() -> bool:
@@ -186,6 +203,29 @@ func get_head_hp_ratio() -> float:
 	if max_hp <= 0.0:
 		return 0.0
 	return clampf(_current_hp / max_hp, 0.0, 1.0)
+
+
+func get_judgement_head_kind() -> StringName:
+	return HEAD_KIND
+
+
+func set_controller_driven(enabled: bool) -> void:
+	_controller_driven = enabled
+	if enabled:
+		_cycle_cooldown_left = 0.0
+
+
+func is_available_for_controller() -> bool:
+	return not is_dead() and _state == HeadState.IDLE
+
+
+func begin_controlled_skill_cycle() -> bool:
+	if not is_available_for_controller():
+		return false
+	_controller_driven = true
+	_cycle_in_progress = true
+	_enter_state(HeadState.ACTIVE)
+	return true
 
 
 func can_receive_guard_mark() -> bool:
@@ -284,6 +324,7 @@ func _activate_wind_field() -> void:
 	_field_triggered_in_cast = true
 	_field_time_left = wind_field_duration_sec
 	wind_field.set_field_active(true)
+	head_skill_activated.emit(self)
 
 
 func _deactivate_wind_field() -> void:
@@ -315,6 +356,9 @@ func _on_animated_sprite_animation_finished() -> void:
 			if wind_field.is_field_active() and _field_time_left > 0.0:
 				_enter_state(HeadState.WIND_ACTIVE)
 			else:
+				if _controller_driven and _cycle_in_progress:
+					_cycle_in_progress = false
+					head_cycle_finished.emit(self)
 				_enter_state(HeadState.IDLE)
 		_:
 			pass
