@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/dungeon_knifeman.tscn" id="3_enemy"]
 [ext_resource type="Script" uid="uid://xllbkxgna7ev" path="res://scripts/camera/follow_camera.gd" id="4_camera"]
 [ext_resource type="Script" path="res://scripts/maps/dungeon_room_2d.gd" id="5_room"]
-
 [node name="MobRoom1ImageMap" type="Node2D" unique_id=897676830]
 script = ExtResource("5_room")
 room_id = &"mob_room_1"

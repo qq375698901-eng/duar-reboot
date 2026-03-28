@@ -1,0 +1,227 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/battle_attribute_debug_panel.gd" id="1_script"]
+
+[node name="BattleAttributeDebugPanel" type="CanvasLayer"]
+script = ExtResource("1_script")
+layer = 10
+
+[node name="RootPanel" type="PanelContainer" parent="."]
+visible = false
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 460.0
+offset_bottom = 520.0
+
+[node name="Margin" type="MarginContainer" parent="RootPanel"]
+offset_right = 436.0
+offset_bottom = 496.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="RootPanel/Margin"]
+offset_right = 404.0
+offset_bottom = 464.0
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="RootPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Battle Attribute Debug"
+
+[node name="Hint" type="Label" parent="RootPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Press U to open/close. Add free points, then assign them below."
+
+[node name="TopRow" type="GridContainer" parent="RootPanel/Margin/VBox"]
+layout_mode = 2
+columns = 2
+
+[node name="FreePointsLabel" type="Label" parent="RootPanel/Margin/VBox/TopRow"]
+layout_mode = 2
+text = "Free Points"
+
+[node name="FreePointsValue" type="Label" parent="RootPanel/Margin/VBox/TopRow"]
+layout_mode = 2
+text = "0"
+
+[node name="ProfessionLabel" type="Label" parent="RootPanel/Margin/VBox/TopRow"]
+layout_mode = 2
+text = "Profession"
+
+[node name="ProfessionValue" type="Label" parent="RootPanel/Margin/VBox/TopRow"]
+layout_mode = 2
+text = "Martial Artist"
+
+[node name="Actions" type="HBoxContainer" parent="RootPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AddPointButton" type="Button" parent="RootPanel/Margin/VBox/Actions"]
+layout_mode = 2
+text = "+1 Free"
+
+[node name="AddFivePointsButton" type="Button" parent="RootPanel/Margin/VBox/Actions"]
+layout_mode = 2
+text = "+5 Free"
+
+[node name="RestoreButton" type="Button" parent="RootPanel/Margin/VBox/Actions"]
+layout_mode = 2
+text = "Restore HP/MP"
+
+[node name="StatsTitle" type="Label" parent="RootPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Attributes"
+
+[node name="Stats" type="VBoxContainer" parent="RootPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AttackRow" type="HBoxContainer" parent="RootPanel/Margin/VBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="RootPanel/Margin/VBox/Stats/AttackRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(70, 0)
+text = "Attack"
+
+[node name="Value" type="Label" parent="RootPanel/Margin/VBox/Stats/AttackRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(96, 0)
+text = "0"
+
+[node name="PlusButton" type="Button" parent="RootPanel/Margin/VBox/Stats/AttackRow"]
+layout_mode = 2
+text = "+"
+
+[node name="MinusButton" type="Button" parent="RootPanel/Margin/VBox/Stats/AttackRow"]
+layout_mode = 2
+text = "-"
+
+[node name="AgilityRow" type="HBoxContainer" parent="RootPanel/Margin/VBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="RootPanel/Margin/VBox/Stats/AgilityRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(70, 0)
+text = "Agility"
+
+[node name="Value" type="Label" parent="RootPanel/Margin/VBox/Stats/AgilityRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(96, 0)
+text = "0"
+
+[node name="PlusButton" type="Button" parent="RootPanel/Margin/VBox/Stats/AgilityRow"]
+layout_mode = 2
+text = "+"
+
+[node name="MinusButton" type="Button" parent="RootPanel/Margin/VBox/Stats/AgilityRow"]
+layout_mode = 2
+text = "-"
+
+[node name="VitalityRow" type="HBoxContainer" parent="RootPanel/Margin/VBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="RootPanel/Margin/VBox/Stats/VitalityRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(70, 0)
+text = "Vitality"
+
+[node name="Value" type="Label" parent="RootPanel/Margin/VBox/Stats/VitalityRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(96, 0)
+text = "0"
+
+[node name="PlusButton" type="Button" parent="RootPanel/Margin/VBox/Stats/VitalityRow"]
+layout_mode = 2
+text = "+"
+
+[node name="MinusButton" type="Button" parent="RootPanel/Margin/VBox/Stats/VitalityRow"]
+layout_mode = 2
+text = "-"
+
+[node name="SpiritRow" type="HBoxContainer" parent="RootPanel/Margin/VBox/Stats"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="RootPanel/Margin/VBox/Stats/SpiritRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(70, 0)
+text = "Spirit"
+
+[node name="Value" type="Label" parent="RootPanel/Margin/VBox/Stats/SpiritRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(96, 0)
+text = "0"
+
+[node name="PlusButton" type="Button" parent="RootPanel/Margin/VBox/Stats/SpiritRow"]
+layout_mode = 2
+text = "+"
+
+[node name="MinusButton" type="Button" parent="RootPanel/Margin/VBox/Stats/SpiritRow"]
+layout_mode = 2
+text = "-"
+
+[node name="DerivedTitle" type="Label" parent="RootPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Derived"
+
+[node name="DerivedGrid" type="GridContainer" parent="RootPanel/Margin/VBox"]
+layout_mode = 2
+columns = 2
+
+[node name="HpLabel" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "HP"
+
+[node name="HpValue" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "0 / 0"
+
+[node name="MpLabel" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "MP"
+
+[node name="MpValue" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "0 / 0"
+
+[node name="AttackMultiplierLabel" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "Attack Mult"
+
+[node name="AttackMultiplierValue" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "1.00x"
+
+[node name="SpeedMultiplierLabel" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "Move Speed"
+
+[node name="SpeedMultiplierValue" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "1.00x"
+
+[node name="AccelerationMultiplierLabel" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "Acceleration"
+
+[node name="AccelerationMultiplierValue" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "1.00x"
+
+[node name="MpRegenLabel" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "MP Regen"
+
+[node name="MpRegenValue" type="Label" parent="RootPanel/Margin/VBox/DerivedGrid"]
+layout_mode = 2
+text = "0.0 / s"

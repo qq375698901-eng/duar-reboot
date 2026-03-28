@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_panel_large.svg" id="1_panel_large"]
 [ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_panel_side.svg" id="2_panel_side"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_icon_plus.svg" id="6_icon_plus"]
 [ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_icon_class_swap.svg" id="7_icon_class_swap"]
 [ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_icon_close.svg" id="8_icon_close"]
+[ext_resource type="Script" path="res://scripts/ui/town_character_panel.gd" id="9_script"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_button"]
 
@@ -16,6 +17,7 @@ visible = false
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 1
+script = ExtResource("9_script")
 
 [node name="OverlayDim" type="ColorRect" parent="."]
 offset_right = 1920.0

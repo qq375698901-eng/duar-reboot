@@ -123,6 +123,7 @@ const ATTACK_DEFINITIONS := {
 
 @export var light_combo_input_window: float = 0.5
 @export var heavy_combo_input_window: float = 0.5
+@export var display_name: String = "Longsword"
 @export var base_attack_power: float = 10.0
 @export_range(0.0, 1.0, 0.01) var base_defense_ratio: float = 0.3
 @export var equip_weight: float = 0.0
@@ -250,6 +251,14 @@ func play_light_attack_c() -> void:
 
 func get_grip_offset() -> Vector2:
 	return grip_anchor.position
+
+
+func get_display_name() -> String:
+	return display_name
+
+
+func get_base_attack_power() -> float:
+	return base_attack_power
 
 
 func get_base_defense_ratio() -> float:

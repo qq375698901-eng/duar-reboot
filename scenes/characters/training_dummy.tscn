@@ -5,6 +5,8 @@
 
 [node name="TrainingDummy" instance=ExtResource("1_player")]
 script = ExtResource("2_dummy")
+spawn_runtime_attribute_debug_panel = false
+spawn_runtime_battle_inventory_panel = false
 
 [node name="DamagePopups" type="Node2D" parent="."]
 

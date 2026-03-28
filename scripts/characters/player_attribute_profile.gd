@@ -143,8 +143,8 @@ func get_hp_multiplier() -> float:
 	return 1.0 + 0.1 * float(get_total_stat(ATTRIBUTE_VITALITY))
 
 
-func get_mp_multiplier() -> float:
-	return 1.0 + 0.1 * float(get_total_stat(ATTRIBUTE_SPIRIT))
+func get_bonus_max_mp() -> float:
+	return float(get_total_stat(ATTRIBUTE_SPIRIT))
 
 
 func get_mp_regen_per_sec(base_regen_per_sec: float = 0.0) -> float:
@@ -173,7 +173,7 @@ func build_snapshot() -> Dictionary:
 			"acceleration_time_scale": get_acceleration_time_scale(),
 			"acceleration_multiplier": get_acceleration_multiplier(),
 			"hp_multiplier": get_hp_multiplier(),
-			"mp_multiplier": get_mp_multiplier(),
+			"max_mp_bonus": get_bonus_max_mp(),
 			"mp_regen_per_sec": get_mp_regen_per_sec(),
 		},
 	}

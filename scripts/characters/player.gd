@@ -25,6 +25,8 @@ const CHARACTER_LAYER := 2
 const PLATFORM_LAYER := 3
 const LADDER_AREA_LAYER := 4
 const LONGSWORD_BASIC_SCENE := preload("res://scenes/weapons/longsword_basic.tscn")
+const BATTLE_ATTRIBUTE_DEBUG_PANEL_SCENE := preload("res://scenes/ui/battle_attribute_debug_panel.tscn")
+const BATTLE_INVENTORY_PANEL_SCENE := preload("res://scenes/ui/battle_inventory_panel.tscn")
 const ATTACK_MOTION_NONE := 0
 const ATTACK_MOTION_FORWARD := 1
 const ATTACK_MOTION_BACKWARD := -1
@@ -99,6 +101,8 @@ const ATTACK_MOTION_BACKWARD := -1
 @export_group("Character Attributes")
 @export_enum("MartialArtist") var starting_profession: int = 0
 @export var starting_free_stat_points: int = 0
+@export var spawn_runtime_attribute_debug_panel: bool = true
+@export var spawn_runtime_battle_inventory_panel: bool = true
 
 @onready var visuals: Node2D = $Visuals
 @onready var body_pivot: Node2D = $Visuals/BodyPivot
@@ -190,6 +194,10 @@ func _ready() -> void:
 	attribute_profile_changed.emit(get_attribute_snapshot())
 	_setup_eye_trail_dots()
 	_refresh_buff_eye_visuals()
+	_connect_inventory_runtime_signals()
+	_sync_equipped_weapon_from_inventory_runtime()
+	_ensure_runtime_attribute_debug_panel()
+	call_deferred("_ensure_runtime_battle_inventory_panel")
 
 
 func _physics_process(delta: float) -> void:
@@ -551,6 +559,74 @@ func _setup_attribute_profile() -> void:
 		_attribute_profile.add_free_stat_points(starting_free_stat_points)
 
 
+func _connect_inventory_runtime_signals() -> void:
+	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
+	if inventory_runtime == null or not inventory_runtime.has_signal("equipped_weapon_changed"):
+		return
+
+	var callback := Callable(self, "_on_inventory_equipped_weapon_changed")
+	if not inventory_runtime.is_connected("equipped_weapon_changed", callback):
+		inventory_runtime.connect("equipped_weapon_changed", callback)
+
+
+func _on_inventory_equipped_weapon_changed(_item: Dictionary = {}) -> void:
+	_sync_equipped_weapon_from_inventory_runtime()
+
+
+func _sync_equipped_weapon_from_inventory_runtime() -> void:
+	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
+	if inventory_runtime == null or not inventory_runtime.has_method("get_equipped_weapon_scene_path"):
+		return
+
+	var scene_path: String = String(inventory_runtime.call("get_equipped_weapon_scene_path"))
+	if scene_path.is_empty():
+		unequip_weapon()
+		return
+	equip_weapon_scene_path(scene_path)
+
+
+func _ensure_runtime_attribute_debug_panel() -> void:
+	if not spawn_runtime_attribute_debug_panel:
+		return
+	for child in get_children():
+		if child.name == "BattleAttributeDebugPanel":
+			return
+
+	var panel: CanvasLayer = BATTLE_ATTRIBUTE_DEBUG_PANEL_SCENE.instantiate() as CanvasLayer
+	if panel == null:
+		return
+	panel.name = "BattleAttributeDebugPanel"
+	panel.set("player_path", NodePath(".."))
+	add_child(panel)
+
+
+func _ensure_runtime_battle_inventory_panel() -> void:
+	if not spawn_runtime_battle_inventory_panel:
+		return
+
+	var current_scene: Node = get_tree().current_scene
+	if current_scene == null:
+		return
+
+	var existing_panel: Node = current_scene.find_child("BattleInventoryPanel", true, false)
+	if existing_panel != null:
+		existing_panel.set("player_path", get_path())
+		return
+
+	var panel: Control = BATTLE_INVENTORY_PANEL_SCENE.instantiate() as Control
+	if panel == null:
+		return
+	panel.name = "BattleInventoryPanel"
+	var panel_parent: Node = current_scene.find_child("UiLayer", true, false)
+	if panel_parent == null:
+		var runtime_ui_layer := CanvasLayer.new()
+		runtime_ui_layer.name = "RuntimeUiLayer"
+		current_scene.add_child(runtime_ui_layer)
+		panel_parent = runtime_ui_layer
+	panel_parent.add_child(panel)
+	panel.set("player_path", get_path())
+
+
 func get_attribute_snapshot() -> Dictionary:
 	if _attribute_profile == null:
 		return {}
@@ -646,7 +722,7 @@ func get_effective_max_hp() -> float:
 func get_effective_max_mp() -> float:
 	if _attribute_profile == null:
 		return max_mp
-	return max_mp * _attribute_profile.get_mp_multiplier()
+	return max_mp + _attribute_profile.get_bonus_max_mp()
 
 
 func get_effective_mp_regen_per_sec() -> float:
@@ -661,6 +737,22 @@ func get_current_hp() -> float:
 
 func get_current_mp() -> float:
 	return _current_mp
+
+
+func get_display_name() -> String:
+	return "Adventurer"
+
+
+func get_specialization_level() -> int:
+	return 1
+
+
+func get_weapon_mastery_level() -> int:
+	return 0
+
+
+func get_equipped_weapon_node() -> Node2D:
+	return _equipped_weapon
 
 
 func _apply_attribute_runtime_refresh(old_max_hp: float, old_max_mp: float) -> void:
@@ -1286,6 +1378,8 @@ func _resolve_guard_source_node(source: Node) -> Node2D:
 
 
 func _should_auto_equip_test_weapon() -> bool:
+	if get_node_or_null("/root/InventoryRuntime") != null:
+		return false
 	return Input.is_action_pressed("attack_light") or Input.is_action_pressed("attack_heavy")
 
 
@@ -1756,10 +1850,26 @@ func _on_weapon_buff_visual_state_changed(active: bool) -> void:
 
 
 func equip_debug_longsword() -> void:
+	_equip_weapon_scene(LONGSWORD_BASIC_SCENE)
+
+
+func equip_weapon_scene_path(scene_path: String) -> void:
+	if scene_path.is_empty():
+		unequip_weapon()
+		return
+
+	var scene_resource: Resource = load(scene_path)
+	if scene_resource is PackedScene:
+		_equip_weapon_scene(scene_resource as PackedScene)
+
+
+func _equip_weapon_scene(scene: PackedScene) -> void:
+	if scene == null:
+		return
 	if _equipped_weapon != null:
 		unequip_weapon()
 
-	_equipped_weapon = LONGSWORD_BASIC_SCENE.instantiate() as Node2D
+	_equipped_weapon = scene.instantiate() as Node2D
 	if _equipped_weapon == null:
 		return
 

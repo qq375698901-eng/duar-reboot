@@ -7,7 +7,9 @@ const PANEL_FADE_DURATION := 0.18
 @onready var inventory_button: Button = $InventoryButton
 @onready var character_button: Button = $CharacterButton
 @onready var inventory_screen: Control = $InventoryScreen
+@onready var inventory_panel: Control = $InventoryScreen
 @onready var character_screen: Control = $CharacterScreen
+@onready var character_panel: Control = $CharacterScreen
 @onready var inventory_overlay_dim: ColorRect = $InventoryScreen/OverlayDim
 @onready var overlay_dim: ColorRect = $CharacterScreen/OverlayDim
 @onready var inventory_panel_shell: Control = $InventoryScreen/PanelShell
@@ -92,6 +94,8 @@ func _on_overlay_gui_input(event: InputEvent) -> void:
 
 func _play_inventory_open() -> void:
 	_stop_inventory_tween()
+	if inventory_panel != null and inventory_panel.has_method("refresh_display"):
+		inventory_panel.call("refresh_display")
 	inventory_screen.visible = true
 	inventory_overlay_dim.modulate.a = 0.0
 	inventory_panel_shell.modulate.a = 0.0
@@ -116,6 +120,8 @@ func _play_inventory_close() -> void:
 
 func _play_character_open() -> void:
 	_stop_active_tween()
+	if character_panel != null and character_panel.has_method("refresh_display"):
+		character_panel.call("refresh_display")
 	character_screen.visible = true
 	overlay_dim.modulate.a = 0.0
 	panel_shell.modulate.a = 0.0

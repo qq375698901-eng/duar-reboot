@@ -15,6 +15,10 @@ run/main_scene="res://scenes/maps/dungeon/mob_room_1_image_map.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+InventoryRuntime="*res://scripts/inventory/inventory_runtime.gd"
+
 [display]
 
 window/size/viewport_width=1920
