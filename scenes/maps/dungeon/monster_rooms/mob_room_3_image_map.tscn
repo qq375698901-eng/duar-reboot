@@ -137,6 +137,12 @@ zoom = Vector2(2, 2)
 process_callback = 0
 script = ExtResource("3_camera")
 
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1001001003]
+position = Vector2(120, 430)
+
+[node name="ExitDoorSpawn" type="Marker2D" parent="." unique_id=1001001013]
+position = Vector2(670, 155)
+
 [node name="DungeonKnifeman" parent="." unique_id=1041320977 instance=ExtResource("5_fm2xy")]
 position = Vector2(243, 294)
 

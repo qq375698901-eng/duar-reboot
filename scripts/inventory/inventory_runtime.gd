@@ -99,7 +99,10 @@ func equip_from_backpack(slot_index: int) -> bool:
 
 	var previous_weapon: Dictionary = _equipped_weapon.duplicate(true)
 	_equipped_weapon = (item as Dictionary).duplicate(true)
-	_backpack_slots[slot_index] = previous_weapon if not previous_weapon.is_empty() else null
+	if previous_weapon.is_empty():
+		_backpack_slots[slot_index] = null
+	else:
+		_backpack_slots[slot_index] = previous_weapon
 	_emit_inventory_changed(true)
 	return true
 

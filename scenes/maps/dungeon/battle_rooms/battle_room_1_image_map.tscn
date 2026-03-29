@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://cyttdjhmsvby0"]
+
+[ext_resource type="Texture2D" uid="uid://dcpajotq7q54" path="res://art/Map/BattleRoom1.png" id="1_bg"]
+[ext_resource type="Script" uid="uid://xllbkxgna7ev" path="res://scripts/camera/follow_camera.gd" id="2_camera"]
+[ext_resource type="Texture2D" uid="uid://cje3his4vqulo" path="res://art/Map/BattleRoom1_backdrop.png" id="3_backdrop"]
+[ext_resource type="Script" uid="uid://bs6dsnbqv7qa6" path="res://scripts/maps/dungeon_room_2d.gd" id="4_room"]
+
+[node name="BattleRoom1ImageMap" type="Node2D" unique_id=958766638]
+script = ExtResource("4_room")
+room_id = &"battle_room_1"
+room_display_name = "Battle Room 01"
+room_type = 6
+room_type_label = "Battle Room"
+
+[node name="Map" type="Node2D" parent="." unique_id=1840960995]
+scale = Vector2(0.5, 0.5)
+
+[node name="Backdrop" type="Sprite2D" parent="Map" unique_id=1315422317]
+z_index = -10
+position = Vector2(-768, -512)
+texture = ExtResource("3_backdrop")
+centered = false
+
+[node name="Background" type="Sprite2D" parent="Map" unique_id=1583623762]
+texture = ExtResource("1_bg")
+centered = false
+
+[node name="Ground" type="StaticBody2D" parent="Map" unique_id=194555000]
+collision_mask = 0
+
+[node name="G01_TopBorder" type="CollisionPolygon2D" parent="Map/Ground" unique_id=86186517]
+position = Vector2(4, 12)
+polygon = PackedVector2Array(94, 56, 1442, 56, 1442, 92, 94, 92)
+
+[node name="G04_BottomFloor" type="CollisionPolygon2D" parent="Map/Ground" unique_id=126852614]
+polygon = PackedVector2Array(94, 897, 1442, 897, 1442, 944, 94, 944)
+
+[node name="Platforms" type="StaticBody2D" parent="." unique_id=195555001]
+collision_layer = 4
+collision_mask = 0
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1752703367]
+position = Vector2(152, 440)
+
+[node name="ExitDoorSpawn" type="Marker2D" parent="." unique_id=555283051]
+position = Vector2(381, 430)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=440322533]
+position = Vector2(384, 256)
+zoom = Vector2(2, 2)
+process_callback = 0
+script = ExtResource("2_camera")
+target_path = NodePath("../Player")
+
+[node name="Platform1" type="CollisionPolygon2D" parent="Platforms" unique_id=823622099]
+position = Vector2(-105.78547, -81.00009)
+scale = Vector2(0.16886128, 0.5000001)
+polygon = PackedVector2Array(94, 897, 1442, 897, 1442, 944, 94, 944)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="Platform2" type="CollisionPolygon2D" parent="Platforms" unique_id=1707840863]
+position = Vector2(577, -82)
+scale = Vector2(0.16886128, 0.5000001)
+polygon = PackedVector2Array(94, 897, 1442, 897, 1442, 944, 94, 944)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="Platform3" type="CollisionPolygon2D" parent="Platforms" unique_id=1770189170]
+position = Vector2(200, -149)
+scale = Vector2(0.2301625, 0.50000024)
+polygon = PackedVector2Array(94, 897, 1442, 897, 1442, 944, 94, 944)
+one_way_collision = true
+one_way_collision_margin = 4.0

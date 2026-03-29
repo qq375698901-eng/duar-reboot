@@ -15,6 +15,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _target == null and target_path != NodePath():
+		_target = get_node_or_null(target_path) as Node2D
 	if _target == null:
 		return
 

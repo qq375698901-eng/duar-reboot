@@ -1,6 +1,4 @@
 extends Control
-
-const PlayerAttributeProfile = preload("res://scripts/characters/player_attribute_profile.gd")
 const LONGSWORD_BASIC_SCENE = preload("res://scenes/weapons/longsword_basic.tscn")
 
 @export var character_source_path: NodePath

@@ -67,14 +67,6 @@ polygon = PackedVector2Array(722, 812, 854, 710, 854, 744, 722, 842)
 [node name="P11_BottomRightFloor" type="CollisionPolygon2D" parent="Map/Ground" unique_id=771364356]
 polygon = PackedVector2Array(1248, 736, 1266, 736, 1266, 758, 1298, 758, 1298, 782, 1322, 782, 1322, 808, 1435.3113, 808, 1434, 416, 1484, 416, 1484, 808, 1510, 808, 1510, 842, 1404, 842, 1300, 842)
 
-[node name="P04_LeftUpperMain2" type="CollisionPolygon2D" parent="Map/Ground" unique_id=1941222274]
-position = Vector2(238, 2)
-polygon = PackedVector2Array(58, 330, 316, 330, 316, 366, 58, 366)
-
-[node name="P07_RightUpperMain2" type="CollisionPolygon2D" parent="Map/Ground" unique_id=2086673400]
-position = Vector2(-206, 2)
-polygon = PackedVector2Array(1212, 384, 1416, 384, 1414, 414, 1212, 418)
-
 [node name="Platforms" type="StaticBody2D" parent="Map" unique_id=1389724631]
 collision_layer = 4
 collision_mask = 0
@@ -88,6 +80,14 @@ one_way_collision_margin = 4.0
 polygon = PackedVector2Array(838, 548, 1008, 384, 1018, 394, 848, 558)
 one_way_collision = true
 one_way_collision_margin = 4.0
+
+[node name="P04_LeftUpperMain2" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=1941222274]
+position = Vector2(238, 2)
+polygon = PackedVector2Array(58, 330, 316, 330, 316, 366, 58, 366)
+
+[node name="P07_RightUpperMain2" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=2086673400]
+position = Vector2(-206, 2)
+polygon = PackedVector2Array(1212, 384, 1416, 384, 1414, 414, 1212, 418)
 
 [node name="Ladders" type="Node2D" parent="Map" unique_id=1689081810]
 
@@ -112,6 +112,12 @@ position = Vector2(96, 384)
 zoom = Vector2(2, 2)
 process_callback = 0
 script = ExtResource("3_camera")
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1001001002]
+position = Vector2(96, 398)
+
+[node name="ExitDoorSpawn" type="Marker2D" parent="." unique_id=1001001012]
+position = Vector2(192, 148)
 
 [node name="DungeonFirebomber" parent="." unique_id=1817648963 instance=ExtResource("5_vwkf4")]
 position = Vector2(218, 162)

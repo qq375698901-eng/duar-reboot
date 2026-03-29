@@ -674,10 +674,10 @@ func _update_behavior(delta: float) -> void:
 						_set_behavior_state(BehaviorState.DASH_PAUSE, dash_pause_duration_sec)
 					velocity.x = move_toward(velocity.x, 0.0, move_accel * 2.0 * delta)
 					return
-				var desired_speed := (1.0 if to_target.x > 0.0 else -1.0) * move_speed
-				velocity.x = move_toward(velocity.x, desired_speed, move_accel * delta)
+				var leap_chase_speed: float = (1.0 if to_target.x > 0.0 else -1.0) * move_speed
+				velocity.x = move_toward(velocity.x, leap_chase_speed, move_accel * delta)
 				return
-			var desired_speed := (1.0 if to_target.x > 0.0 else -1.0) * move_speed
+			var desired_speed: float = (1.0 if to_target.x > 0.0 else -1.0) * move_speed
 			velocity.x = move_toward(velocity.x, desired_speed, move_accel * delta)
 		BehaviorState.ATTACK_PAUSE:
 			if not target_engageable:

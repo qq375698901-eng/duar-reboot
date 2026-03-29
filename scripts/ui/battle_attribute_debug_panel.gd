@@ -1,7 +1,5 @@
 extends CanvasLayer
 
-const PlayerAttributeProfile = preload("res://scripts/characters/player_attribute_profile.gd")
-
 @export var player_path: NodePath
 
 @onready var root_panel: PanelContainer = $RootPanel

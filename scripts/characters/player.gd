@@ -1,7 +1,5 @@
 extends CharacterBody2D
 
-const PlayerAttributeProfile = preload("res://scripts/characters/player_attribute_profile.gd")
-
 signal attribute_profile_changed(snapshot: Dictionary)
 signal resources_changed(current_hp: float, max_hp: float, current_mp: float, max_mp: float)
 
@@ -805,17 +803,17 @@ func get_base_run_speed() -> float:
 
 
 func get_movement_speed_scale() -> float:
-	var scale: float = 1.0
+	var modifier_scale: float = 1.0
 	for key in _movement_speed_modifiers.keys():
-		scale *= clampf(float(_movement_speed_modifiers[key]), 0.1, 4.0)
-	return clampf(scale, 0.1, 4.0)
+		modifier_scale *= clampf(float(_movement_speed_modifiers[key]), 0.1, 4.0)
+	return clampf(modifier_scale, 0.1, 4.0)
 
 
 func get_jump_height_scale() -> float:
-	var scale: float = 1.0
+	var modifier_scale: float = 1.0
 	for key in _jump_height_modifiers.keys():
-		scale *= clampf(float(_jump_height_modifiers[key]), 0.1, 4.0)
-	return clampf(scale, 0.1, 4.0)
+		modifier_scale *= clampf(float(_jump_height_modifiers[key]), 0.1, 4.0)
+	return clampf(modifier_scale, 0.1, 4.0)
 
 
 func get_effective_walk_speed() -> float:
@@ -838,11 +836,11 @@ func get_effective_air_speed_cap() -> float:
 	return _air_speed_cap * get_movement_speed_scale()
 
 
-func set_movement_speed_modifier(source_key: StringName, scale: float) -> void:
+func set_movement_speed_modifier(source_key: StringName, modifier_scale: float) -> void:
 	if source_key == &"":
 		return
 
-	var clamped_scale: float = clampf(scale, 0.1, 4.0)
+	var clamped_scale: float = clampf(modifier_scale, 0.1, 4.0)
 	if is_equal_approx(clamped_scale, 1.0):
 		_movement_speed_modifiers.erase(source_key)
 	else:
@@ -858,11 +856,11 @@ func clear_movement_speed_modifier(source_key: StringName) -> void:
 	_clamp_velocity_to_current_movement_caps()
 
 
-func set_jump_height_modifier(source_key: StringName, scale: float) -> void:
+func set_jump_height_modifier(source_key: StringName, modifier_scale: float) -> void:
 	if source_key == &"":
 		return
 
-	var clamped_scale: float = clampf(scale, 0.1, 4.0)
+	var clamped_scale: float = clampf(modifier_scale, 0.1, 4.0)
 	if is_equal_approx(clamped_scale, 1.0):
 		_jump_height_modifiers.erase(source_key)
 	else:
