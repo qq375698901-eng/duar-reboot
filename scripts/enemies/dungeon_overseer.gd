@@ -129,6 +129,10 @@ const ATTACK_PAYLOADS := {
 @export var front_pressure_time_sec: float = 0.65
 @export var front_pressure_decay_per_sec: float = 1.6
 @export var rear_hold_front_tolerance_px: float = 10.0
+@export var fall_death_y: float = 100000.0
+@export var ledge_avoidance_enabled: bool = true
+@export var ledge_probe_forward_distance: float = 18.0
+@export var ledge_probe_down_distance: float = 40.0
 
 @export_group("Attack")
 @export var default_attack_hit_effect: String = "launch"
@@ -165,6 +169,7 @@ var _registered_collision_exception_ids: Dictionary = {}
 var _attack_1_chain_count: int = 0
 var _attack_3_lock_requested: bool = false
 var _was_target_on_front_side: bool = true
+var _ledge_probe: RayCast2D
 
 
 func _ready() -> void:
@@ -175,6 +180,7 @@ func _ready() -> void:
 	attack_hitbox.target_hit.connect(_on_attack_hitbox_target_hit)
 	attack_hitbox.configure(self, _build_attack_payload(&"attack_1"))
 	attack_hitbox.set_active(false)
+	_setup_ledge_probe()
 	_refresh_target()
 	_sync_nonblocking_collisions()
 	_sync_facing()
@@ -188,6 +194,9 @@ func _physics_process(delta: float) -> void:
 	_update_damage_popups(delta)
 	_refresh_target()
 	_sync_nonblocking_collisions()
+	if _top_state != TopState.DEAD and global_position.y >= fall_death_y:
+		die()
+		return
 
 	if _top_state == TopState.DEAD:
 		velocity = Vector2.ZERO
@@ -221,6 +230,7 @@ func set_facing(direction: int) -> void:
 	facing = 1 if direction > 0 else -1
 	_sync_facing()
 	_sync_attack_hitbox_to_animation()
+	_update_ledge_probe(facing)
 
 
 func play_attack(attack_name: StringName) -> bool:
@@ -333,6 +343,14 @@ func trigger_hit_flash() -> void:
 
 func is_dead() -> bool:
 	return _top_state == TopState.DEAD
+
+
+func is_attack_disabled() -> bool:
+	return _top_state == TopState.DEAD or _top_state == TopState.DOWN or _top_state == TopState.GRABBED
+
+
+func set_fall_death_y(value: float) -> void:
+	fall_death_y = value
 
 
 func get_current_hp() -> float:
@@ -477,7 +495,11 @@ func _update_behavior(delta: float) -> void:
 				_set_behavior_state(BehaviorState.PRESSURE_PAUSE, pressure_pause_duration_sec)
 				velocity.x = move_toward(velocity.x, 0.0, move_accel * 2.2 * delta)
 				return
-			var desired_speed: float = (1.0 if to_target.x > 0.0 else -1.0) * move_speed
+			var desired_direction: int = 1 if to_target.x > 0.0 else -1
+			if not _has_floor_ahead(desired_direction):
+				velocity.x = move_toward(velocity.x, 0.0, move_accel * 2.2 * delta)
+				return
+			var desired_speed: float = float(desired_direction) * move_speed
 			velocity.x = move_toward(velocity.x, desired_speed, move_accel * delta)
 		BehaviorState.PRESSURE_PAUSE:
 			velocity.x = move_toward(velocity.x, 0.0, move_accel * 2.5 * delta)
@@ -509,6 +531,37 @@ func _update_behavior(delta: float) -> void:
 func _set_behavior_state(next_state: BehaviorState, timer_sec: float = 0.0) -> void:
 	_behavior_state = next_state
 	_behavior_timer = maxf(0.0, timer_sec)
+
+
+func _setup_ledge_probe() -> void:
+	if _ledge_probe != null:
+		return
+	_ledge_probe = RayCast2D.new()
+	_ledge_probe.name = "LedgeProbe"
+	_ledge_probe.enabled = true
+	_ledge_probe.collide_with_areas = false
+	_ledge_probe.collide_with_bodies = true
+	_ledge_probe.collision_mask = _layer_bit(WORLD_LAYER) | _layer_bit(PLATFORM_LAYER)
+	add_child(_ledge_probe)
+	_update_ledge_probe(facing)
+
+
+func _update_ledge_probe(direction: int) -> void:
+	if _ledge_probe == null:
+		return
+	var facing_sign: int = 1 if direction >= 0 else -1
+	_ledge_probe.position = Vector2.ZERO
+	_ledge_probe.target_position = Vector2(float(facing_sign) * ledge_probe_forward_distance, ledge_probe_down_distance)
+
+
+func _has_floor_ahead(direction: int) -> bool:
+	if not ledge_avoidance_enabled or not is_on_floor():
+		return true
+	if _ledge_probe == null:
+		return true
+	_update_ledge_probe(direction)
+	_ledge_probe.force_raycast_update()
+	return _ledge_probe.is_colliding()
 
 
 func _select_attack(to_target: Vector2, horizontal_distance: float, vertical_distance: float) -> StringName:

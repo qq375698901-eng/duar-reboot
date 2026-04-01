@@ -1,10 +1,12 @@
-[gd_scene load_steps=21 format=3 uid="uid://bfmq6f3w6i4p0"]
+[gd_scene load_steps=23 format=3 uid="uid://bfmq6f3w6i4p0"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_tth0r"]
 [ext_resource type="Texture2D" path="res://art/characters/player_head.png" id="2_head"]
 [ext_resource type="Texture2D" path="res://art/characters/player_torso.png" id="3_torso"]
 [ext_resource type="Texture2D" path="res://art/characters/player_leg_left.png" id="4_leg_left"]
 [ext_resource type="Texture2D" path="res://art/characters/player_leg_right.png" id="5_leg_right"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_panel_side.svg" id="6_town_panel_side"]
+[ext_resource type="Texture2D" path="res://art/ui/town_set_01/town_icon_frame.svg" id="7_town_icon_frame"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hqv7w"]
 size = Vector2(14, 28)
@@ -411,11 +413,61 @@ tracks/0/keys = {
 "values": [-10.0, 10.0, -10.0]
 }
 
+[sub_resource type="Animation" id="Animation_death"]
+resource_name = "death"
+length = 0.22
+tracks/0/type = "value"
+tracks/0/path = NodePath("Visuals/BodyPivot:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.22),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [12.0, 82.0, 98.0]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Visuals/BodyPivot/Torso:position")
+tracks/1/interp = 1
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.22),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -17), Vector2(-2, -13)]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Visuals/BodyPivot/HeadPivot:position")
+tracks/2/interp = 1
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.22),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -24), Vector2(-7, -17)]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Visuals/BodyPivot/LeftLegPivot:rotation_degrees")
+tracks/3/interp = 1
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.22),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 22.0]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Visuals/BodyPivot/RightLegPivot:rotation_degrees")
+tracks/4/interp = 1
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.22),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -26.0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yce75"]
 _data = {
 &"air_stun": SubResource("Animation_air_stun"),
 &"climb": SubResource("Animation_climb"),
 &"climb_idle": SubResource("Animation_climb_idle"),
+&"death": SubResource("Animation_death"),
 &"down": SubResource("Animation_down"),
 &"fall": SubResource("Animation_fall"),
 &"grabbed": SubResource("Animation_grabbed"),
@@ -493,6 +545,252 @@ offset_left = -18.0
 offset_top = -56.0
 offset_right = 18.0
 offset_bottom = -38.0
+mouse_filter = 2
+
+[node name="ScreenHud" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="BattleInfoCard" type="Control" parent="ScreenHud"]
+anchors_preset = 6
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = -208.0
+offset_right = 374.0
+offset_bottom = -30.0
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="ScreenHud/BattleInfoCard"]
+offset_right = 356.0
+offset_bottom = 178.0
+mouse_filter = 2
+texture = ExtResource("6_town_panel_side")
+expand_mode = 1
+
+[node name="TopBar" type="ColorRect" parent="ScreenHud/BattleInfoCard"]
+offset_left = 18.0
+offset_top = 12.0
+offset_right = 338.0
+offset_bottom = 18.0
+mouse_filter = 2
+color = Color(0.38, 0.44, 0.52, 0.95)
+
+[node name="PortraitFrame" type="TextureRect" parent="ScreenHud/BattleInfoCard"]
+offset_left = 18.0
+offset_top = 30.0
+offset_right = 92.0
+offset_bottom = 104.0
+mouse_filter = 2
+texture = ExtResource("7_town_icon_frame")
+expand_mode = 1
+
+[node name="Portrait" type="TextureRect" parent="ScreenHud/BattleInfoCard/PortraitFrame"]
+offset_left = 18.0
+offset_top = 12.0
+offset_right = 56.0
+offset_bottom = 50.0
+mouse_filter = 2
+texture = ExtResource("2_head")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HeaderLabel" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 110.0
+offset_top = 24.0
+offset_right = 248.0
+offset_bottom = 44.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 14
+text = "BATTLE STATUS"
+
+[node name="WeaponLabel" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 110.0
+offset_top = 44.0
+offset_right = 218.0
+offset_bottom = 64.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 13
+text = "CURRENT WEAPON"
+
+[node name="WeaponValue" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 110.0
+offset_top = 62.0
+offset_right = 324.0
+offset_bottom = 98.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 20
+text = "Longsword"
+autowrap_mode = 2
+
+[node name="SpecLabel" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 110.0
+offset_top = 100.0
+offset_right = 166.0
+offset_bottom = 118.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 12
+text = "SPEC"
+
+[node name="SpecValue" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 110.0
+offset_top = 116.0
+offset_right = 176.0
+offset_bottom = 130.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.2, 0.55, 0.95, 1)
+theme_override_font_sizes/font_size = 18
+text = "Lv.1"
+
+[node name="MasteryLabel" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 194.0
+offset_top = 100.0
+offset_right = 266.0
+offset_bottom = 118.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 12
+text = "MASTERY"
+
+[node name="MasteryValue" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 194.0
+offset_top = 116.0
+offset_right = 272.0
+offset_bottom = 130.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.62, 0.34, 0.94, 1)
+theme_override_font_sizes/font_size = 18
+text = "Lv.0"
+
+[node name="HpLabel" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 18.0
+offset_top = 136.0
+offset_right = 48.0
+offset_bottom = 154.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 12
+text = "HP"
+
+[node name="HpBar" type="Control" parent="ScreenHud/BattleInfoCard"]
+offset_left = 48.0
+offset_top = 140.0
+offset_right = 238.0
+offset_bottom = 150.0
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="ScreenHud/BattleInfoCard/HpBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.17, 0.12, 0.12, 0.9)
+
+[node name="Fill" type="ColorRect" parent="ScreenHud/BattleInfoCard/HpBar"]
+offset_right = 122.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.84, 0.19, 0.19, 0.95)
+
+[node name="HpValue" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 246.0
+offset_top = 134.0
+offset_right = 336.0
+offset_bottom = 154.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="MpLabel" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 18.0
+offset_top = 156.0
+offset_right = 48.0
+offset_bottom = 174.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.59, 0.67, 0.73, 1)
+theme_override_font_sizes/font_size = 12
+text = "MP"
+
+[node name="MpBar" type="Control" parent="ScreenHud/BattleInfoCard"]
+offset_left = 48.0
+offset_top = 160.0
+offset_right = 238.0
+offset_bottom = 170.0
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="ScreenHud/BattleInfoCard/MpBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.09, 0.12, 0.18, 0.9)
+
+[node name="Fill" type="ColorRect" parent="ScreenHud/BattleInfoCard/MpBar"]
+offset_right = 122.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.2, 0.55, 0.95, 0.95)
+
+[node name="MpValue" type="Label" parent="ScreenHud/BattleInfoCard"]
+offset_left = 246.0
+offset_top = 154.0
+offset_right = 336.0
+offset_bottom = 174.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="BottomExpBars" type="Control" parent="ScreenHud"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -18.0
+offset_bottom = 0.0
+mouse_filter = 2
+
+[node name="MasteryExpBar" type="Control" parent="ScreenHud/BottomExpBars"]
+anchor_right = 1.0
+offset_right = 0.0
+offset_bottom = 7.0
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Fill" type="ColorRect" parent="ScreenHud/BottomExpBars/MasteryExpBar"]
+offset_right = 0.0
+offset_bottom = 7.0
+mouse_filter = 2
+color = Color(0.62, 0.34, 0.94, 0.95)
+
+[node name="Ticks" type="Control" parent="ScreenHud/BottomExpBars/MasteryExpBar"]
+anchor_right = 1.0
+offset_right = 0.0
+offset_bottom = 7.0
+mouse_filter = 2
+
+[node name="SpecExpBar" type="Control" parent="ScreenHud/BottomExpBars"]
+offset_top = 9.0
+anchor_right = 1.0
+offset_right = 0.0
+offset_bottom = 16.0
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Fill" type="ColorRect" parent="ScreenHud/BottomExpBars/SpecExpBar"]
+offset_right = 0.0
+offset_bottom = 7.0
+mouse_filter = 2
+color = Color(0.2, 0.55, 0.95, 0.95)
+
+[node name="Ticks" type="Control" parent="ScreenHud/BottomExpBars/SpecExpBar"]
+anchor_right = 1.0
+offset_right = 0.0
+offset_bottom = 7.0
 mouse_filter = 2
 
 [node name="HpBar" type="Control" parent="StatusBars"]

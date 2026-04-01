@@ -1,0 +1,93 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/network/multiplayer_showcase_lobby.gd" id="1_script"]
+
+[node name="MultiplayerShowcaseLobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06, 0.08, 0.12, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(520, 320)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="CenterContainer/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Online Showcase"
+
+[node name="SubtitleLabel" type="Label" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+autowrap_mode = 3
+text = "First pass: host or join a 2-player showcase room."
+
+[node name="IpLabel" type="Label" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+text = "IP"
+
+[node name="IpEdit" type="LineEdit" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+text = "127.0.0.1"
+
+[node name="PortLabel" type="Label" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+text = "Port"
+
+[node name="PortEdit" type="LineEdit" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+text = "24567"
+
+[node name="ButtonRow" type="HBoxContainer" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HostButton" type="Button" parent="CenterContainer/Panel/Margin/VBox/ButtonRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="CenterContainer/Panel/Margin/VBox/ButtonRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Join"
+
+[node name="BackButton" type="Button" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+text = "Back"
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/Panel/Margin/VBox"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Choose host or join."

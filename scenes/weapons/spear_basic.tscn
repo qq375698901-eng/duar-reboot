@@ -1,0 +1,842 @@
+[gd_scene format=3 uid="uid://cxj7f4w3kq8sa"]
+
+[ext_resource type="Texture2D" uid="uid://cfohlsh5c7yri" path="res://art/weapons/black_diamond_spear.png" id="1_spear"]
+[ext_resource type="Script" uid="uid://donu7k6ldbgnt" path="res://scripts/weapons/spear_basic.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://85odw8cum6uk" path="res://scripts/combat/weapon_attack_hitbox_2d.gd" id="3_hitbox"]
+[ext_resource type="Script" uid="uid://5ac4ynol3i50" path="res://scripts/debug/editor_reference_only.gd" id="4_editor_only"]
+[ext_resource type="Texture2D" uid="uid://c1mtembyfpqkh" path="res://art/characters/player_head.png" id="5_ref_head"]
+[ext_resource type="Texture2D" uid="uid://dnhpji45dagdw" path="res://art/characters/player_torso.png" id="6_ref_torso"]
+[ext_resource type="Texture2D" uid="uid://b8jtlp15ic2qf" path="res://art/characters/player_leg_left.png" id="7_ref_leg_left"]
+[ext_resource type="Texture2D" uid="uid://hg2vls4e0cy4" path="res://art/characters/player_leg_right.png" id="8_ref_leg_right"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tip_small"]
+size = Vector2(8, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tip_medium"]
+size = Vector2(8, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tip_heavy"]
+size = Vector2(10, 26)
+
+[sub_resource type="Animation" id="Animation_y5jf7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.43117]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(18.899105, -2.350895)]
+}
+
+[sub_resource type="Animation" id="Animation_air_heavy_attack_x"]
+resource_name = "air_heavy_attack_x"
+length = 0.18
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.08, 0.12, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18.225, -3.025), Vector2(14.225, -7.025), Vector2(14.225, -7.025), Vector2(22.225, 12.975), Vector2(26.225, 22.975)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.08, 0.12, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.43117, 0.418879, 0.418879, 2.617994, 2.932153]
+}
+
+[sub_resource type="Animation" id="Animation_air_heavy_attack_x_land"]
+resource_name = "air_heavy_attack_x_land"
+length = 0.12
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.08, 0.12),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(26.225, 22.975), Vector2(22.225, 14.975), Vector2(20.225, 6.975), Vector2(18.225, -3.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.08, 0.12),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [2.932153, 2.548181, 2.059489, 1.43117]
+}
+
+[sub_resource type="Animation" id="Animation_air_light_attack_c"]
+resource_name = "air_light_attack_c"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12, 0.18, 0.22, 0.26, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18.225, -3.025), Vector2(14.225, -7.025), Vector2(14.225, -7.025), Vector2(22.225, 4.975), Vector2(30.225, 18.975), Vector2(26.225, 14.975), Vector2(22.225, 10.975)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12, 0.18, 0.22, 0.26, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.43117, 0.698132, 0.698132, 1.675516, 2.303835, 2.094395, 1.884956]
+}
+
+[sub_resource type="Animation" id="Animation_guard_counter_heavy"]
+resource_name = "guard_counter_heavy"
+length = 0.32
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.14, 0.2, 0.26, 0.32),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(16.225, -1.025), Vector2(12.225, 4.975), Vector2(8.225, 10.975), Vector2(8.225, 10.975), Vector2(34.225, -11.025), Vector2(22.225, -3.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.14, 0.2, 0.26, 0.32),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.954769, 2.478368, 2.792527, 2.792527, 1.605703, 1.43117]
+}
+
+[sub_resource type="Animation" id="Animation_guard_counter_light"]
+resource_name = "guard_counter_light"
+length = 0.24
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12, 0.18, 0.24),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(16.225, -1.025), Vector2(20.225, -3.025), Vector2(30.225, -3.025), Vector2(38.225, -5.025), Vector2(22.225, -3.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12, 0.18, 0.24),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.954769, 1.53589, 1.186824, 1.012291, 1.43117]
+}
+
+[sub_resource type="Animation" id="Animation_guard_hold"]
+resource_name = "guard_hold"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(16.225, -1.025), Vector2(17.225, -2.025), Vector2(16.225, -1.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.954769, 2.024582, 1.954769]
+}
+
+[sub_resource type="Animation" id="Animation_heavy_attack_x_1"]
+resource_name = "heavy_attack_x_1"
+length = 0.48
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.14, 0.22, 0.3, 0.36, 0.42, 0.48),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18.225, -3.025), Vector2(12.225, 2.975), Vector2(6.225, 8.975), Vector2(6.225, 8.975), Vector2(28.225, -9.025), Vector2(36.225, -13.025), Vector2(30.225, -9.025), Vector2(26.225, -5.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.14, 0.22, 0.3, 0.36, 0.42, 0.48),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.43117, 2.234021, 2.548181, 2.548181, 1.640609, 1.291544, 1.43117, 1.53589]
+}
+
+[sub_resource type="Animation" id="Animation_heavy_attack_x_2"]
+resource_name = "heavy_attack_x_2"
+length = 0.52
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.18, 0.28, 0.34, 0.4, 0.52),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(26.225, -5.025), Vector2(8.225, -1.025), Vector2(4.225, 0.975), Vector2(4.225, 0.975), Vector2(36.225, -15.025), Vector2(48.225, -19.025), Vector2(34.225, -11.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.18, 0.28, 0.34, 0.4, 0.52),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.53589, 2.443461, 2.6529, 2.6529, 1.570796, 1.22173, 1.32645]
+}
+
+[sub_resource type="Animation" id="Animation_idle"]
+resource_name = "idle"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(18.225, -3.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.43117]
+}
+
+[sub_resource type="Animation" id="Animation_light_attack_c_1"]
+resource_name = "light_attack_c_1"
+length = 0.36
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.12, 0.16, 0.22, 0.28, 0.36),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18.225, -3.025), Vector2(12.225, -7.025), Vector2(12.225, -7.025), Vector2(30.225, -7.025), Vector2(42.225, -7.025), Vector2(36.225, -5.025), Vector2(32.225, -3.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.12, 0.16, 0.22, 0.28, 0.36),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.43117, 1.012291, 1.012291, 1.354375, 1.466077, 1.518436, 1.53589]
+}
+
+[sub_resource type="Animation" id="Animation_light_attack_c_2"]
+resource_name = "light_attack_c_2"
+length = 0.34
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.1, 0.14, 0.2, 0.26, 0.34),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(32.225, -3.025), Vector2(22.225, -1.025), Vector2(22.225, -1.025), Vector2(40.225, 0.975), Vector2(46.225, 2.975), Vector2(38.225, 0.975), Vector2(30.225, -1.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.1, 0.14, 0.2, 0.26, 0.34),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.53589, 1.675516, 1.675516, 1.361357, 1.204277, 1.291544, 1.396263]
+}
+
+[sub_resource type="Animation" id="Animation_light_attack_c_3"]
+resource_name = "light_attack_c_3"
+length = 0.42
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.17, 0.22, 0.28, 0.34, 0.42),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(30.225, -1.025), Vector2(0.725, -1.535), Vector2(20.225, -13.025), Vector2(34.64, -1.88), Vector2(30.73, -0.665), Vector2(32.225, -7.025), Vector2(24.225, -3.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.17, 0.22, 0.28, 0.34, 0.42),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.396263, 1.752311, 2.146755, 1.675516, 1.291544, 1.466077, 1.605703]
+}
+
+[sub_resource type="Animation" id="Animation_run_heavy_attack_x"]
+resource_name = "run_heavy_attack_x"
+length = 0.42
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12, 0.18, 0.24, 0.3, 0.36, 0.42),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18.225, -3.025), Vector2(22.225, -1.025), Vector2(16.225, 2.975), Vector2(10.225, 8.975), Vector2(10.225, 8.975), Vector2(40.225, -11.025), Vector2(50.225, -15.025), Vector2(36.225, -9.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12, 0.18, 0.24, 0.3, 0.36, 0.42),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.43117, 1.675516, 2.164208, 2.513274, 2.513274, 1.53589, 1.22173, 1.32645]
+}
+
+[sub_resource type="Animation" id="Animation_run_light_attack_c"]
+resource_name = "run_light_attack_c"
+length = 0.32
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.1, 0.14, 0.2, 0.26, 0.32),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18.225, -3.025), Vector2(20.225, -3.025), Vector2(22.225, -3.025), Vector2(36.225, -5.025), Vector2(46.225, -5.025), Vector2(40.225, -4.025), Vector2(32.225, -4.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.1, 0.14, 0.2, 0.26, 0.32),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.43117, 1.396263, 1.361357, 1.151917, 1.082104, 1.151917, 1.22173]
+}
+
+[sub_resource type="Animation" id="Animation_skill_zc"]
+resource_name = "skill_zc"
+length = 0.54
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10187605, 0.20147128, 0.24404636, 0.27597767, 0.3, 0.3930591, 0.46, 0.5, 0.54),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18.225, -3.025), Vector2(-7.986, -20.616), Vector2(-25.701, 0.667), Vector2(-6.16, 16.379), Vector2(-6.4, -14.575), Vector2(20.225, 23.105), Vector2(40.225, -20.025), Vector2(27.835, -24.67), Vector2(22.225, -15.025), Vector2(18.225, -3.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.101115786, 0.19995075, 0.2455669, 0.27597767, 0.3, 0.46, 0.5, 0.54),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.3212142437597072, 0.013962634015954834, -1.6755160819145565, -3.2393310917014757, -5.969025614359173, -4.930555136883981, -5.735151922053367, -5.253072307179586, -4.852015307179586]
+}
+
+[sub_resource type="Animation" id="Animation_skill_zx_1"]
+resource_name = "skill_zx_1"
+length = 0.56
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.24, 0.48, 0.52, 0.55874795),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18.225, -3.025), Vector2(23.09, -2.93), Vector2(6.685, -1.45), Vector2(36.085, 3.175), Vector2(6.685, -1.45)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.47751614),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.43117, 1.7627825445142729]
+}
+
+[sub_resource type="Animation" id="Animation_skill_zx_2"]
+resource_name = "skill_zx_2"
+length = 0.12
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.059058104, 0.12),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(6.685, -1.45), Vector2(32.285, 2.46), Vector2(14.915, -2.575)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.12),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.7627825445142729, 1.5393804002589984]
+}
+
+[sub_resource type="Animation" id="Animation_skill_zx_3"]
+resource_name = "skill_zx_3"
+length = 0.12
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(14.915, -2.575), Vector2(16.225, -6.025), Vector2(46.225, -1.025), Vector2(48.225, -1.025), Vector2(34.225, -4.025), Vector2(28.225, -6.025), Vector2(20.225, -3.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.12),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.5393804002589984, 1.4398966328953218]
+}
+
+[sub_resource type="Animation" id="Animation_skill_zxc"]
+resource_name = "skill_zxc"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpearPivot:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = false
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.12, 0.24, 0.38, 0.56, 0.74, 0.92, 1.08, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(18.225, -3.025), Vector2(14.225, 0.975), Vector2(12.225, 6.975), Vector2(14.225, 14.975), Vector2(18.225, 20.975), Vector2(20.225, 14.975), Vector2(18.225, 6.975), Vector2(18.225, 0.975), Vector2(18.225, -3.025)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpearPivot:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.12, 0.24, 0.38, 0.56, 0.74, 0.92, 1.08, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.43117, 0.418879, -0.698132, -2.234021, -3.839724, -5.410521, -3.839724, -1.396263, 1.43117]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_spear"]
+_data = {
+&"RESET": SubResource("Animation_y5jf7"),
+&"air_heavy_attack_x": SubResource("Animation_air_heavy_attack_x"),
+&"air_heavy_attack_x_land": SubResource("Animation_air_heavy_attack_x_land"),
+&"air_light_attack_c": SubResource("Animation_air_light_attack_c"),
+&"guard_counter_heavy": SubResource("Animation_guard_counter_heavy"),
+&"guard_counter_light": SubResource("Animation_guard_counter_light"),
+&"guard_hold": SubResource("Animation_guard_hold"),
+&"heavy_attack_x_1": SubResource("Animation_heavy_attack_x_1"),
+&"heavy_attack_x_2": SubResource("Animation_heavy_attack_x_2"),
+&"idle": SubResource("Animation_idle"),
+&"light_attack_c_1": SubResource("Animation_light_attack_c_1"),
+&"light_attack_c_2": SubResource("Animation_light_attack_c_2"),
+&"light_attack_c_3": SubResource("Animation_light_attack_c_3"),
+&"run_heavy_attack_x": SubResource("Animation_run_heavy_attack_x"),
+&"run_light_attack_c": SubResource("Animation_run_light_attack_c"),
+&"skill_zc": SubResource("Animation_skill_zc"),
+&"skill_zx_1": SubResource("Animation_skill_zx_1"),
+&"skill_zx_2": SubResource("Animation_skill_zx_2"),
+&"skill_zx_3": SubResource("Animation_skill_zx_3"),
+&"skill_zxc": SubResource("Animation_skill_zxc")
+}
+
+[node name="SpearBasic" type="Node2D" unique_id=707761895]
+script = ExtResource("2_script")
+
+[node name="ReferencePlayer" type="Node2D" parent="." unique_id=1516842089]
+modulate = Color(1, 1, 1, 0.42)
+show_behind_parent = true
+z_index = -10
+script = ExtResource("4_editor_only")
+
+[node name="Visuals" type="Node2D" parent="ReferencePlayer" unique_id=1919887075]
+texture_filter = 1
+position = Vector2(-8, 18)
+
+[node name="BodyPivot" type="Node2D" parent="ReferencePlayer/Visuals" unique_id=993111137]
+
+[node name="Torso" type="Sprite2D" parent="ReferencePlayer/Visuals/BodyPivot" unique_id=1706437538]
+position = Vector2(0, -17)
+texture = ExtResource("6_ref_torso")
+
+[node name="HeadPivot" type="Node2D" parent="ReferencePlayer/Visuals/BodyPivot" unique_id=390951761]
+position = Vector2(0, -24)
+
+[node name="Head" type="Sprite2D" parent="ReferencePlayer/Visuals/BodyPivot/HeadPivot" unique_id=972210319]
+position = Vector2(0, -4)
+texture = ExtResource("5_ref_head")
+
+[node name="EyeEffects" type="Node2D" parent="ReferencePlayer/Visuals/BodyPivot/HeadPivot" unique_id=856840042]
+position = Vector2(0, -4)
+
+[node name="LeftEyeGlow" type="Polygon2D" parent="ReferencePlayer/Visuals/BodyPivot/HeadPivot/EyeEffects" unique_id=541245524]
+position = Vector2(-2, -1)
+color = Color(0.35, 0.75, 1, 0.85)
+polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1)
+
+[node name="RightEyeGlow" type="Polygon2D" parent="ReferencePlayer/Visuals/BodyPivot/HeadPivot/EyeEffects" unique_id=1420432848]
+position = Vector2(2, -1)
+color = Color(0.35, 0.75, 1, 0.85)
+polygon = PackedVector2Array(-1, -1, 1, -1, 1, 1, -1, 1)
+
+[node name="LeftLegPivot" type="Node2D" parent="ReferencePlayer/Visuals/BodyPivot" unique_id=454168525]
+position = Vector2(-3, -10)
+rotation = 0.10471976
+
+[node name="LeftLeg" type="Sprite2D" parent="ReferencePlayer/Visuals/BodyPivot/LeftLegPivot" unique_id=356189793]
+position = Vector2(0, 6)
+texture = ExtResource("7_ref_leg_left")
+
+[node name="RightLegPivot" type="Node2D" parent="ReferencePlayer/Visuals/BodyPivot" unique_id=1571173586]
+position = Vector2(3, -10)
+rotation = -0.10471976
+
+[node name="RightLeg" type="Sprite2D" parent="ReferencePlayer/Visuals/BodyPivot/RightLegPivot" unique_id=198701784]
+position = Vector2(0, 6)
+texture = ExtResource("8_ref_leg_right")
+
+[node name="WeaponAnchor" type="Marker2D" parent="ReferencePlayer/Visuals/BodyPivot" unique_id=1595051343]
+position = Vector2(8, -18)
+
+[node name="SpearPivot" type="Node2D" parent="." unique_id=2141482229]
+position = Vector2(18.899105, -2.350895)
+rotation = 1.43117
+scale = Vector2(0.5649257, 0.7227237)
+
+[node name="Sprite2D" type="Sprite2D" parent="SpearPivot" unique_id=2142894030]
+position = Vector2(0, 22)
+texture = ExtResource("1_spear")
+
+[node name="GripAnchor" type="Marker2D" parent="SpearPivot" unique_id=1211366098]
+
+[node name="AttackHitboxes" type="Node2D" parent="SpearPivot" unique_id=985374197]
+
+[node name="LightAttackC1Hitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=1706213146]
+position = Vector2(0, -12)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"light_attack_c_1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/LightAttackC1Hitbox" unique_id=939754562]
+shape = SubResource("RectangleShape2D_tip_small")
+
+[node name="LightAttackC2Hitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=116180850]
+position = Vector2(0, -11)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"light_attack_c_2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/LightAttackC2Hitbox" unique_id=1762421917]
+shape = SubResource("RectangleShape2D_tip_medium")
+
+[node name="LightAttackC3Hitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=1709271133]
+position = Vector2(0, -11)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"light_attack_c_3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/LightAttackC3Hitbox" unique_id=409517897]
+shape = SubResource("RectangleShape2D_tip_medium")
+
+[node name="HeavyAttackX1Hitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=1544115064]
+position = Vector2(0, -11)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"heavy_attack_x_1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/HeavyAttackX1Hitbox" unique_id=672110288]
+shape = SubResource("RectangleShape2D_tip_medium")
+
+[node name="HeavyAttackX2Hitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=1661739138]
+position = Vector2(0, -10)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"heavy_attack_x_2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/HeavyAttackX2Hitbox" unique_id=544652422]
+shape = SubResource("RectangleShape2D_tip_heavy")
+
+[node name="RunLightAttackCHitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=2111402760]
+position = Vector2(0, -12)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"run_light_attack_c"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/RunLightAttackCHitbox" unique_id=142553454]
+shape = SubResource("RectangleShape2D_tip_small")
+
+[node name="RunHeavyAttackXHitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=1309565531]
+position = Vector2(0, -10)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"run_heavy_attack_x"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/RunHeavyAttackXHitbox" unique_id=1059672765]
+shape = SubResource("RectangleShape2D_tip_heavy")
+
+[node name="AirLightAttackCHitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=2071167377]
+position = Vector2(0, -12)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"air_light_attack_c"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/AirLightAttackCHitbox" unique_id=1130843103]
+shape = SubResource("RectangleShape2D_tip_small")
+
+[node name="AirHeavyAttackXHitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=985928560]
+position = Vector2(0, -11)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"air_heavy_attack_x"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/AirHeavyAttackXHitbox" unique_id=1746641407]
+shape = SubResource("RectangleShape2D_tip_medium")
+
+[node name="SkillZCHitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=85353639]
+position = Vector2(0, -10)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"skill_zc"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/SkillZCHitbox" unique_id=1548599078]
+shape = SubResource("RectangleShape2D_tip_heavy")
+
+[node name="SkillZx1Hitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=302582760]
+position = Vector2(0, -12)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"skill_zx_1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/SkillZx1Hitbox" unique_id=2061438676]
+shape = SubResource("RectangleShape2D_tip_small")
+
+[node name="SkillZx2Hitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=766116389]
+position = Vector2(0, -11)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"skill_zx_2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/SkillZx2Hitbox" unique_id=1822047719]
+shape = SubResource("RectangleShape2D_tip_medium")
+
+[node name="SkillZx3Hitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=462549930]
+position = Vector2(0, -10)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"skill_zx_3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/SkillZx3Hitbox" unique_id=1463665197]
+shape = SubResource("RectangleShape2D_tip_heavy")
+
+[node name="GuardCounterLightHitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=1366441113]
+position = Vector2(0, -12)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"guard_counter_light"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/GuardCounterLightHitbox" unique_id=910281352]
+shape = SubResource("RectangleShape2D_tip_small")
+
+[node name="GuardCounterHeavyHitbox" type="Area2D" parent="SpearPivot/AttackHitboxes" unique_id=1323756495]
+position = Vector2(0, -10)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_hitbox")
+attack_id = &"guard_counter_heavy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpearPivot/AttackHitboxes/GuardCounterHeavyHitbox" unique_id=1965867025]
+shape = SubResource("RectangleShape2D_tip_heavy")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=769332510]
+libraries/ = SubResource("AnimationLibrary_spear")

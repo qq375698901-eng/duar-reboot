@@ -18,6 +18,7 @@ room_display_name = "Small Mob Room 04"
 room_type = 1
 room_type_label = "Monster Room (Low Difficulty)"
 encounter_level = 1
+loot_chest_size = 1
 
 [node name="Map" type="Node2D" parent="." unique_id=181389720]
 scale = Vector2(0.5, 0.5)
@@ -87,7 +88,7 @@ one_way_collision_margin = 4.0
 
 [node name="P03_LeftCenterSlope" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=1100650356]
 position = Vector2(16, -36)
-polygon = PackedVector2Array(454, 638, 476, 638, 618, 760, 588, 766)
+polygon = PackedVector2Array(458, 640, 458, 624, 618, 754, 590, 754)
 one_way_collision = true
 one_way_collision_margin = 4.0
 
@@ -104,7 +105,7 @@ one_way_collision_margin = 4.0
 
 [node name="G08_RightMidShelf" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=80875698]
 position = Vector2(0, -16)
-polygon = PackedVector2Array(1152, 638, 1430, 638, 1430, 670, 1152, 670)
+polygon = PackedVector2Array(1192, 638, 1430, 638, 1430, 670, 1152, 668)
 
 [node name="G03_LeftMidFloor" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=71868469]
 position = Vector2(32, -50)
@@ -141,6 +142,9 @@ position = Vector2(116, 430)
 
 [node name="ExitDoorSpawn" type="Marker2D" parent="." unique_id=1500771710]
 position = Vector2(148, 119)
+
+[node name="LootChestSpawn" type="Marker2D" parent="." unique_id=1500771711]
+position = Vector2(183, 122)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=909995090]
 position = Vector2(240, 360)

@@ -1,0 +1,94 @@
+{
+    "name":  "dungeon_jailer",
+    "display_name":  "Dungeon Jailer",
+    "frame_width":  192,
+    "frame_height":  192,
+    "background":  "transparent",
+    "fixed_frame_size":  true,
+    "baseline_y":  145,
+    "facing":  "right",
+    "notes":  [
+                  "elite enemy concept assembled from four key poses",
+                  "long lock-neck cage fork silhouette for control pressure",
+                  "placeholder animation strips intended to support a complete scene setup"
+              ],
+    "animations":  [
+                       {
+                           "name":  "idle",
+                           "file":  "dungeon_jailer_idle_strip.png",
+                           "frames":  4,
+                           "fps":  5,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "move",
+                           "file":  "dungeon_jailer_move_strip.png",
+                           "frames":  6,
+                           "fps":  7,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "attack_1",
+                           "file":  "dungeon_jailer_attack_1_strip.png",
+                           "frames":  8,
+                           "fps":  9,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "attack_2",
+                           "file":  "dungeon_jailer_attack_2_strip.png",
+                           "frames":  20,
+                           "fps":  8,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "attack_3",
+                           "file":  "dungeon_jailer_attack_3_strip.png",
+                           "frames":  8,
+                           "fps":  8,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "hit",
+                           "file":  "dungeon_jailer_hit_strip.png",
+                           "frames":  3,
+                           "fps":  8,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "launch",
+                           "file":  "dungeon_jailer_launch_strip.png",
+                           "frames":  2,
+                           "fps":  7,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "down",
+                           "file":  "dungeon_jailer_down_strip.png",
+                           "frames":  2,
+                           "fps":  5,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "get_up",
+                           "file":  "dungeon_jailer_get_up_strip.png",
+                           "frames":  5,
+                           "fps":  7,
+                           "loop":  false
+                       },
+                       {
+                           "name":  "grabbed",
+                           "file":  "dungeon_jailer_grabbed_strip.png",
+                           "frames":  2,
+                           "fps":  5,
+                           "loop":  true
+                       },
+                       {
+                           "name":  "death",
+                           "file":  "dungeon_jailer_death_strip.png",
+                           "frames":  4,
+                           "fps":  7,
+                           "loop":  false
+                       }
+                   ]
+}

@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/flow/dungeon_transition_scene.gd" id="1_script"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_dj2f1"]
+font_size = 48
+font_color = Color(0.92, 0.92, 0.92, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="DungeonTransitionScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HintLabel" type="Label" parent="CenterContainer"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_dj2f1")
+text = ""
+horizontal_alignment = 1
+
+[node name="RevealTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="LoadTimer" type="Timer" parent="."]
+one_shot = true

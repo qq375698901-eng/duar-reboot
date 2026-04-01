@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/objects/dungeon_loot_chest_2d.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="1_rect_shape"]
+size = Vector2(40, 28)
+
+[node name="DungeonLootChest2D" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+
+[node name="InteractArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea"]
+shape = SubResource("1_rect_shape")
+
+[node name="PromptLabel" type="Label" parent="."]
+visible = false
+custom_minimum_size = Vector2(84, 34)
+theme_override_colors/font_color = Color(0.95, 0.95, 0.98, 1)
+theme_override_font_sizes/font_size = 16
+text = "UP\nLOOT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="."]
+visible = false
+custom_minimum_size = Vector2(108, 32)
+theme_override_colors/font_color = Color(0.98, 0.89, 0.56, 1)
+theme_override_font_sizes/font_size = 16
+text = "Loot x1"
+horizontal_alignment = 1
+vertical_alignment = 1

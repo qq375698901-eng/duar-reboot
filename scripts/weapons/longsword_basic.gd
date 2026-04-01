@@ -124,11 +124,18 @@ const ATTACK_DEFINITIONS := {
 @export var light_combo_input_window: float = 0.5
 @export var heavy_combo_input_window: float = 0.5
 @export var display_name: String = "Longsword"
+@export var weapon_mastery_track_id: String = "longsword"
 @export var base_attack_power: float = 10.0
 @export_range(0.0, 1.0, 0.01) var base_defense_ratio: float = 0.3
 @export var equip_weight: float = 0.0
 @export_range(1, 8, 1) var weapon_tier: int = 1
 @export_range(0, 4, 1) var reinforcement_level: int = 0
+@export var reinforcement_bonus_base_attack_power: float = 0.0
+@export var reinforcement_bonus_base_defense_ratio: float = 0.0
+@export var reinforcement_bonus_attack: int = 0
+@export var reinforcement_bonus_agility: int = 0
+@export var reinforcement_bonus_vitality: int = 0
+@export var reinforcement_bonus_spirit: int = 0
 @export var affixes: PackedStringArray = []
 @export var coeff_light_attack_c_1: float = 0.7
 @export var coeff_light_attack_c_2: float = 0.5
@@ -257,12 +264,16 @@ func get_display_name() -> String:
 	return display_name
 
 
+func get_weapon_mastery_track_id() -> String:
+	return weapon_mastery_track_id
+
+
 func get_base_attack_power() -> float:
-	return base_attack_power
+	return maxf(0.0, base_attack_power + reinforcement_bonus_base_attack_power)
 
 
 func get_base_defense_ratio() -> float:
-	return base_defense_ratio
+	return clampf(base_defense_ratio + reinforcement_bonus_base_defense_ratio, 0.0, 1.0)
 
 
 func get_equip_weight() -> float:
@@ -277,8 +288,88 @@ func get_reinforcement_level() -> int:
 	return reinforcement_level
 
 
+func get_reinforcement_bonus_data() -> Dictionary:
+	return {
+		"base_attack_power": reinforcement_bonus_base_attack_power,
+		"base_defense_ratio": reinforcement_bonus_base_defense_ratio,
+		"attack": reinforcement_bonus_attack,
+		"agility": reinforcement_bonus_agility,
+		"vitality": reinforcement_bonus_vitality,
+		"spirit": reinforcement_bonus_spirit,
+	}
+
+
+func get_attribute_bonus_value(attribute_id: StringName) -> int:
+	match String(attribute_id):
+		"attack":
+			return reinforcement_bonus_attack
+		"agility":
+			return reinforcement_bonus_agility
+		"vitality":
+			return reinforcement_bonus_vitality
+		"spirit":
+			return reinforcement_bonus_spirit
+		_:
+			return 0
+
+
 func get_affixes() -> PackedStringArray:
 	return affixes
+
+
+func apply_runtime_item_data(item_data: Dictionary) -> void:
+	if item_data.is_empty():
+		return
+
+	display_name = String(item_data.get("display_name", display_name))
+	weapon_mastery_track_id = String(item_data.get("weapon_mastery_track_id", weapon_mastery_track_id))
+	base_attack_power = float(item_data.get("base_attack_power", base_attack_power))
+	base_defense_ratio = float(item_data.get("base_defense_ratio", base_defense_ratio))
+	equip_weight = float(item_data.get("equip_weight", equip_weight))
+	weapon_tier = max(1, int(item_data.get("weapon_tier", weapon_tier)))
+	reinforcement_level = clampi(int(item_data.get("reinforcement_level", reinforcement_level)), 0, 4)
+	affixes = _coerce_affixes(item_data.get("affixes", affixes))
+
+	var reinforcement_bonus := _normalize_reinforcement_bonus_data(item_data.get("reinforcement_bonus", {}))
+	reinforcement_bonus_base_attack_power = float(reinforcement_bonus.get("base_attack_power", 0.0))
+	reinforcement_bonus_base_defense_ratio = float(reinforcement_bonus.get("base_defense_ratio", 0.0))
+	reinforcement_bonus_attack = int(reinforcement_bonus.get("attack", 0))
+	reinforcement_bonus_agility = int(reinforcement_bonus.get("agility", 0))
+	reinforcement_bonus_vitality = int(reinforcement_bonus.get("vitality", 0))
+	reinforcement_bonus_spirit = int(reinforcement_bonus.get("spirit", 0))
+
+
+func _normalize_reinforcement_bonus_data(value: Variant) -> Dictionary:
+	var normalized := {
+		"base_attack_power": 0.0,
+		"base_defense_ratio": 0.0,
+		"attack": 0,
+		"agility": 0,
+		"vitality": 0,
+		"spirit": 0,
+	}
+	if not (value is Dictionary):
+		return normalized
+
+	var source: Dictionary = value as Dictionary
+	normalized["base_attack_power"] = float(source.get("base_attack_power", 0.0))
+	normalized["base_defense_ratio"] = float(source.get("base_defense_ratio", 0.0))
+	normalized["attack"] = int(source.get("attack", 0))
+	normalized["agility"] = int(source.get("agility", 0))
+	normalized["vitality"] = int(source.get("vitality", 0))
+	normalized["spirit"] = int(source.get("spirit", 0))
+	return normalized
+
+
+func _coerce_affixes(value: Variant) -> PackedStringArray:
+	if value is PackedStringArray:
+		return value
+
+	var normalized := PackedStringArray()
+	if value is Array:
+		for entry in value as Array:
+			normalized.append(String(entry))
+	return normalized
 
 
 func reset_pose() -> void:
@@ -664,6 +755,9 @@ func _reset_hit_memory_for_attack(attack_id: StringName) -> void:
 func _on_attack_hitbox_target_hit(target: Node, attack_id: StringName) -> void:
 	if target == _get_weapon_holder():
 		return
+	var weapon_holder := _get_weapon_holder()
+	if weapon_holder != null and weapon_holder.has_method("can_resolve_network_combat_hits") and not bool(weapon_holder.call("can_resolve_network_combat_hits")):
+		return
 	if attack_id != _current_attack_id:
 		return
 	if not ATTACK_DEFINITIONS.has(String(attack_id)):
@@ -692,10 +786,11 @@ func _build_attack_payload(attack_id: StringName) -> Dictionary:
 		attribute_attack_multiplier = float(holder.call("get_attack_attribute_damage_multiplier"))
 
 	attack_data["attack_id"] = String(attack_id)
-	attack_data["base_attack_power"] = base_attack_power
+	var effective_base_attack_power := get_base_attack_power()
+	attack_data["base_attack_power"] = effective_base_attack_power
 	attack_data["attack_coefficient"] = attack_coefficient
 	attack_data["attribute_attack_multiplier"] = attribute_attack_multiplier
-	attack_data["damage"] = base_attack_power * attack_coefficient * attribute_attack_multiplier
+	attack_data["damage"] = effective_base_attack_power * attack_coefficient * attribute_attack_multiplier
 	return attack_data
 
 
@@ -977,6 +1072,9 @@ func _try_grab_target_for_skill_zx(target: Node) -> void:
 
 
 func _apply_grabbed_damage_to_target(target: Node, attack_id: StringName) -> void:
+	var weapon_holder := _get_weapon_holder()
+	if weapon_holder != null and weapon_holder.has_method("can_resolve_network_combat_hits") and not bool(weapon_holder.call("can_resolve_network_combat_hits")):
+		return
 	var attack_data: Dictionary = _build_attack_payload(attack_id)
 	attack_hit_registered.emit(target, attack_id)
 	if target.has_method("receive_grabbed_weapon_hit"):

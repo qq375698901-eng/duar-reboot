@@ -18,6 +18,7 @@ room_display_name = "Small Mob Room 02"
 room_type = 1
 room_type_label = "Monster Room (Low Difficulty)"
 encounter_level = 1
+loot_chest_size = 1
 
 [node name="Map" type="Node2D" parent="." unique_id=905143305]
 scale = Vector2(0.5, 0.5)
@@ -118,6 +119,9 @@ position = Vector2(96, 398)
 
 [node name="ExitDoorSpawn" type="Marker2D" parent="." unique_id=1001001012]
 position = Vector2(192, 148)
+
+[node name="LootChestSpawn" type="Marker2D" parent="." unique_id=1001001014]
+position = Vector2(248, 150)
 
 [node name="DungeonFirebomber" parent="." unique_id=1817648963 instance=ExtResource("5_vwkf4")]
 position = Vector2(218, 162)

@@ -15,6 +15,7 @@ room_display_name = "Elite Monster Room 01"
 room_type = 2
 room_type_label = "Elite Monster Room (Medium Difficulty)"
 encounter_level = 2
+loot_chest_size = 2
 
 [node name="Map" type="Node2D" parent="." unique_id=1415295734]
 scale = Vector2(0.5, 0.5)
@@ -109,10 +110,13 @@ process_callback = 0
 script = ExtResource("3_camera")
 
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1001001001]
-position = Vector2(120, 430)
+position = Vector2(147, 54)
 
 [node name="ExitDoorSpawn" type="Marker2D" parent="." unique_id=1001001011]
-position = Vector2(702, 386)
+position = Vector2(587, 351)
+
+[node name="LootChestSpawn" type="Marker2D" parent="." unique_id=1001001012]
+position = Vector2(623, 62)
 
 [node name="DungeonOverseer" parent="." unique_id=1607229209 instance=ExtResource("5_1kou1")]
 position = Vector2(418, 218)

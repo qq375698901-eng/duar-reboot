@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/item_debug_panel.gd" id="1_script"]
+
+[node name="ItemDebugPanel" type="CanvasLayer"]
+script = ExtResource("1_script")
+
+[node name="Panel" type="PanelContainer" parent="."]
+offset_left = 28.0
+offset_top = 28.0
+offset_right = 468.0
+offset_bottom = 520.0
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 428.0
+offset_bottom = 468.0
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+offset_right = 416.0
+offset_bottom = 456.0
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="Panel/Margin/VBox"]
+text = "Item Debug Panel"
+theme_override_font_sizes/font_size = 22
+
+[node name="HintLabel" type="Label" parent="Panel/Margin/VBox"]
+text = "Press I to toggle. Click Add to spawn one item into backpack."
+autowrap_mode = 2
+
+[node name="ListScroll" type="ScrollContainer" parent="Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 360)
+size_flags_vertical = 3
+
+[node name="ListBox" type="VBoxContainer" parent="Panel/Margin/VBox/ListScroll"]
+offset_right = 416.0
+offset_bottom = 360.0
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="StatusLabel" type="Label" parent="Panel/Margin/VBox"]
+text = "Ready."
+autowrap_mode = 2

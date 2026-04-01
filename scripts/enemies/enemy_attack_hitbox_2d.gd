@@ -3,6 +3,8 @@ class_name EnemyAttackHitbox2D
 
 signal target_hit(target: Node, attack_id: StringName, attack_data: Dictionary)
 
+const ENEMY_COLLISION_GROUP := &"enemy_bodies"
+
 @export var attack_id: StringName = &"attack"
 @export var show_debug_shape := true
 @export_enum("rect", "slash") var debug_visual_style: String = "rect"
@@ -79,9 +81,13 @@ func reset_hit_memory() -> void:
 func _on_body_entered(body: Node) -> void:
 	if not _active:
 		return
+	if not _owner_can_deal_damage():
+		return
 	if body == null:
 		return
 	if body == _owner_body:
+		return
+	if _is_friendly_enemy_target(body):
 		return
 	if _hit_targets.has(body.get_instance_id()):
 		return
@@ -92,11 +98,15 @@ func _on_body_entered(body: Node) -> void:
 func _emit_existing_overlaps() -> void:
 	if not _active:
 		return
+	if not _owner_can_deal_damage():
+		return
 
 	for body in get_overlapping_bodies():
 		if body == null:
 			continue
 		if body == _owner_body:
+			continue
+		if _is_friendly_enemy_target(body):
 			continue
 		if _hit_targets.has(body.get_instance_id()):
 			continue
@@ -106,6 +116,10 @@ func _emit_existing_overlaps() -> void:
 
 func _queue_target_hit(body: Node) -> void:
 	if body == null:
+		return
+	if not _owner_can_deal_damage():
+		return
+	if _is_friendly_enemy_target(body):
 		return
 
 	_hit_targets[body.get_instance_id()] = true
@@ -120,8 +134,30 @@ func _emit_target_hit_deferred(body: Node, resolved_attack_id: StringName, attac
 		return
 	if body == _owner_body:
 		return
+	if not _owner_can_deal_damage():
+		return
+	if _is_friendly_enemy_target(body):
+		return
 
 	target_hit.emit(body, resolved_attack_id, attack_data)
+
+
+func _owner_can_deal_damage() -> bool:
+	if _owner_body == null:
+		return false
+	if not is_instance_valid(_owner_body):
+		return false
+	if _owner_body.has_method("is_attack_disabled") and bool(_owner_body.call("is_attack_disabled")):
+		return false
+	if _owner_body.has_method("is_dead") and bool(_owner_body.call("is_dead")):
+		return false
+	return true
+
+
+func _is_friendly_enemy_target(body: Node) -> bool:
+	if body == null:
+		return false
+	return body.is_in_group(ENEMY_COLLISION_GROUP)
 
 
 func _draw() -> void:

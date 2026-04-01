@@ -33,11 +33,32 @@ position = Vector2(4, 12)
 polygon = PackedVector2Array(94, 56, 1442, 56, 1442, 92, 94, 92)
 
 [node name="G04_BottomFloor" type="CollisionPolygon2D" parent="Map/Ground" unique_id=126852614]
-polygon = PackedVector2Array(94, 897, 1442, 897, 1442, 944, 94, 944)
+polygon = PackedVector2Array(128, 898, 1404, 898, 1404, 926, 128, 926)
 
 [node name="Platforms" type="StaticBody2D" parent="." unique_id=195555001]
 collision_layer = 4
 collision_mask = 0
+
+[node name="Platform1" type="CollisionPolygon2D" parent="Platforms" unique_id=823622099]
+position = Vector2(-105.78547, -81.00009)
+scale = Vector2(0.16886128, 0.5000001)
+polygon = PackedVector2Array(614.6196, 897.99994, 1442, 897, 1443.7025, 927.99994, 614.6196, 927.99994)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="Platform2" type="CollisionPolygon2D" parent="Platforms" unique_id=1707840863]
+position = Vector2(577, -82)
+scale = Vector2(0.16886128, 0.5000001)
+polygon = PackedVector2Array(94, 897, 1131.106, 897.99976, 1131.106, 925.99976, 94.7522, 925.99976)
+one_way_collision = true
+one_way_collision_margin = 4.0
+
+[node name="Platform3" type="CollisionPolygon2D" parent="Platforms" unique_id=1770189170]
+position = Vector2(200, -149)
+scale = Vector2(0.2301625, 0.50000024)
+polygon = PackedVector2Array(94, 897, 1442, 897, 1442.459, 927.9995, 95.584656, 927.9995)
+one_way_collision = true
+one_way_collision_margin = 4.0
 
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1752703367]
 position = Vector2(152, 440)
@@ -51,24 +72,3 @@ zoom = Vector2(2, 2)
 process_callback = 0
 script = ExtResource("2_camera")
 target_path = NodePath("../Player")
-
-[node name="Platform1" type="CollisionPolygon2D" parent="Platforms" unique_id=823622099]
-position = Vector2(-105.78547, -81.00009)
-scale = Vector2(0.16886128, 0.5000001)
-polygon = PackedVector2Array(94, 897, 1442, 897, 1442, 944, 94, 944)
-one_way_collision = true
-one_way_collision_margin = 4.0
-
-[node name="Platform2" type="CollisionPolygon2D" parent="Platforms" unique_id=1707840863]
-position = Vector2(577, -82)
-scale = Vector2(0.16886128, 0.5000001)
-polygon = PackedVector2Array(94, 897, 1442, 897, 1442, 944, 94, 944)
-one_way_collision = true
-one_way_collision_margin = 4.0
-
-[node name="Platform3" type="CollisionPolygon2D" parent="Platforms" unique_id=1770189170]
-position = Vector2(200, -149)
-scale = Vector2(0.2301625, 0.50000024)
-polygon = PackedVector2Array(94, 897, 1442, 897, 1442, 944, 94, 944)
-one_way_collision = true
-one_way_collision_margin = 4.0

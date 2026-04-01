@@ -1,11 +1,16 @@
 extends Control
 
+const DESIGN_SIZE := Vector2(1920.0, 1080.0)
 const PANEL_OPEN_OFFSET := Vector2(96.0, 18.0)
 const PANEL_OPEN_DURATION := 0.24
 const PANEL_FADE_DURATION := 0.18
+const MULTIPLAYER_SHOWCASE_LOBBY_SCENE_PATH := "res://scenes/network/multiplayer_showcase_lobby.tscn"
 
 @onready var inventory_button: Button = $InventoryButton
 @onready var character_button: Button = $CharacterButton
+@onready var auction_button: Button = $AuctionButton
+@onready var auction_button_text: Label = $AuctionButton/Text
+@onready var auction_button_tag: Label = $AuctionButton/AuctionTag
 @onready var inventory_screen: Control = $InventoryScreen
 @onready var inventory_panel: Control = $InventoryScreen
 @onready var character_screen: Control = $CharacterScreen
@@ -16,6 +21,7 @@ const PANEL_FADE_DURATION := 0.18
 @onready var panel_shell: Control = $CharacterScreen/PanelShell
 @onready var inventory_close_button: Button = $InventoryScreen/PanelShell/CloseButton
 @onready var close_button: Button = $CharacterScreen/PanelShell/CloseButton
+@onready var enter_dungeon_button: Button = $EnterDungeonButton
 
 var _inventory_open_position: Vector2 = Vector2.ZERO
 var _panel_open_position: Vector2 = Vector2.ZERO
@@ -24,6 +30,11 @@ var _panel_tween: Tween
 
 
 func _ready() -> void:
+	custom_minimum_size = DESIGN_SIZE
+	var viewport := get_viewport()
+	if viewport != null and not viewport.size_changed.is_connected(_apply_design_scale):
+		viewport.size_changed.connect(_apply_design_scale)
+	_apply_design_scale()
 	_inventory_open_position = inventory_panel_shell.position
 	_panel_open_position = panel_shell.position
 	_reset_inventory_screen_visuals()
@@ -34,8 +45,30 @@ func _ready() -> void:
 	character_button.pressed.connect(_on_character_button_pressed)
 	inventory_close_button.pressed.connect(_on_inventory_close_pressed)
 	close_button.pressed.connect(_on_character_close_pressed)
+	auction_button.pressed.connect(_on_auction_button_pressed)
+	enter_dungeon_button.pressed.connect(_on_enter_dungeon_button_pressed)
 	inventory_overlay_dim.gui_input.connect(_on_inventory_overlay_gui_input)
 	overlay_dim.gui_input.connect(_on_overlay_gui_input)
+	auction_button_text.text = "SHOWCASE"
+	auction_button_tag.text = "ONLINE"
+
+
+func _apply_design_scale() -> void:
+	var viewport_rect: Rect2 = get_viewport_rect()
+	var viewport_size: Vector2 = viewport_rect.size
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		return
+
+	var width_scale: float = viewport_size.x / DESIGN_SIZE.x
+	var height_scale: float = viewport_size.y / DESIGN_SIZE.y
+	var fit_scale: float = minf(width_scale, height_scale)
+	scale = Vector2.ONE * fit_scale
+	position = (viewport_size - DESIGN_SIZE * fit_scale) * 0.5
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_RESIZED:
+		_apply_design_scale()
 
 
 func _on_inventory_button_pressed() -> void:
@@ -64,6 +97,16 @@ func _on_character_close_pressed() -> void:
 	if not character_screen.visible:
 		return
 	_play_character_close()
+
+
+func _on_enter_dungeon_button_pressed() -> void:
+	var flow_runtime: Node = get_node_or_null("/root/DungeonFlowRuntime")
+	if flow_runtime != null and flow_runtime.has_method("start_fixed_dungeon_run"):
+		flow_runtime.call("start_fixed_dungeon_run")
+
+
+func _on_auction_button_pressed() -> void:
+	get_tree().change_scene_to_file(MULTIPLAYER_SHOWCASE_LOBBY_SCENE_PATH)
 
 
 func _unhandled_input(event: InputEvent) -> void:

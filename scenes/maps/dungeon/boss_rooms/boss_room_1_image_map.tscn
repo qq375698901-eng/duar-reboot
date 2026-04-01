@@ -18,6 +18,7 @@ room_display_name = "Boss Room 01"
 room_type = 4
 room_type_label = "Boss Room (High Difficulty)"
 encounter_level = 3
+loot_chest_size = 3
 
 [node name="Map" type="Node2D" parent="." unique_id=1542391347]
 scale = Vector2(0.5, 0.5)
@@ -147,7 +148,10 @@ polygon = PackedVector2Array(-12, -132, 28, -132, 26, 146, -14, 146)
 position = Vector2(120, 450)
 
 [node name="ExitDoorSpawn" type="Marker2D" parent="." unique_id=2089126233]
-position = Vector2(647, 420)
+position = Vector2(646, 431)
+
+[node name="LootChestSpawn" type="Marker2D" parent="." unique_id=2089126234]
+position = Vector2(582, 432)
 
 [node name="JudgementWindHeadTest" parent="." unique_id=1321738369 instance=ExtResource("6_wind_head")]
 position = Vector2(344, 316)

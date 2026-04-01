@@ -1,0 +1,82 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/network/multiplayer_showcase_room.gd" id="1_room_script"]
+[ext_resource type="PackedScene" path="res://scenes/characters/training_dummy.tscn" id="2_training_dummy"]
+[ext_resource type="Script" path="res://scripts/camera/follow_camera.gd" id="3_follow_camera"]
+
+[sub_resource type="RectangleShape2D" id="1_floor_shape"]
+size = Vector2(1400, 24)
+
+[node name="MultiplayerShowcaseRoom" type="Node2D"]
+script = ExtResource("1_room_script")
+
+[node name="MapRoom" type="Node2D" parent="."]
+
+[node name="Backdrop" type="ColorRect" parent="MapRoom"]
+offset_left = -700.0
+offset_top = -180.0
+offset_right = 700.0
+offset_bottom = 180.0
+color = Color(0.0941176, 0.0980392, 0.141176, 1)
+
+[node name="Floor" type="StaticBody2D" parent="MapRoom"]
+position = Vector2(0, 76)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MapRoom/Floor"]
+shape = SubResource("1_floor_shape")
+
+[node name="FloorVisual" type="ColorRect" parent="MapRoom"]
+offset_left = -700.0
+offset_top = 64.0
+offset_right = 700.0
+offset_bottom = 180.0
+color = Color(0.219608, 0.192157, 0.160784, 1)
+
+[node name="TrainingDummy" parent="MapRoom" instance=ExtResource("2_training_dummy")]
+position = Vector2(-120, 64)
+forced_get_up_hint_color = Color(0.35, 1, 0.45, 1)
+damage_popup_rise_speed = 26.0
+damage_popup_lifetime = 0.55
+damage_popup_color = Color(1, 0.92, 0.65, 1)
+
+[node name="PlayerSpawnA" type="Marker2D" parent="."]
+position = Vector2(-420, 64)
+
+[node name="PlayerSpawnB" type="Marker2D" parent="."]
+position = Vector2(-300, 64)
+
+[node name="ExitDoorSpawn" type="Marker2D" parent="."]
+position = Vector2(420, 64)
+
+[node name="LootChestSpawn" type="Marker2D" parent="."]
+position = Vector2(300, 64)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -12)
+enabled = true
+zoom = Vector2(2, 2)
+script = ExtResource("3_follow_camera")
+
+[node name="UiLayer" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="InfoPanel" type="PanelContainer" parent="UiLayer"]
+offset_left = 28.0
+offset_top = 26.0
+offset_right = 286.0
+offset_bottom = 118.0
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="UiLayer/InfoPanel"]
+offset_right = 258.0
+offset_bottom = 92.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="InfoLabel" type="Label" parent="UiLayer/InfoPanel/Margin"]
+offset_right = 238.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.98, 1)
+text = "Loading..."

@@ -1,0 +1,54 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/battle_death_overlay.gd" id="1_script"]
+
+[node name="BattleDeathOverlay" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_script")
+
+[node name="Tint" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.45, 0.03, 0.03, 1)
+modulate = Color(1, 1, 1, 0)
+
+[node name="CenterBox" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="CenterBox"]
+layout_mode = 2
+theme_override_styles/panel = null
+
+[node name="VBox" type="VBoxContainer" parent="CenterBox/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MessageLabel" type="Label" parent="CenterBox/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.94, 1)
+theme_override_font_sizes/font_size = 36
+text = "Defeated"
+horizontal_alignment = 1
+
+[node name="ReturnButton" type="Button" parent="CenterBox/Panel/VBox"]
+visible = false
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+text = "Return To Town"

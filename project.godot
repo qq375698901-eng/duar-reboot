@@ -11,17 +11,21 @@ config_version=5
 [application]
 
 config/name="duar reboot"
+run/main_scene="res://scenes/ui/login_screen.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
+AccountRuntime="*res://scripts/account/account_runtime.gd"
 InventoryRuntime="*res://scripts/inventory/inventory_runtime.gd"
+DungeonFlowRuntime="*res://scripts/flow/dungeon_flow_runtime.gd"
+NetworkSession="*res://scripts/network/network_session.gd"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=1600
+window/size/viewport_height=900
 window/stretch/mode="canvas_items"
 
 [physics]
