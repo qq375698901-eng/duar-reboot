@@ -94,6 +94,9 @@ func _on_body_entered(body: Node) -> void:
 
 
 func _resolve_hit_deferred(body: Node, payload: Dictionary) -> void:
+	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
+		_explode()
+		return
 	if body != null and is_instance_valid(body) and body != owner_body and not body.is_in_group(ENEMY_COLLISION_GROUP):
 		projectile_hit.emit(body, payload)
 		if body.has_method("receive_weapon_hit"):
@@ -139,6 +142,8 @@ func _spawn_fire_patch() -> void:
 	var patch := fire_patch_scene.instantiate()
 	if patch == null:
 		return
+	if patch is Node:
+		(patch as Node).set_multiplayer_authority(1, true)
 
 	var current_scene := get_tree().current_scene
 	if current_scene == null:

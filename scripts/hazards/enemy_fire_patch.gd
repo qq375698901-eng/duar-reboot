@@ -87,6 +87,8 @@ func _apply_hit_deferred(body: Node) -> void:
 
 
 func _deliver_hit_deferred(body: Node, payload: Dictionary) -> void:
+	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
+		return
 	if not _is_valid_damage_target(body):
 		return
 

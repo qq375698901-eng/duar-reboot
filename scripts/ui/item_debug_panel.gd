@@ -6,12 +6,12 @@ const TOGGLE_ACTION := &"debug_toggle_item_panel"
 @onready var list_box: VBoxContainer = $Panel/Margin/VBox/ListScroll/ListBox
 @onready var status_label: Label = $Panel/Margin/VBox/StatusLabel
 
-var _inventory_runtime: Node
+var _inventory_service: Node
 
 
 func _ready() -> void:
 	layer = 90
-	_inventory_runtime = get_node_or_null("/root/InventoryRuntime")
+	_inventory_service = get_node_or_null("/root/InventoryService")
 	_ensure_input_actions()
 	_connect_inventory_signals()
 	_rebuild_list()
@@ -27,11 +27,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _connect_inventory_signals() -> void:
-	if _inventory_runtime == null or not _inventory_runtime.has_signal("inventory_changed"):
+	if _inventory_service == null or not _inventory_service.has_signal("inventory_changed"):
 		return
 	var callback := Callable(self, "_on_inventory_changed")
-	if not _inventory_runtime.is_connected("inventory_changed", callback):
-		_inventory_runtime.connect("inventory_changed", callback)
+	if not _inventory_service.is_connected("inventory_changed", callback):
+		_inventory_service.connect("inventory_changed", callback)
 
 
 func _on_inventory_changed() -> void:
@@ -43,11 +43,11 @@ func _rebuild_list() -> void:
 	for child in list_box.get_children():
 		child.queue_free()
 
-	if _inventory_runtime == null or not _inventory_runtime.has_method("get_debug_item_catalog"):
-		status_label.text = "Inventory runtime unavailable."
+	if _inventory_service == null or not _inventory_service.has_method("get_debug_item_catalog"):
+		status_label.text = "Inventory service unavailable."
 		return
 
-	var catalog: Array = _inventory_runtime.call("get_debug_item_catalog") as Array
+	var catalog: Array = _inventory_service.call("get_debug_item_catalog") as Array
 	for entry_value in catalog:
 		if not (entry_value is Dictionary):
 			continue
@@ -95,11 +95,11 @@ func _build_item_row(item: Dictionary) -> Control:
 
 
 func _on_add_pressed(definition_id: String, display_name: String) -> void:
-	if _inventory_runtime == null or not _inventory_runtime.has_method("add_item_to_backpack_by_definition"):
+	if _inventory_service == null or not _inventory_service.has_method("add_item_to_backpack_by_definition"):
 		status_label.text = "Add failed."
 		return
 
-	var success: bool = bool(_inventory_runtime.call("add_item_to_backpack_by_definition", definition_id))
+	var success: bool = bool(_inventory_service.call("add_item_to_backpack_by_definition", definition_id))
 	if success:
 		status_label.text = "%s added to backpack." % display_name
 	else:
@@ -119,13 +119,13 @@ func _resolve_item_icon(item: Dictionary) -> Texture2D:
 func _build_item_description(item: Dictionary) -> String:
 	var item_type: String = String(item.get("item_type", ""))
 	if item_type == "weapon":
-		var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
+		var inventory_service: Node = get_node_or_null("/root/InventoryService")
 		var atk: float = float(item.get("base_attack_power", 0.0))
 		var defense_ratio: float = float(item.get("base_defense_ratio", 0.0))
-		if inventory_runtime != null and inventory_runtime.has_method("get_item_total_base_attack_power"):
-			atk = float(inventory_runtime.call("get_item_total_base_attack_power", item))
-		if inventory_runtime != null and inventory_runtime.has_method("get_item_total_base_defense_ratio"):
-			defense_ratio = float(inventory_runtime.call("get_item_total_base_defense_ratio", item))
+		if inventory_service != null and inventory_service.has_method("get_item_total_base_attack_power"):
+			atk = float(inventory_service.call("get_item_total_base_attack_power", item))
+		if inventory_service != null and inventory_service.has_method("get_item_total_base_defense_ratio"):
+			defense_ratio = float(inventory_service.call("get_item_total_base_defense_ratio", item))
 		return "Weapon | ATK %s | DEF %d%%" % [
 			str(snappedf(atk, 0.1)),
 			int(round(defense_ratio * 100.0)),

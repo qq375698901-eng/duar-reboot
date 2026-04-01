@@ -29,7 +29,7 @@ const DOUBLE_CLICK_THRESHOLD_SEC := 0.28
 @onready var carry_hint_label: Label = $PanelShell/EquipCard/CarryHint
 @onready var capacity_label: Label = $PanelShell/BackpackCard/CapacityLabel
 
-var _inventory_runtime: Node
+var _inventory_service: Node
 var _player: Node
 var _slot_widgets: Array = []
 var _equip_slot_button: Button
@@ -50,7 +50,7 @@ var _last_clicked_time_sec: float = -1.0
 
 func _ready() -> void:
 	visible = false
-	_inventory_runtime = get_node_or_null("/root/InventoryRuntime")
+	_inventory_service = get_node_or_null("/root/InventoryService")
 	_player = get_node_or_null(player_path)
 	_ensure_input_actions()
 	_build_grid()
@@ -78,12 +78,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _connect_inventory_signals() -> void:
-	if _inventory_runtime == null or not _inventory_runtime.has_signal("inventory_changed"):
+	if _inventory_service == null or not _inventory_service.has_signal("inventory_changed"):
 		return
 
 	var callback: Callable = Callable(self, "_on_inventory_changed")
-	if not _inventory_runtime.is_connected("inventory_changed", callback):
-		_inventory_runtime.connect("inventory_changed", callback)
+	if not _inventory_service.is_connected("inventory_changed", callback):
+		_inventory_service.connect("inventory_changed", callback)
 
 
 func _on_inventory_changed() -> void:
@@ -381,8 +381,8 @@ func _on_backpack_slot_pressed(slot_index: int) -> void:
 		_refresh_all()
 		return
 
-	if _inventory_runtime != null and _inventory_runtime.has_method("move_item"):
-		_inventory_runtime.call("move_item", CONTAINER_BACKPACK, _selected_backpack_index, CONTAINER_BACKPACK, slot_index)
+	if _inventory_service != null and _inventory_service.has_method("move_item"):
+		_inventory_service.call("move_item", CONTAINER_BACKPACK, _selected_backpack_index, CONTAINER_BACKPACK, slot_index)
 	_selected_backpack_index = -1
 	_refresh_all()
 
@@ -390,15 +390,15 @@ func _on_backpack_slot_pressed(slot_index: int) -> void:
 func _on_equip_slot_pressed() -> void:
 	if _is_player_equipment_operation_locked():
 		return
-	if _inventory_runtime == null:
+	if _inventory_service == null:
 		return
 
 	var did_change: bool = false
-	if _selected_backpack_index >= 0 and _is_selected_item_type(ITEM_TYPE_WEAPON) and _inventory_runtime.has_method("equip_from_backpack"):
-		did_change = bool(_inventory_runtime.call("equip_from_backpack", _selected_backpack_index))
+	if _selected_backpack_index >= 0 and _is_selected_item_type(ITEM_TYPE_WEAPON) and _inventory_service.has_method("equip_from_backpack"):
+		did_change = bool(_inventory_service.call("equip_from_backpack", _selected_backpack_index))
 	else:
-		if _inventory_runtime.has_method("unequip_to_backpack"):
-			did_change = bool(_inventory_runtime.call("unequip_to_backpack"))
+		if _inventory_service.has_method("unequip_to_backpack"):
+			did_change = bool(_inventory_service.call("unequip_to_backpack"))
 
 	if did_change:
 		_selected_backpack_index = -1
@@ -409,14 +409,14 @@ func _on_equip_slot_pressed() -> void:
 func _on_potion_slot_pressed() -> void:
 	if _is_player_equipment_operation_locked():
 		return
-	if _inventory_runtime == null:
+	if _inventory_service == null:
 		return
 
 	var did_change: bool = false
-	if _selected_backpack_index >= 0 and _is_selected_item_type(ITEM_TYPE_POTION) and _inventory_runtime.has_method("equip_potion_from_backpack"):
-		did_change = bool(_inventory_runtime.call("equip_potion_from_backpack", _selected_backpack_index))
-	elif _selected_backpack_index < 0 and _inventory_runtime.has_method("unequip_potion_to_backpack"):
-		did_change = bool(_inventory_runtime.call("unequip_potion_to_backpack"))
+	if _selected_backpack_index >= 0 and _is_selected_item_type(ITEM_TYPE_POTION) and _inventory_service.has_method("equip_potion_from_backpack"):
+		did_change = bool(_inventory_service.call("equip_potion_from_backpack", _selected_backpack_index))
+	elif _selected_backpack_index < 0 and _inventory_service.has_method("unequip_potion_to_backpack"):
+		did_change = bool(_inventory_service.call("unequip_potion_to_backpack"))
 
 	if did_change:
 		_selected_backpack_index = -1
@@ -448,8 +448,8 @@ func _on_potion_slot_mouse_exited() -> void:
 
 
 func _get_backpack_slots() -> Array:
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_backpack_slots"):
-		return _inventory_runtime.call("get_backpack_slots") as Array
+	if _inventory_service != null and _inventory_service.has_method("get_backpack_slots"):
+		return _inventory_service.call("get_backpack_slots") as Array
 	return []
 
 
@@ -464,14 +464,14 @@ func _get_backpack_item(slot_index: int) -> Dictionary:
 
 
 func _get_equipped_weapon() -> Dictionary:
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_equipped_weapon"):
-		return _inventory_runtime.call("get_equipped_weapon") as Dictionary
+	if _inventory_service != null and _inventory_service.has_method("get_equipped_weapon"):
+		return _inventory_service.call("get_equipped_weapon") as Dictionary
 	return {}
 
 
 func _get_equipped_potion() -> Dictionary:
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_equipped_potion"):
-		return _inventory_runtime.call("get_equipped_potion") as Dictionary
+	if _inventory_service != null and _inventory_service.has_method("get_equipped_potion"):
+		return _inventory_service.call("get_equipped_potion") as Dictionary
 	return {}
 
 
@@ -588,24 +588,24 @@ func _resolve_item_icon(item: Dictionary) -> Texture2D:
 func _get_total_base_attack_power(item: Dictionary) -> float:
 	if item.is_empty():
 		return 0.0
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_item_total_base_attack_power"):
-		return float(_inventory_runtime.call("get_item_total_base_attack_power", item))
+	if _inventory_service != null and _inventory_service.has_method("get_item_total_base_attack_power"):
+		return float(_inventory_service.call("get_item_total_base_attack_power", item))
 	return float(item.get("base_attack_power", 0.0))
 
 
 func _get_total_base_defense_ratio(item: Dictionary) -> float:
 	if item.is_empty():
 		return 0.0
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_item_total_base_defense_ratio"):
-		return float(_inventory_runtime.call("get_item_total_base_defense_ratio", item))
+	if _inventory_service != null and _inventory_service.has_method("get_item_total_base_defense_ratio"):
+		return float(_inventory_service.call("get_item_total_base_defense_ratio", item))
 	return float(item.get("base_defense_ratio", 0.0))
 
 
 func _get_reinforcement_label(item: Dictionary) -> String:
 	if item.is_empty():
 		return "0/4"
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_item_reinforcement_label"):
-		return String(_inventory_runtime.call("get_item_reinforcement_label", item))
+	if _inventory_service != null and _inventory_service.has_method("get_item_reinforcement_label"):
+		return String(_inventory_service.call("get_item_reinforcement_label", item))
 	return "%d/4" % int(item.get("reinforcement_level", 0))
 
 
@@ -667,7 +667,7 @@ func _try_open_reinforcement_popup(slot_index: int, item: Dictionary, is_double_
 	_selected_backpack_index = -1
 	_clear_last_backpack_click()
 	_hide_item_tooltip()
-	_reinforcement_popup.call("open_popup", _inventory_runtime, CONTAINER_BACKPACK, slot_index, [CONTAINER_EQUIPPED, CONTAINER_BACKPACK])
+	_reinforcement_popup.call("open_popup", _inventory_service, CONTAINER_BACKPACK, slot_index, [CONTAINER_EQUIPPED, CONTAINER_BACKPACK])
 	_refresh_all()
 	return true
 
@@ -685,7 +685,7 @@ func _try_open_crafting_popup(slot_index: int, item: Dictionary, is_double_click
 	_selected_backpack_index = -1
 	_clear_last_backpack_click()
 	_hide_item_tooltip()
-	_crafting_popup.call("open_popup", _inventory_runtime, CONTAINER_BACKPACK, slot_index)
+	_crafting_popup.call("open_popup", _inventory_service, CONTAINER_BACKPACK, slot_index)
 	_refresh_all()
 	return true
 

@@ -271,6 +271,24 @@
 - 撤离房：归途
 - 主城 `EnterDungeonButton` 现在直接启动这套固定地牢流程
 - DUNGEON 房间出口门现在优先走流程管理器推进下一房；只有未接流程管理时才回退到房间自带的 `exit_target_scene_path`
+- 新增 `DungeonInstanceRuntime` 自动加载，专门保存当前 pending / active 房间实例分配结果
+- `DungeonFlowRuntime` 当前会把实例分配结果同步到 `DungeonInstanceRuntime`，房间切换时也会同步清理
+- `DungeonRoom2D` 进入房间后会读取当前 active assignment；当前会在左上角显示实例调试角标，便于验证 `run_id / stage / instance_id` 是否正确传入房间
+- 新增 `DungeonRoomSessionRuntime` 自动加载，专门保存当前房间会话状态
+- 当前房间会话已接入的事件包括：房间开始、清房状态变化、箱子开启、主玩家死亡、请求离开房间、房间结束
+- `DungeonRoom2D` 左上角调试角标现在会同时显示实例信息和当前房间会话摘要，用于验证“实例上下文”和“房间状态事件”都已进入 runtime
+- 当前房间会话 runtime 已开始维护玩家条目 `players`
+- 当前房间内所有被识别为 `Player*` 的玩家实例都会登记为玩家条目
+- 当前玩家条目已记录：玩家 key、显示名、authority、出生点、当前位置、职业、专精等级、武器掌握路线/等级、当前武器、HP/MP 快照
+- 当前 `DungeonRoom2D` 会在玩家加入、离开、属性变化、资源变化、死亡时刷新对应条目；本地主输入玩家会被标记为 `primary_player`
+- 当前 `DungeonRoom2D` 在存在 `NetworkSession` 时，会按当前 peer 列表自动生成对应的玩家实例，而不再只生成单个本地玩家
+- 当前新增 showcase 到 dungeon 的双人验证入口：在 `multiplayer_showcase_room` 中按 `F6`，可让当前会话内所有玩家一起进入 `extraction_room_1_image_map`
+- 当前 `multiplayer_showcase_room` 已补多房间双人验证快捷键：
+- `F6`：撤离房
+- `F7`：小怪房
+- `F8`：精英房
+- `F9`：Boss 房
+- 当前玩家角色与战利品箱对账号/库存的持久化读写，已改为优先走 `AccountService` / `InventoryService`
 
 ## 战利品箱
 - 地牢房间内新增正式对象场景 `dungeon_loot_chest_2d`

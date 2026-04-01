@@ -35,8 +35,8 @@ var _character_source: Node
 var _fallback_profile: PlayerAttributeProfile
 var _fallback_weapon: Node
 var _stat_rows: Dictionary = {}
-var _inventory_runtime: Node
-var _account_runtime: Node
+var _inventory_service: Node
+var _account_service: Node
 
 
 func _ready() -> void:
@@ -44,10 +44,10 @@ func _ready() -> void:
 	_setup_fallback_state()
 	_hide_deprecated_profile_sections()
 	_configure_text_layout()
-	_inventory_runtime = get_node_or_null("/root/InventoryRuntime")
-	_account_runtime = get_node_or_null("/root/AccountRuntime")
-	_connect_inventory_runtime_signals()
-	_connect_account_runtime_signals()
+	_inventory_service = get_node_or_null("/root/InventoryService")
+	_account_service = get_node_or_null("/root/AccountService")
+	_connect_inventory_service_signals()
+	_connect_account_service_signals()
 	bind_character_source(get_node_or_null(character_source_path))
 	_refresh_all()
 
@@ -104,37 +104,37 @@ func _configure_text_layout() -> void:
 	class_value_label.clip_text = true
 
 
-func _connect_inventory_runtime_signals() -> void:
-	if _inventory_runtime == null or not _inventory_runtime.has_signal("inventory_changed"):
+func _connect_inventory_service_signals() -> void:
+	if _inventory_service == null or not _inventory_service.has_signal("inventory_changed"):
 		return
 
-	var callback := Callable(self, "_on_inventory_runtime_changed")
-	if not _inventory_runtime.is_connected("inventory_changed", callback):
-		_inventory_runtime.connect("inventory_changed", callback)
+	var callback := Callable(self, "_on_inventory_service_changed")
+	if not _inventory_service.is_connected("inventory_changed", callback):
+		_inventory_service.connect("inventory_changed", callback)
 
 
-func _on_inventory_runtime_changed() -> void:
+func _on_inventory_service_changed() -> void:
 	_refresh_all()
 
 
-func _connect_account_runtime_signals() -> void:
-	if _account_runtime == null:
+func _connect_account_service_signals() -> void:
+	if _account_service == null:
 		return
 
-	var session_callback := Callable(self, "_on_account_runtime_changed")
-	if _account_runtime.has_signal("session_changed") and not _account_runtime.is_connected("session_changed", session_callback):
-		_account_runtime.connect("session_changed", session_callback)
+	var session_callback := Callable(self, "_on_account_service_changed")
+	if _account_service.has_signal("session_changed") and not _account_service.is_connected("session_changed", session_callback):
+		_account_service.connect("session_changed", session_callback)
 
-	var profile_callback := Callable(self, "_on_account_runtime_profile_changed")
-	if _account_runtime.has_signal("profile_changed") and not _account_runtime.is_connected("profile_changed", profile_callback):
-		_account_runtime.connect("profile_changed", profile_callback)
+	var profile_callback := Callable(self, "_on_account_service_profile_changed")
+	if _account_service.has_signal("profile_changed") and not _account_service.is_connected("profile_changed", profile_callback):
+		_account_service.connect("profile_changed", profile_callback)
 
 
-func _on_account_runtime_changed(_username: String = "") -> void:
+func _on_account_service_changed(_username: String = "") -> void:
 	_refresh_all()
 
 
-func _on_account_runtime_profile_changed(_snapshot: Dictionary = {}) -> void:
+func _on_account_service_profile_changed(_snapshot: Dictionary = {}) -> void:
 	_refresh_all()
 
 
@@ -237,8 +237,8 @@ func _refresh_class_card(snapshot: Dictionary) -> void:
 func _get_attribute_snapshot() -> Dictionary:
 	if _character_source != null and _character_source.has_method("get_attribute_snapshot"):
 		return _character_source.call("get_attribute_snapshot") as Dictionary
-	if _account_runtime != null and _account_runtime.has_method("get_current_profile_snapshot"):
-		var snapshot: Dictionary = _account_runtime.call("get_current_profile_snapshot") as Dictionary
+	if _account_service != null and _account_service.has_method("get_current_profile_snapshot"):
+		var snapshot: Dictionary = _account_service.call("get_current_profile_snapshot") as Dictionary
 		if not snapshot.is_empty():
 			if not snapshot.has("equipment_bonus_stats"):
 				snapshot["equipment_bonus_stats"] = _read_weapon_bonus_stats(_resolve_weapon_source())
@@ -279,24 +279,24 @@ func _build_empty_equipment_bonus_stats() -> Dictionary:
 func _get_display_name() -> String:
 	if _character_source != null and _character_source.has_method("get_display_name"):
 		return String(_character_source.call("get_display_name"))
-	if _account_runtime != null and _account_runtime.has_method("get_current_display_name"):
-		return String(_account_runtime.call("get_current_display_name"))
+	if _account_service != null and _account_service.has_method("get_current_display_name"):
+		return String(_account_service.call("get_current_display_name"))
 	return fallback_display_name
 
 
 func _get_specialization_level() -> int:
 	if _character_source != null and _character_source.has_method("get_specialization_level"):
 		return int(_character_source.call("get_specialization_level"))
-	if _account_runtime != null and _account_runtime.has_method("get_current_specialization_level"):
-		return int(_account_runtime.call("get_current_specialization_level"))
+	if _account_service != null and _account_service.has_method("get_current_specialization_level"):
+		return int(_account_service.call("get_current_specialization_level"))
 	return fallback_specialization_level
 
 
 func _get_specialization_exp() -> int:
 	if _character_source != null and _character_source.has_method("get_specialization_exp"):
 		return int(_character_source.call("get_specialization_exp"))
-	if _account_runtime != null and _account_runtime.has_method("get_current_specialization_exp"):
-		return int(_account_runtime.call("get_current_specialization_exp"))
+	if _account_service != null and _account_service.has_method("get_current_specialization_exp"):
+		return int(_account_service.call("get_current_specialization_exp"))
 	if _fallback_profile != null:
 		return _fallback_profile.get_specialization_exp()
 	return 0
@@ -305,8 +305,8 @@ func _get_specialization_exp() -> int:
 func _get_specialization_exp_to_next_level() -> int:
 	if _character_source != null and _character_source.has_method("get_specialization_exp_to_next_level"):
 		return int(_character_source.call("get_specialization_exp_to_next_level"))
-	if _account_runtime != null and _account_runtime.has_method("get_current_specialization_exp_to_next_level"):
-		return int(_account_runtime.call("get_current_specialization_exp_to_next_level"))
+	if _account_service != null and _account_service.has_method("get_current_specialization_exp_to_next_level"):
+		return int(_account_service.call("get_current_specialization_exp_to_next_level"))
 	if _fallback_profile != null:
 		return _fallback_profile.get_specialization_exp_to_next_level()
 	return 100
@@ -315,16 +315,16 @@ func _get_specialization_exp_to_next_level() -> int:
 func _get_weapon_mastery_level() -> int:
 	if _character_source != null and _character_source.has_method("get_weapon_mastery_level"):
 		return int(_character_source.call("get_weapon_mastery_level"))
-	if _account_runtime != null and _account_runtime.has_method("get_current_weapon_mastery_level"):
-		return int(_account_runtime.call("get_current_weapon_mastery_level", _resolve_weapon_mastery_track_id()))
+	if _account_service != null and _account_service.has_method("get_current_weapon_mastery_level"):
+		return int(_account_service.call("get_current_weapon_mastery_level", _resolve_weapon_mastery_track_id()))
 	return fallback_weapon_mastery_level
 
 
 func _get_weapon_mastery_exp() -> int:
 	if _character_source != null and _character_source.has_method("get_weapon_mastery_exp"):
 		return int(_character_source.call("get_weapon_mastery_exp"))
-	if _account_runtime != null and _account_runtime.has_method("get_current_weapon_mastery_exp"):
-		return int(_account_runtime.call("get_current_weapon_mastery_exp", _resolve_weapon_mastery_track_id()))
+	if _account_service != null and _account_service.has_method("get_current_weapon_mastery_exp"):
+		return int(_account_service.call("get_current_weapon_mastery_exp", _resolve_weapon_mastery_track_id()))
 	if _fallback_profile != null:
 		return _fallback_profile.get_weapon_mastery_exp(_resolve_weapon_mastery_track_id())
 	return 0
@@ -333,8 +333,8 @@ func _get_weapon_mastery_exp() -> int:
 func _get_weapon_mastery_exp_to_next_level() -> int:
 	if _character_source != null and _character_source.has_method("get_weapon_mastery_exp_to_next_level"):
 		return int(_character_source.call("get_weapon_mastery_exp_to_next_level"))
-	if _account_runtime != null and _account_runtime.has_method("get_current_weapon_mastery_exp_to_next_level"):
-		return int(_account_runtime.call("get_current_weapon_mastery_exp_to_next_level", _resolve_weapon_mastery_track_id()))
+	if _account_service != null and _account_service.has_method("get_current_weapon_mastery_exp_to_next_level"):
+		return int(_account_service.call("get_current_weapon_mastery_exp_to_next_level", _resolve_weapon_mastery_track_id()))
 	if _fallback_profile != null:
 		return _fallback_profile.get_weapon_mastery_exp_to_next_level(_resolve_weapon_mastery_track_id())
 	return 80
@@ -356,8 +356,8 @@ func _resolve_weapon_source() -> Variant:
 		var equipped_weapon: Variant = _character_source.call("get_equipped_weapon_node")
 		if equipped_weapon is Node:
 			return equipped_weapon
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_equipped_weapon"):
-		var equipped_item: Dictionary = _inventory_runtime.call("get_equipped_weapon") as Dictionary
+	if _inventory_service != null and _inventory_service.has_method("get_equipped_weapon"):
+		var equipped_item: Dictionary = _inventory_service.call("get_equipped_weapon") as Dictionary
 		if not equipped_item.is_empty():
 			return equipped_item
 		return null
@@ -382,9 +382,8 @@ func _read_weapon_base_attack_power(weapon: Variant) -> float:
 		return 0.0
 	if weapon is Dictionary:
 		var item: Dictionary = weapon as Dictionary
-		var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-		if inventory_runtime != null and inventory_runtime.has_method("get_item_total_base_attack_power"):
-			return float(inventory_runtime.call("get_item_total_base_attack_power", item))
+		if _inventory_service != null and _inventory_service.has_method("get_item_total_base_attack_power"):
+			return float(_inventory_service.call("get_item_total_base_attack_power", item))
 		return float(item.get("base_attack_power", 0.0))
 	if weapon.has_method("get_base_attack_power"):
 		return float(weapon.call("get_base_attack_power"))
@@ -396,9 +395,8 @@ func _read_weapon_defense_ratio(weapon: Variant) -> float:
 		return 0.0
 	if weapon is Dictionary:
 		var item: Dictionary = weapon as Dictionary
-		var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-		if inventory_runtime != null and inventory_runtime.has_method("get_item_total_base_defense_ratio"):
-			return float(inventory_runtime.call("get_item_total_base_defense_ratio", item))
+		if _inventory_service != null and _inventory_service.has_method("get_item_total_base_defense_ratio"):
+			return float(_inventory_service.call("get_item_total_base_defense_ratio", item))
 		return float(item.get("base_defense_ratio", 0.0))
 	if weapon.has_method("get_base_defense_ratio"):
 		return float(weapon.call("get_base_defense_ratio"))
@@ -461,8 +459,8 @@ func _on_stat_plus_button_pressed(attribute_id: StringName) -> void:
 			_refresh_all()
 		return
 
-	if _account_runtime != null and _account_runtime.has_method("allocate_free_stat_points"):
-		var did_allocate_account: bool = bool(_account_runtime.call("allocate_free_stat_points", attribute_id, 1))
+	if _account_service != null and _account_service.has_method("allocate_free_stat_points"):
+		var did_allocate_account: bool = bool(_account_service.call("allocate_free_stat_points", attribute_id, 1))
 		if did_allocate_account:
 			_refresh_all()
 		return

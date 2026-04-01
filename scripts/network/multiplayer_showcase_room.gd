@@ -5,6 +5,10 @@ const EXIT_DOOR_SCENE := preload("res://scenes/maps/dungeon_exit_door_2d.tscn")
 const LOOT_CHEST_SCENE := preload("res://scenes/objects/dungeon_loot_chest_2d.tscn")
 const TOWN_HUB_SCENE_PATH := "res://scenes/ui/town_hub_main_ui.tscn"
 const LOCAL_DEFAULT_WEAPON_SCENE_PATH := "res://scenes/weapons/longsword_basic.tscn"
+const DUNGEON_DUO_TEST_EXTRACTION_SCENE_PATH := "res://scenes/maps/dungeon/extraction_rooms/extraction_room_1_image_map.tscn"
+const DUNGEON_DUO_TEST_MONSTER_SCENE_PATH := "res://scenes/maps/dungeon/monster_rooms/mob_room_1_image_map.tscn"
+const DUNGEON_DUO_TEST_ELITE_SCENE_PATH := "res://scenes/maps/dungeon/elite_monster_rooms/elite_room_1_image_map.tscn"
+const DUNGEON_DUO_TEST_BOSS_SCENE_PATH := "res://scenes/maps/dungeon/boss_rooms/boss_room_1_image_map.tscn"
 const ENEMY_BODY_GROUP := &"enemy_bodies"
 const SHOWCASE_EXIT_DOOR_NAME := "ShowcaseExitDoor"
 const SHOWCASE_LOOT_CHEST_NAME := "ShowcaseLootChest"
@@ -61,6 +65,22 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F6:
+		get_viewport().set_input_as_handled()
+		_request_enter_dungeon_duo_test(DUNGEON_DUO_TEST_EXTRACTION_SCENE_PATH)
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F7:
+		get_viewport().set_input_as_handled()
+		_request_enter_dungeon_duo_test(DUNGEON_DUO_TEST_MONSTER_SCENE_PATH)
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F8:
+		get_viewport().set_input_as_handled()
+		_request_enter_dungeon_duo_test(DUNGEON_DUO_TEST_ELITE_SCENE_PATH)
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
+		get_viewport().set_input_as_handled()
+		_request_enter_dungeon_duo_test(DUNGEON_DUO_TEST_BOSS_SCENE_PATH)
+		return
 	if event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		_leave_showcase_room()
@@ -284,7 +304,12 @@ func _update_info_label() -> void:
 	var room_line := "Door: Open  Chest: Open" if _room_cleared and _showcase_chest_opened else (
 		"Door: Open  Chest: Ready" if _room_cleared else "Door: Closed  Chest: Locked"
 	)
-	info_label.text = "%s\n%s\n%s\n%s\nESC: Leave room" % [session_line, peers_line, dummy_line, room_line]
+	info_label.text = "%s\n%s\n%s\n%s\nF6: Extraction  F7: Monster\nF8: Elite  F9: Boss\nESC: Leave room" % [
+		session_line,
+		peers_line,
+		dummy_line,
+		room_line,
+	]
 
 
 func _build_dummy_status_line() -> String:
@@ -482,6 +507,22 @@ func _leave_showcase_room() -> void:
 	get_tree().change_scene_to_file(TOWN_HUB_SCENE_PATH)
 
 
+func _request_enter_dungeon_duo_test(scene_path: String) -> void:
+	if not _is_supported_dungeon_duo_test_scene(scene_path):
+		return
+	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+		request_host_enter_dungeon_duo_test.rpc_id(1, scene_path)
+		return
+	enter_dungeon_duo_test.rpc(scene_path)
+
+
+func _is_supported_dungeon_duo_test_scene(scene_path: String) -> bool:
+	return scene_path == DUNGEON_DUO_TEST_EXTRACTION_SCENE_PATH \
+		or scene_path == DUNGEON_DUO_TEST_MONSTER_SCENE_PATH \
+		or scene_path == DUNGEON_DUO_TEST_ELITE_SCENE_PATH \
+		or scene_path == DUNGEON_DUO_TEST_BOSS_SCENE_PATH
+
+
 @rpc("authority", "call_remote", "reliable")
 func sync_showcase_room_state(room_cleared: bool, chest_opened: bool) -> void:
 	_apply_room_state(room_cleared, chest_opened)
@@ -495,6 +536,13 @@ func receive_showcase_chest_reward(reward_payload: Dictionary) -> void:
 @rpc("authority", "call_remote", "reliable")
 func receive_showcase_exit() -> void:
 	_leave_showcase_room()
+
+
+@rpc("authority", "call_local", "reliable")
+func enter_dungeon_duo_test(scene_path: String) -> void:
+	if scene_path.is_empty():
+		return
+	get_tree().change_scene_to_file(scene_path)
 
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -522,3 +570,12 @@ func request_host_schedule_player_respawn(peer_id: int) -> void:
 	if multiplayer.get_remote_sender_id() != peer_id:
 		return
 	_schedule_player_respawn(peer_id)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func request_host_enter_dungeon_duo_test(scene_path: String) -> void:
+	if not multiplayer.is_server():
+		return
+	if not _is_supported_dungeon_duo_test_scene(scene_path):
+		return
+	enter_dungeon_duo_test.rpc(scene_path)

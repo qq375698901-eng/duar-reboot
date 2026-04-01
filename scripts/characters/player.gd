@@ -247,8 +247,8 @@ func _ready() -> void:
 	_setup_potion_use_icon()
 	_refresh_buff_eye_visuals()
 	if use_inventory_runtime_state:
-		_connect_inventory_runtime_signals()
-		_sync_equipped_weapon_from_inventory_runtime()
+		_connect_inventory_service_signals()
+		_sync_equipped_weapon_from_inventory_service()
 	elif not default_network_weapon_scene_path.is_empty():
 		equip_weapon_scene_path(default_network_weapon_scene_path)
 	_ensure_runtime_attribute_debug_panel()
@@ -891,6 +891,7 @@ func try_enter_climb() -> void:
 	_ladder_snap_x = ladder_area.global_position.x
 	global_position.x = _ladder_snap_x
 	velocity = Vector2.ZERO
+	_standing_on_platform = false
 	_move_phase = MovePhase.CLIMB
 	_exit_run_state()
 	_ladder_reentry_locked = true
@@ -945,12 +946,12 @@ func _setup_attribute_profile() -> void:
 			_attribute_profile.add_free_stat_points(starting_free_stat_points)
 		return
 
-	var account_runtime: Node = get_node_or_null("/root/AccountRuntime")
-	if account_runtime != null \
-			and account_runtime.has_method("is_logged_in") \
-			and bool(account_runtime.call("is_logged_in")) \
-			and account_runtime.has_method("get_current_profile_state"):
-		var profile_state: Dictionary = account_runtime.call("get_current_profile_state") as Dictionary
+	var account_service: Node = _get_account_service()
+	if account_service != null \
+			and account_service.has_method("is_logged_in") \
+			and bool(account_service.call("is_logged_in")) \
+			and account_service.has_method("get_current_profile_state"):
+		var profile_state: Dictionary = account_service.call("get_current_profile_state") as Dictionary
 		if not profile_state.is_empty():
 			_attribute_profile.load_persisted_state(profile_state)
 			return
@@ -960,34 +961,34 @@ func _setup_attribute_profile() -> void:
 		_attribute_profile.add_free_stat_points(starting_free_stat_points)
 
 
-func _connect_inventory_runtime_signals() -> void:
+func _connect_inventory_service_signals() -> void:
 	if not use_inventory_runtime_state:
 		return
 
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime == null or not inventory_runtime.has_signal("equipped_weapon_changed"):
+	var inventory_service: Node = _get_inventory_service()
+	if inventory_service == null or not inventory_service.has_signal("equipped_weapon_changed"):
 		return
 
 	var callback := Callable(self, "_on_inventory_equipped_weapon_changed")
-	if not inventory_runtime.is_connected("equipped_weapon_changed", callback):
-		inventory_runtime.connect("equipped_weapon_changed", callback)
+	if not inventory_service.is_connected("equipped_weapon_changed", callback):
+		inventory_service.connect("equipped_weapon_changed", callback)
 
 
 func _on_inventory_equipped_weapon_changed(_item: Dictionary = {}) -> void:
-	_sync_equipped_weapon_from_inventory_runtime()
+	_sync_equipped_weapon_from_inventory_service()
 
 
-func _sync_equipped_weapon_from_inventory_runtime() -> void:
+func _sync_equipped_weapon_from_inventory_service() -> void:
 	if not use_inventory_runtime_state:
 		if not default_network_weapon_scene_path.is_empty():
 			equip_weapon_scene_path(default_network_weapon_scene_path)
 		return
 
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime == null or not inventory_runtime.has_method("get_equipped_weapon"):
+	var inventory_service: Node = _get_inventory_service()
+	if inventory_service == null or not inventory_service.has_method("get_equipped_weapon"):
 		return
 
-	var equipped_item: Dictionary = inventory_runtime.call("get_equipped_weapon") as Dictionary
+	var equipped_item: Dictionary = inventory_service.call("get_equipped_weapon") as Dictionary
 	var scene_path: String = String(equipped_item.get("scene_path", ""))
 	if scene_path.is_empty():
 		unequip_weapon()
@@ -1184,10 +1185,24 @@ func get_current_mp() -> float:
 func get_equipped_potion() -> Dictionary:
 	if not use_inventory_runtime_state:
 		return {}
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime != null and inventory_runtime.has_method("get_equipped_potion"):
-		return inventory_runtime.call("get_equipped_potion") as Dictionary
+	var inventory_service: Node = _get_inventory_service()
+	if inventory_service != null and inventory_service.has_method("get_equipped_potion"):
+		return inventory_service.call("get_equipped_potion") as Dictionary
 	return {}
+
+
+func get_equipped_weapon_state() -> Dictionary:
+	if use_inventory_runtime_state:
+		var inventory_service: Node = _get_inventory_service()
+		if inventory_service != null and inventory_service.has_method("get_equipped_weapon"):
+			return inventory_service.call("get_equipped_weapon") as Dictionary
+
+	if _equipped_weapon_scene_path.is_empty():
+		return {}
+
+	return {
+		"scene_path": _equipped_weapon_scene_path,
+	}
 
 
 func is_potion_use_active() -> bool:
@@ -1201,9 +1216,9 @@ func is_dead() -> bool:
 func get_display_name() -> String:
 	if not use_account_runtime_state:
 		return "Adventurer"
-	var account_runtime: Node = get_node_or_null("/root/AccountRuntime")
-	if account_runtime != null and account_runtime.has_method("get_current_display_name"):
-		return String(account_runtime.call("get_current_display_name"))
+	var account_service: Node = _get_account_service()
+	if account_service != null and account_service.has_method("get_current_display_name"):
+		return String(account_service.call("get_current_display_name"))
 	return "Adventurer"
 
 
@@ -1243,14 +1258,44 @@ func get_weapon_mastery_exp_to_next_level() -> int:
 	return _attribute_profile.get_weapon_mastery_exp_to_next_level(get_current_weapon_mastery_track_id())
 
 
+func get_runtime_player_session_snapshot() -> Dictionary:
+	var equipped_weapon: Dictionary = get_equipped_weapon_state()
+	return {
+		"player_key": "%d:%s" % [get_multiplayer_authority(), String(name)],
+		"node_name": String(name),
+		"display_name": get_display_name(),
+		"multiplayer_authority": get_multiplayer_authority(),
+		"enable_local_input": enable_local_input,
+		"network_replica_mode": network_replica_mode,
+		"profession_name": get_profession_name(),
+		"specialization_level": get_specialization_level(),
+		"specialization_exp": get_specialization_exp(),
+		"specialization_exp_to_next_level": get_specialization_exp_to_next_level(),
+		"weapon_mastery_track_id": get_current_weapon_mastery_track_id(),
+		"weapon_mastery_level": get_weapon_mastery_level(),
+		"weapon_mastery_exp": get_weapon_mastery_exp(),
+		"weapon_mastery_exp_to_next_level": get_weapon_mastery_exp_to_next_level(),
+		"equipped_weapon_definition_id": String(equipped_weapon.get("definition_id", "")),
+		"equipped_weapon_display_name": String(equipped_weapon.get("display_name", "")),
+		"equipped_weapon_scene_path": String(equipped_weapon.get("scene_path", _equipped_weapon_scene_path)),
+		"current_hp": get_current_hp(),
+		"effective_max_hp": get_effective_max_hp(),
+		"current_mp": get_current_mp(),
+		"effective_max_mp": get_effective_max_mp(),
+		"dead": is_dead(),
+		"position": global_position,
+		"attribute_snapshot": get_attribute_snapshot(),
+	}
+
+
 func get_equipped_weapon_node() -> Node2D:
 	return _equipped_weapon
 
 
 func get_current_weapon_mastery_track_id() -> String:
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if use_inventory_runtime_state and inventory_runtime != null and inventory_runtime.has_method("get_equipped_weapon"):
-		var equipped_item: Dictionary = inventory_runtime.call("get_equipped_weapon") as Dictionary
+	var inventory_service: Node = _get_inventory_service()
+	if use_inventory_runtime_state and inventory_service != null and inventory_service.has_method("get_equipped_weapon"):
+		var equipped_item: Dictionary = inventory_service.call("get_equipped_weapon") as Dictionary
 		var mastery_track_id_from_item: String = String(equipped_item.get("weapon_mastery_track_id", ""))
 		if not mastery_track_id_from_item.is_empty():
 			return mastery_track_id_from_item
@@ -1348,14 +1393,14 @@ func _build_effective_total_stats_snapshot() -> Dictionary:
 func _persist_account_profile_state() -> void:
 	if not use_account_runtime_state:
 		return
-	var account_runtime: Node = get_node_or_null("/root/AccountRuntime")
-	if account_runtime == null \
-			or not account_runtime.has_method("is_logged_in") \
-			or not bool(account_runtime.call("is_logged_in")) \
-			or not account_runtime.has_method("overwrite_current_profile_state") \
+	var account_service: Node = _get_account_service()
+	if account_service == null \
+			or not account_service.has_method("is_logged_in") \
+			or not bool(account_service.call("is_logged_in")) \
+			or not account_service.has_method("overwrite_current_profile_state") \
 			or _attribute_profile == null:
 		return
-	account_runtime.call("overwrite_current_profile_state", _attribute_profile.export_persisted_state())
+	account_service.call("overwrite_current_profile_state", _attribute_profile.export_persisted_state())
 
 
 func _apply_passive_mp_regen(delta: float) -> void:
@@ -1921,9 +1966,9 @@ func _refresh_battle_info_card(effective_max_hp: float, effective_max_mp: float)
 
 
 func _get_current_weapon_display_name() -> String:
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if use_inventory_runtime_state and inventory_runtime != null and inventory_runtime.has_method("get_equipped_weapon"):
-		var equipped_item: Dictionary = inventory_runtime.call("get_equipped_weapon") as Dictionary
+	var inventory_service: Node = _get_inventory_service()
+	if use_inventory_runtime_state and inventory_service != null and inventory_service.has_method("get_equipped_weapon"):
+		var equipped_item: Dictionary = inventory_service.call("get_equipped_weapon") as Dictionary
 		if not equipped_item.is_empty():
 			return String(equipped_item.get("display_name", "Longsword"))
 
@@ -2205,6 +2250,9 @@ func apply_collision_profile() -> void:
 			return
 
 		collision_layer = layer_bit(CHARACTER_LAYER)
+		if _should_use_climb_collision_passthrough():
+			collision_mask = 0
+			return
 		collision_mask = layer_bit(WORLD_LAYER)
 		if _platform_drop_timer <= 0.0:
 			collision_mask |= layer_bit(PLATFORM_LAYER)
@@ -2227,14 +2275,19 @@ func apply_collision_profile() -> void:
 		return
 
 	collision_layer = layer_bit(CHARACTER_LAYER)
-	if _move_phase == MovePhase.CLIMB:
-		collision_mask = layer_bit(WORLD_LAYER)
+	if _should_use_climb_collision_passthrough():
+		# Ladders must ignore one-way platforms even when they share the world body layer.
+		collision_mask = 0
 	else:
 		collision_mask = layer_bit(WORLD_LAYER)
 		if _platform_drop_timer <= 0.0:
 			collision_mask |= layer_bit(PLATFORM_LAYER)
 	if _character_drop_timer <= 0.0:
 		collision_mask |= layer_bit(CHARACTER_LAYER)
+
+
+func _should_use_climb_collision_passthrough() -> bool:
+	return _top_state == TopState.OPERABLE and _move_phase == MovePhase.CLIMB
 
 
 func layer_bit(layer_number: int) -> int:
@@ -2255,7 +2308,7 @@ func _resolve_guard_source_node(source: Node) -> Node2D:
 
 
 func _should_auto_equip_test_weapon() -> bool:
-	if use_inventory_runtime_state and get_node_or_null("/root/InventoryRuntime") != null:
+	if use_inventory_runtime_state and _get_inventory_service() != null:
 		return false
 	return Input.is_action_pressed("attack_light") or Input.is_action_pressed("attack_heavy")
 
@@ -2590,11 +2643,11 @@ func can_start_equipped_potion_use() -> bool:
 func start_equipped_potion_use() -> bool:
 	if not use_inventory_runtime_state:
 		return false
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime == null or not inventory_runtime.has_method("consume_equipped_potion_one"):
+	var inventory_service: Node = _get_inventory_service()
+	if inventory_service == null or not inventory_service.has_method("consume_equipped_potion_one"):
 		return false
 
-	var consumed_item: Dictionary = inventory_runtime.call("consume_equipped_potion_one") as Dictionary
+	var consumed_item: Dictionary = inventory_service.call("consume_equipped_potion_one") as Dictionary
 	if consumed_item.is_empty():
 		return false
 
@@ -3119,11 +3172,19 @@ func _show_death_overlay() -> void:
 func _apply_death_inventory_penalty() -> void:
 	if not use_inventory_runtime_state:
 		return
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime == null:
+	var inventory_service: Node = _get_inventory_service()
+	if inventory_service == null:
 		return
-	if inventory_runtime.has_method("apply_player_death_penalty"):
-		inventory_runtime.call("apply_player_death_penalty")
+	if inventory_service.has_method("apply_player_death_penalty"):
+		inventory_service.call("apply_player_death_penalty")
+
+
+func _get_account_service() -> Node:
+	return get_node_or_null("/root/AccountService")
+
+
+func _get_inventory_service() -> Node:
+	return get_node_or_null("/root/InventoryService")
 
 
 func set_fall_death_y(value: float) -> void:

@@ -84,7 +84,7 @@ one_way_collision_margin = 4.0
 
 [node name="P04_LeftUpperMain2" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=1941222274]
 position = Vector2(238, 2)
-polygon = PackedVector2Array(58, 330, 316, 330, 316, 366, 58, 366)
+polygon = PackedVector2Array(58, 330, 316, 330, 316, 362, 56, 364)
 
 [node name="P07_RightUpperMain2" type="CollisionPolygon2D" parent="Map/Platforms" unique_id=2086673400]
 position = Vector2(-206, 2)
@@ -93,12 +93,13 @@ polygon = PackedVector2Array(1212, 384, 1416, 384, 1414, 414, 1212, 418)
 [node name="Ladders" type="Node2D" parent="Map" unique_id=1689081810]
 
 [node name="Ladder01" type="Area2D" parent="Map/Ladders" unique_id=999362347]
-position = Vector2(506, 443)
+position = Vector2(512, 428)
 collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Map/Ladders/Ladder01" unique_id=1257657798]
-polygon = PackedVector2Array(-14, -106, 32, -101, 28, 81, -14, 81)
+position = Vector2(-8, 23)
+polygon = PackedVector2Array(-16, -121, 32, -121, 28, 81, -14, 81)
 
 [node name="Ladder02" type="Area2D" parent="Map/Ladders" unique_id=1544353919]
 position = Vector2(1002, 560)

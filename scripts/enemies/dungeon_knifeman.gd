@@ -72,6 +72,11 @@ const ATTACK_ACTIVE_FRAMES := {
 @export var ledge_avoidance_enabled: bool = true
 @export var ledge_probe_forward_distance: float = 18.0
 @export var ledge_probe_down_distance: float = 40.0
+@export_group("Networking")
+@export var network_snapshot_interval_sec: float = 0.05
+@export var network_combat_snapshot_interval_sec: float = 0.016
+@export var network_combat_snapshot_boost_duration_sec: float = 0.2
+@export var network_interpolation_speed: float = 18.0
 
 @onready var visuals: Node2D = $Visuals
 @onready var animated_sprite: AnimatedSprite2D = $Visuals/AnimatedSprite2D
@@ -96,6 +101,11 @@ var _behavior_timer := 0.0
 var _target: Node2D
 var _registered_collision_exception_ids: Dictionary = {}
 var _ledge_probe: RayCast2D
+var _network_snapshot_timer := 0.0
+var _network_combat_snapshot_boost_timer := 0.0
+var _network_state_ready := false
+var _network_received_state: Dictionary = {}
+var _network_grabber_path := ""
 
 
 func _ready() -> void:
@@ -116,8 +126,13 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _is_network_replica():
+		_physics_process_network_replica(delta)
+		return
+
 	_update_hit_flash(delta)
 	_update_damage_popups(delta)
+	_network_combat_snapshot_boost_timer = maxf(0.0, _network_combat_snapshot_boost_timer - delta)
 	_refresh_target()
 	_sync_nonblocking_collisions()
 	if _top_state != TopState.DEAD and global_position.y >= fall_death_y:
@@ -126,10 +141,12 @@ func _physics_process(delta: float) -> void:
 
 	if _top_state == TopState.DEAD:
 		velocity = Vector2.ZERO
+		_broadcast_network_snapshot(delta)
 		return
 
 	if _top_state == TopState.GRABBED:
 		_update_grabbed_state()
+		_broadcast_network_snapshot(delta)
 		return
 
 	match _top_state:
@@ -148,6 +165,7 @@ func _physics_process(delta: float) -> void:
 	_post_move_update()
 	_apply_collision_profile()
 	_update_animation_state()
+	_broadcast_network_snapshot(delta)
 
 
 func set_facing(direction: int) -> void:
@@ -177,13 +195,18 @@ func play_attack() -> bool:
 
 
 func receive_weapon_hit(attack_data: Dictionary, source: Node) -> void:
+	if _is_network_replica():
+		request_receive_weapon_hit.rpc_id(1, attack_data.duplicate(true), _node_to_path_string(source))
+		return
 	if _top_state == TopState.DEAD:
 		return
 
+	_boost_network_snapshot_priority()
 	var raw_damage: float = attack_data.get("damage", 0.0)
 	_last_received_damage = maxf(0.0, raw_damage)
 	apply_damage(_last_received_damage)
 	if _top_state == TopState.DEAD:
+		_broadcast_network_snapshot_immediately()
 		return
 
 	var source_is_on_left := true
@@ -203,16 +226,22 @@ func receive_weapon_hit(attack_data: Dictionary, source: Node) -> void:
 				source_is_on_left,
 				attack_data.get("stun_duration_sec", stun_base_duration_sec)
 			)
+	_broadcast_network_snapshot_immediately()
 
 
 func receive_grabbed_weapon_hit(attack_data: Dictionary, _source: Node) -> void:
+	if _is_network_replica():
+		request_receive_grabbed_weapon_hit.rpc_id(1, attack_data.duplicate(true))
+		return
 	if _top_state == TopState.DEAD:
 		return
 
+	_boost_network_snapshot_priority()
 	var raw_damage: float = attack_data.get("damage", 0.0)
 	_last_received_damage = maxf(0.0, raw_damage)
 	apply_damage(_last_received_damage)
 	trigger_hit_flash()
+	_broadcast_network_snapshot_immediately()
 
 
 func apply_damage(raw_damage: float) -> void:
@@ -220,6 +249,8 @@ func apply_damage(raw_damage: float) -> void:
 	if final_damage <= 0.0:
 		return
 
+	if multiplayer.has_multiplayer_peer() and is_multiplayer_authority():
+		show_damage_popup_remote.rpc(final_damage)
 	trigger_hit_flash()
 	_show_damage_popup(final_damage)
 	_current_hp = clampf(_current_hp - final_damage, 0.0, max_hp)
@@ -432,6 +463,7 @@ func die() -> void:
 	_apply_collision_profile()
 	update_status_bars()
 	animated_sprite.play(&"death")
+	_broadcast_network_snapshot_immediately()
 
 
 func _interrupt_attack() -> void:
@@ -639,6 +671,172 @@ func _update_hit_flash(delta: float) -> void:
 		visuals.modulate = Color(1, 1, 1, 1).lerp(hit_flash_color, t)
 	else:
 		visuals.modulate = Color(1, 1, 1, 1)
+
+
+func _is_network_replica() -> bool:
+	return multiplayer.has_multiplayer_peer() and not is_multiplayer_authority()
+
+
+func _physics_process_network_replica(delta: float) -> void:
+	_update_hit_flash(delta)
+	_update_damage_popups(delta)
+	if not _network_state_ready:
+		update_status_bars()
+		return
+
+	var target_position := _get_network_state_vector2("position", global_position)
+	var follow_weight := clampf(delta * network_interpolation_speed, 0.0, 1.0)
+	global_position = global_position.lerp(target_position, follow_weight)
+	if global_position.distance_to(target_position) <= 0.5:
+		global_position = target_position
+
+	velocity = _get_network_state_vector2("velocity", velocity)
+	_top_state = _get_network_state_int("top_state", int(_top_state))
+	_current_hp = _get_network_state_float("current_hp", _current_hp)
+	_hit_flash_timer = _get_network_state_float("hit_flash_timer", _hit_flash_timer)
+	_attack_in_progress = _get_network_state_bool("attack_in_progress", _attack_in_progress)
+	_network_grabber_path = _get_network_state_string("grabber_path", "")
+	_resolve_network_grabber()
+	set_facing(_get_network_state_int("facing", facing))
+	_sync_network_animation_state(
+		_get_network_state_string("current_animation", String(_current_animation)),
+		_get_network_state_int("current_frame", 0)
+	)
+	_apply_collision_profile()
+	update_status_bars()
+
+
+func _broadcast_network_snapshot(delta: float) -> void:
+	if not multiplayer.has_multiplayer_peer() or not is_multiplayer_authority():
+		return
+	_network_snapshot_timer = maxf(0.0, _network_snapshot_timer - delta)
+	if _network_snapshot_timer > 0.0:
+		return
+	_network_snapshot_timer = _get_active_network_snapshot_interval()
+	receive_authority_snapshot.rpc(_build_network_snapshot())
+
+
+func _broadcast_network_snapshot_immediately() -> void:
+	if not multiplayer.has_multiplayer_peer() or not is_multiplayer_authority():
+		return
+	_network_snapshot_timer = _get_active_network_snapshot_interval()
+	receive_authority_snapshot.rpc(_build_network_snapshot())
+
+
+func _build_network_snapshot() -> Dictionary:
+	return {
+		"position": global_position,
+		"velocity": velocity,
+		"top_state": int(_top_state),
+		"facing": facing,
+		"current_hp": _current_hp,
+		"hit_flash_timer": _hit_flash_timer,
+		"attack_in_progress": _attack_in_progress,
+		"grabber_path": _node_to_path_string(_grabber),
+		"current_animation": String(animated_sprite.animation) if animated_sprite != null else String(_current_animation),
+		"current_frame": animated_sprite.frame if animated_sprite != null else 0,
+	}
+
+
+func _get_active_network_snapshot_interval() -> float:
+	if _should_use_fast_network_snapshot():
+		return maxf(network_combat_snapshot_interval_sec, 0.008)
+	return maxf(network_snapshot_interval_sec, 0.02)
+
+
+func _should_use_fast_network_snapshot() -> bool:
+	if _network_combat_snapshot_boost_timer > 0.0:
+		return true
+	if _top_state != TopState.OPERABLE:
+		return true
+	if _attack_in_progress:
+		return true
+	return absf(velocity.x) > 30.0 or absf(velocity.y) > 45.0
+
+
+func _boost_network_snapshot_priority(duration_sec: float = -1.0, broadcast_now: bool = false) -> void:
+	if duration_sec <= 0.0:
+		duration_sec = network_combat_snapshot_boost_duration_sec
+	_network_combat_snapshot_boost_timer = maxf(_network_combat_snapshot_boost_timer, duration_sec)
+	if broadcast_now:
+		_broadcast_network_snapshot_immediately()
+
+
+func _resolve_network_grabber() -> void:
+	if _network_grabber_path.is_empty():
+		_grabber = null
+		return
+	_grabber = get_node_or_null(NodePath(_network_grabber_path)) as Node2D
+
+
+func _sync_network_animation_state(animation_name: String, frame_value: int) -> void:
+	if animated_sprite == null or animation_name.is_empty():
+		return
+	var animation_key := StringName(animation_name)
+	if animated_sprite.animation != animation_key:
+		animated_sprite.play(animation_key)
+	elif not animated_sprite.is_playing():
+		animated_sprite.play()
+	if animated_sprite.frame != frame_value:
+		animated_sprite.frame = frame_value
+	_current_animation = animation_key
+
+
+func _node_to_path_string(node: Node) -> String:
+	if node == null or not is_instance_valid(node):
+		return ""
+	return str(node.get_path())
+
+
+func _get_network_state_vector2(key: String, fallback: Vector2) -> Vector2:
+	var value: Variant = _network_received_state.get(key, fallback)
+	return value if value is Vector2 else fallback
+
+
+func _get_network_state_float(key: String, fallback: float) -> float:
+	return float(_network_received_state.get(key, fallback))
+
+
+func _get_network_state_int(key: String, fallback: int) -> int:
+	return int(_network_received_state.get(key, fallback))
+
+
+func _get_network_state_bool(key: String, fallback: bool) -> bool:
+	return bool(_network_received_state.get(key, fallback))
+
+
+func _get_network_state_string(key: String, fallback: String) -> String:
+	return String(_network_received_state.get(key, fallback))
+
+
+@rpc("authority", "call_remote", "unreliable_ordered")
+func receive_authority_snapshot(snapshot: Dictionary) -> void:
+	if not _is_network_replica():
+		return
+	_network_received_state = snapshot.duplicate(true)
+	_network_state_ready = true
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func request_receive_weapon_hit(attack_data: Dictionary, source_path: String) -> void:
+	if not is_multiplayer_authority():
+		return
+	var source := get_node_or_null(NodePath(source_path))
+	receive_weapon_hit(attack_data, source)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func request_receive_grabbed_weapon_hit(attack_data: Dictionary) -> void:
+	if not is_multiplayer_authority():
+		return
+	receive_grabbed_weapon_hit(attack_data, null)
+
+
+@rpc("authority", "call_remote", "reliable")
+func show_damage_popup_remote(damage_value: float) -> void:
+	if not _is_network_replica():
+		return
+	_show_damage_popup(damage_value)
 
 
 func _update_animation_state() -> void:

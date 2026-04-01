@@ -117,23 +117,23 @@ func _update_position_to_mouse() -> void:
 
 
 func _get_total_base_attack_power(item: Dictionary) -> float:
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime != null and inventory_runtime.has_method("get_item_total_base_attack_power"):
-		return float(inventory_runtime.call("get_item_total_base_attack_power", item))
+	var inventory_service: Node = get_node_or_null("/root/InventoryService")
+	if inventory_service != null and inventory_service.has_method("get_item_total_base_attack_power"):
+		return float(inventory_service.call("get_item_total_base_attack_power", item))
 	return float(item.get("base_attack_power", 0.0))
 
 
 func _get_total_base_defense_ratio(item: Dictionary) -> float:
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime != null and inventory_runtime.has_method("get_item_total_base_defense_ratio"):
-		return float(inventory_runtime.call("get_item_total_base_defense_ratio", item))
+	var inventory_service: Node = get_node_or_null("/root/InventoryService")
+	if inventory_service != null and inventory_service.has_method("get_item_total_base_defense_ratio"):
+		return float(inventory_service.call("get_item_total_base_defense_ratio", item))
 	return float(item.get("base_defense_ratio", 0.0))
 
 
 func _get_reinforcement_label(item: Dictionary) -> String:
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime != null and inventory_runtime.has_method("get_item_reinforcement_label"):
-		return String(inventory_runtime.call("get_item_reinforcement_label", item))
+	var inventory_service: Node = get_node_or_null("/root/InventoryService")
+	if inventory_service != null and inventory_service.has_method("get_item_reinforcement_label"):
+		return String(inventory_service.call("get_item_reinforcement_label", item))
 	return "%d/4" % int(item.get("reinforcement_level", 0))
 
 

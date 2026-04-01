@@ -29,8 +29,8 @@ func _on_password_submitted(_text: String) -> void:
 
 
 func _submit_auth_request(register_mode: bool) -> void:
-	var account_runtime: Node = get_node_or_null("/root/AccountRuntime")
-	if account_runtime == null:
+	var account_service: Node = get_node_or_null("/root/AccountService")
+	if account_service == null:
 		_set_status(Marshalls.base64_to_utf8("6LSm5Y+357O757uf5pyq5bCx57uq44CC"), Color(0.93, 0.4, 0.4, 1.0))
 		return
 
@@ -38,9 +38,9 @@ func _submit_auth_request(register_mode: bool) -> void:
 	var password: String = password_edit.text
 	var result: Dictionary
 	if register_mode:
-		result = account_runtime.call("register_account", username, password) as Dictionary
+		result = account_service.call("register_account", username, password) as Dictionary
 	else:
-		result = account_runtime.call("login_account", username, password) as Dictionary
+		result = account_service.call("login_account", username, password) as Dictionary
 
 	var is_ok: bool = bool(result.get("ok", false))
 	var message: String = String(result.get("message", ""))

@@ -60,6 +60,9 @@ func _on_body_entered(body: Node) -> void:
 
 
 func _resolve_hit_deferred(body: Node, payload: Dictionary) -> void:
+	if multiplayer.has_multiplayer_peer() and not is_multiplayer_authority():
+		_expire()
+		return
 	if body != null and is_instance_valid(body) and body != owner_body:
 		projectile_hit.emit(body, payload)
 		if body.has_method("receive_weapon_hit"):

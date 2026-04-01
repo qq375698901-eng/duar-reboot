@@ -105,6 +105,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_refresh_local_interaction_state()
 	if _status_timer > 0.0:
 		_status_timer = maxf(0.0, _status_timer - delta)
 		if _status_timer <= 0.0:
@@ -113,11 +114,10 @@ func _physics_process(delta: float) -> void:
 	if _is_opened or not _is_unlocked or _player_inside_count <= 0:
 		return
 
-	if Input.is_action_just_pressed("interact_up"):
-		if multiplayer.has_multiplayer_peer():
+	if _is_interact_up_just_pressed():
+		if _should_route_interaction_to_network():
 			interaction_requested.emit(_local_interacting_peer_id)
-			return
-		_try_open_chest()
+		return
 
 
 func set_chest_size(value: int) -> void:
@@ -147,6 +147,23 @@ func set_is_opened(opened: bool, status_message: String = "") -> void:
 
 func is_opened() -> bool:
 	return _is_opened
+
+
+func can_player_interact(player: Node) -> bool:
+	return not _is_opened and _is_unlocked and _is_player_close_enough(player)
+
+
+func force_singleplayer_interact(player: Node = null) -> bool:
+	if not can_player_interact(player):
+		return false
+	_interacting_player = player
+	_local_interacting_peer_id = _resolve_body_peer_id(player)
+	_try_open_chest()
+	return true
+
+
+func _should_route_interaction_to_network() -> bool:
+	return multiplayer.has_multiplayer_peer() and not get_signal_connection_list("interaction_requested").is_empty()
 
 
 func show_status_message(message: String) -> void:
@@ -251,13 +268,13 @@ func _grant_placeholder_loot(definition_ids: PackedStringArray) -> PackedStringA
 
 
 func _grant_definition_ids(definition_ids: PackedStringArray) -> PackedStringArray:
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime == null or not inventory_runtime.has_method("add_item_to_backpack_by_definition"):
+	var inventory_service: Node = _get_inventory_service()
+	if inventory_service == null or not inventory_service.has_method("add_item_to_backpack_by_definition"):
 		return PackedStringArray()
 
 	var granted := PackedStringArray()
 	for definition_id in definition_ids:
-		if bool(inventory_runtime.call("add_item_to_backpack_by_definition", definition_id)):
+		if bool(inventory_service.call("add_item_to_backpack_by_definition", definition_id)):
 			granted.append(definition_id)
 	return granted
 
@@ -308,6 +325,43 @@ func _refresh_prompt_state() -> void:
 	prompt_label.visible = _is_unlocked and _player_inside_count > 0
 
 
+func _refresh_local_interaction_state() -> void:
+	if interact_area == null:
+		return
+
+	var overlapping_local_player_count: int = 0
+	var resolved_player: Node = null
+	var resolved_peer_id: int = _local_interacting_peer_id
+	for body in interact_area.get_overlapping_bodies():
+		if not _is_local_interaction_body(body):
+			continue
+		overlapping_local_player_count += 1
+		if resolved_player == null:
+			resolved_player = body
+			resolved_peer_id = _resolve_body_peer_id(body)
+
+	if overlapping_local_player_count <= 0:
+		var fallback_player: Node = _find_local_interaction_player()
+		if _is_player_close_enough(fallback_player):
+			overlapping_local_player_count = 1
+			resolved_player = fallback_player
+			resolved_peer_id = _resolve_body_peer_id(fallback_player)
+
+	if overlapping_local_player_count == _player_inside_count \
+			and resolved_player == _interacting_player \
+			and resolved_peer_id == _local_interacting_peer_id:
+		return
+
+	_player_inside_count = overlapping_local_player_count
+	_interacting_player = resolved_player
+	_local_interacting_peer_id = resolved_peer_id
+	_refresh_prompt_state()
+
+
+func _is_interact_up_just_pressed() -> bool:
+	return Input.is_action_just_pressed("interact_up") or Input.is_action_just_pressed("ui_up")
+
+
 func _show_status(message: String) -> void:
 	status_label.text = message
 	status_label.visible = true
@@ -353,14 +407,14 @@ func _grant_experience_to_player(player: Node, exp_reward: int) -> int:
 			player.call("add_current_weapon_mastery_exp", exp_reward)
 		return exp_reward
 
-	var account_runtime: Node = get_node_or_null("/root/AccountRuntime")
-	if account_runtime != null:
-		if account_runtime.has_method("add_specialization_exp"):
-			account_runtime.call("add_specialization_exp", exp_reward)
+	var account_service: Node = _get_account_service()
+	if account_service != null:
+		if account_service.has_method("add_specialization_exp"):
+			account_service.call("add_specialization_exp", exp_reward)
 
 		var track_id: String = _resolve_weapon_mastery_track_id()
-		if account_runtime.has_method("add_weapon_mastery_exp"):
-			account_runtime.call("add_weapon_mastery_exp", track_id, exp_reward)
+		if account_service.has_method("add_weapon_mastery_exp"):
+			account_service.call("add_weapon_mastery_exp", track_id, exp_reward)
 		return exp_reward
 
 	return 0
@@ -380,13 +434,21 @@ func _resolve_reward_player() -> Node:
 
 
 func _resolve_weapon_mastery_track_id() -> String:
-	var inventory_runtime: Node = get_node_or_null("/root/InventoryRuntime")
-	if inventory_runtime != null and inventory_runtime.has_method("get_equipped_weapon"):
-		var equipped_item: Dictionary = inventory_runtime.call("get_equipped_weapon") as Dictionary
+	var inventory_service: Node = _get_inventory_service()
+	if inventory_service != null and inventory_service.has_method("get_equipped_weapon"):
+		var equipped_item: Dictionary = inventory_service.call("get_equipped_weapon") as Dictionary
 		var track_id: String = String(equipped_item.get("weapon_mastery_track_id", ""))
 		if not track_id.is_empty():
 			return track_id
 	return PlayerAttributeProfile.DEFAULT_WEAPON_MASTERY_TRACK
+
+
+func _get_account_service() -> Node:
+	return get_node_or_null("/root/AccountService")
+
+
+func _get_inventory_service() -> Node:
+	return get_node_or_null("/root/InventoryService")
 
 
 func _build_open_status(exp_reward: int, loot_count: int) -> String:
@@ -424,3 +486,28 @@ func _resolve_body_peer_id(body: Node) -> int:
 	if body is Node:
 		return int((body as Node).get_multiplayer_authority())
 	return 1
+
+
+func _find_local_interaction_player() -> Node:
+	var current_scene: Node = get_tree().current_scene
+	if current_scene == null:
+		return null
+	for child in current_scene.get_children():
+		if _is_local_interaction_body(child):
+			return child
+	return current_scene.find_child("Player", true, false)
+
+
+func _is_player_close_enough(body: Node) -> bool:
+	if not _is_local_interaction_body(body):
+		return false
+	if not (body is Node2D):
+		return false
+
+	var body_position: Vector2 = (body as Node2D).global_position
+	var offset: Vector2 = body_position - global_position
+	var half_size := Vector2(20.0, 14.0)
+	if collision_shape != null and collision_shape.shape is RectangleShape2D:
+		half_size = (collision_shape.shape as RectangleShape2D).size * 0.5
+	return absf(offset.x - collision_shape.position.x) <= half_size.x + 14.0 \
+		and absf(offset.y - collision_shape.position.y) <= half_size.y + 20.0

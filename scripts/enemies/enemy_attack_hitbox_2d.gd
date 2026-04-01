@@ -147,6 +147,8 @@ func _owner_can_deal_damage() -> bool:
 		return false
 	if not is_instance_valid(_owner_body):
 		return false
+	if multiplayer.has_multiplayer_peer() and _owner_body is Node and not (_owner_body as Node).is_multiplayer_authority():
+		return false
 	if _owner_body.has_method("is_attack_disabled") and bool(_owner_body.call("is_attack_disabled")):
 		return false
 	if _owner_body.has_method("is_dead") and bool(_owner_body.call("is_dead")):

@@ -19,7 +19,13 @@ config/icon="res://icon.svg"
 
 AccountRuntime="*res://scripts/account/account_runtime.gd"
 InventoryRuntime="*res://scripts/inventory/inventory_runtime.gd"
+LobbyServerSimulator="*res://scripts/network/lobby_server_simulator.gd"
+InstanceAllocatorSimulator="*res://scripts/network/instance_allocator_simulator.gd"
+AccountService="*res://scripts/services/account_service.gd"
+InventoryService="*res://scripts/services/inventory_service.gd"
 DungeonFlowRuntime="*res://scripts/flow/dungeon_flow_runtime.gd"
+DungeonInstanceRuntime="*res://scripts/flow/dungeon_instance_runtime.gd"
+DungeonRoomSessionRuntime="*res://scripts/flow/dungeon_room_session_runtime.gd"
 NetworkSession="*res://scripts/network/network_session.gd"
 
 [display]

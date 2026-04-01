@@ -35,7 +35,7 @@ const ITEM_TYPE_CRAFTING_MATERIAL := "crafting_material"
 @onready var next_page_button: Button = $PanelShell/WarehouseCard/NextPageButton
 @onready var page_label: Label = $PanelShell/WarehouseCard/PageLabel
 
-var _inventory_runtime: Node
+var _inventory_service: Node
 var _backpack_slot_widgets: Array = []
 var _warehouse_slot_widgets: Array = []
 var _equip_slot_button: Button
@@ -58,7 +58,7 @@ var _last_click_time_sec: float = -1.0
 
 
 func _ready() -> void:
-	_inventory_runtime = get_node_or_null("/root/InventoryRuntime")
+	_inventory_service = get_node_or_null("/root/InventoryService")
 	_build_slot_grid(backpack_grid, backpack_slot_count, Vector2(84.0, 84.0), CONTAINER_BACKPACK)
 	_build_slot_grid(warehouse_grid, warehouse_slot_count, Vector2(44.0, 44.0), CONTAINER_WAREHOUSE)
 	_setup_equip_slot_button()
@@ -77,12 +77,12 @@ func refresh_display() -> void:
 
 
 func _connect_inventory_signals() -> void:
-	if _inventory_runtime == null or not _inventory_runtime.has_signal("inventory_changed"):
+	if _inventory_service == null or not _inventory_service.has_signal("inventory_changed"):
 		return
 
 	var callback: Callable = Callable(self, "_on_inventory_changed")
-	if not _inventory_runtime.is_connected("inventory_changed", callback):
-		_inventory_runtime.connect("inventory_changed", callback)
+	if not _inventory_service.is_connected("inventory_changed", callback):
+		_inventory_service.connect("inventory_changed", callback)
 
 
 func _on_inventory_changed() -> void:
@@ -409,22 +409,22 @@ func _on_slot_pressed(container_id: StringName, local_index: int) -> void:
 		_refresh_all()
 		return
 
-	if _inventory_runtime != null and _inventory_runtime.has_method("move_item"):
-		_inventory_runtime.call("move_item", _selected_container, _selected_index, container_id, actual_index)
+	if _inventory_service != null and _inventory_service.has_method("move_item"):
+		_inventory_service.call("move_item", _selected_container, _selected_index, container_id, actual_index)
 	_clear_selection()
 	_refresh_all()
 
 
 func _on_equip_slot_pressed() -> void:
-	if _inventory_runtime == null:
+	if _inventory_service == null:
 		return
 
 	var did_change: bool = false
-	if _selected_container == CONTAINER_BACKPACK and _selected_index >= 0 and _is_selected_backpack_item_type(ITEM_TYPE_WEAPON) and _inventory_runtime.has_method("equip_from_backpack"):
-		did_change = bool(_inventory_runtime.call("equip_from_backpack", _selected_index))
+	if _selected_container == CONTAINER_BACKPACK and _selected_index >= 0 and _is_selected_backpack_item_type(ITEM_TYPE_WEAPON) and _inventory_service.has_method("equip_from_backpack"):
+		did_change = bool(_inventory_service.call("equip_from_backpack", _selected_index))
 	elif _selected_index < 0:
-		if _inventory_runtime.has_method("unequip_to_backpack"):
-			did_change = bool(_inventory_runtime.call("unequip_to_backpack"))
+		if _inventory_service.has_method("unequip_to_backpack"):
+			did_change = bool(_inventory_service.call("unequip_to_backpack"))
 
 	if did_change:
 		_clear_selection()
@@ -432,14 +432,14 @@ func _on_equip_slot_pressed() -> void:
 
 
 func _on_potion_slot_pressed() -> void:
-	if _inventory_runtime == null:
+	if _inventory_service == null:
 		return
 
 	var did_change: bool = false
-	if _selected_container == CONTAINER_BACKPACK and _selected_index >= 0 and _is_selected_backpack_item_type(ITEM_TYPE_POTION) and _inventory_runtime.has_method("equip_potion_from_backpack"):
-		did_change = bool(_inventory_runtime.call("equip_potion_from_backpack", _selected_index))
-	elif _selected_index < 0 and _inventory_runtime.has_method("unequip_potion_to_backpack"):
-		did_change = bool(_inventory_runtime.call("unequip_potion_to_backpack"))
+	if _selected_container == CONTAINER_BACKPACK and _selected_index >= 0 and _is_selected_backpack_item_type(ITEM_TYPE_POTION) and _inventory_service.has_method("equip_potion_from_backpack"):
+		did_change = bool(_inventory_service.call("equip_potion_from_backpack", _selected_index))
+	elif _selected_index < 0 and _inventory_service.has_method("unequip_potion_to_backpack"):
+		did_change = bool(_inventory_service.call("unequip_potion_to_backpack"))
 
 	if did_change:
 		_clear_selection()
@@ -499,26 +499,26 @@ func _get_item_from_container(container_id: StringName, slot_index: int) -> Dict
 
 
 func _get_backpack_slots() -> Array:
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_backpack_slots"):
-		return _inventory_runtime.call("get_backpack_slots") as Array
+	if _inventory_service != null and _inventory_service.has_method("get_backpack_slots"):
+		return _inventory_service.call("get_backpack_slots") as Array
 	return []
 
 
 func _get_warehouse_slots() -> Array:
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_warehouse_slots"):
-		return _inventory_runtime.call("get_warehouse_slots") as Array
+	if _inventory_service != null and _inventory_service.has_method("get_warehouse_slots"):
+		return _inventory_service.call("get_warehouse_slots") as Array
 	return []
 
 
 func _get_equipped_weapon() -> Dictionary:
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_equipped_weapon"):
-		return _inventory_runtime.call("get_equipped_weapon") as Dictionary
+	if _inventory_service != null and _inventory_service.has_method("get_equipped_weapon"):
+		return _inventory_service.call("get_equipped_weapon") as Dictionary
 	return {}
 
 
 func _get_equipped_potion() -> Dictionary:
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_equipped_potion"):
-		return _inventory_runtime.call("get_equipped_potion") as Dictionary
+	if _inventory_service != null and _inventory_service.has_method("get_equipped_potion"):
+		return _inventory_service.call("get_equipped_potion") as Dictionary
 	return {}
 
 
@@ -603,24 +603,24 @@ func _resolve_item_icon(item: Dictionary) -> Texture2D:
 func _get_total_base_attack_power(item: Dictionary) -> float:
 	if item.is_empty():
 		return 0.0
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_item_total_base_attack_power"):
-		return float(_inventory_runtime.call("get_item_total_base_attack_power", item))
+	if _inventory_service != null and _inventory_service.has_method("get_item_total_base_attack_power"):
+		return float(_inventory_service.call("get_item_total_base_attack_power", item))
 	return float(item.get("base_attack_power", 0.0))
 
 
 func _get_total_base_defense_ratio(item: Dictionary) -> float:
 	if item.is_empty():
 		return 0.0
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_item_total_base_defense_ratio"):
-		return float(_inventory_runtime.call("get_item_total_base_defense_ratio", item))
+	if _inventory_service != null and _inventory_service.has_method("get_item_total_base_defense_ratio"):
+		return float(_inventory_service.call("get_item_total_base_defense_ratio", item))
 	return float(item.get("base_defense_ratio", 0.0))
 
 
 func _get_reinforcement_label(item: Dictionary) -> String:
 	if item.is_empty():
 		return "0/4"
-	if _inventory_runtime != null and _inventory_runtime.has_method("get_item_reinforcement_label"):
-		return String(_inventory_runtime.call("get_item_reinforcement_label", item))
+	if _inventory_service != null and _inventory_service.has_method("get_item_reinforcement_label"):
+		return String(_inventory_service.call("get_item_reinforcement_label", item))
 	return "%d/4" % int(item.get("reinforcement_level", 0))
 
 
@@ -688,7 +688,7 @@ func _try_open_reinforcement_popup(container_id: StringName, actual_index: int, 
 	_clear_selection()
 	_clear_last_slot_click()
 	_hide_item_tooltip()
-	_reinforcement_popup.call("open_popup", _inventory_runtime, container_id, actual_index, [CONTAINER_EQUIPPED, CONTAINER_BACKPACK, CONTAINER_WAREHOUSE])
+	_reinforcement_popup.call("open_popup", _inventory_service, container_id, actual_index, [CONTAINER_EQUIPPED, CONTAINER_BACKPACK, CONTAINER_WAREHOUSE])
 	_refresh_all()
 	return true
 
@@ -706,7 +706,7 @@ func _try_open_crafting_popup(container_id: StringName, actual_index: int, item:
 	_clear_selection()
 	_clear_last_slot_click()
 	_hide_item_tooltip()
-	_crafting_popup.call("open_popup", _inventory_runtime, container_id, actual_index)
+	_crafting_popup.call("open_popup", _inventory_service, container_id, actual_index)
 	_refresh_all()
 	return true
 
